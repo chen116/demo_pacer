@@ -66,3 +66,17 @@ service sshd restart
 
 ifconfig to see ip
 
+
+
+echo "SUBSYSTEM==\"cpu\",ACTION==\"add\",RUN+=\"/bin/sh -c '[ ! -e /sys\$devpath/online ] || echo 1 > /sys\$devpath/online'\"" > /etc/udev/rules.d/cpu-online.rules && udevadm control --reload-rules && apt update &&  apt -y install gcc && apt -y install python3-dev 
+
+wget http://semanchuk.com/philip/sysv_ipc/sysv_ipc-1.0.0.tar.gz && tar -xzf sysv_ipc-1.0.0.tar.gz && cd sysv_ipc-1.0.0 && python3 setup.py install
+
+cd /root/ && apt -y install python3-pip && pip install --upgrade pip && pip install numpy 
+
+cd /root/ && git clone https://github.com/libheartbeats/heartbeats.git && cd heartbeats && mkdir hbed && echo "export HEARTBEAT_ENABLED_DIR='/root/heartbeats/hbed/'" >> ~/.bashrc && source ~/.bashrc && make clean && make uninstall && make && make install && ldconfig 
+
+cd /root/ && git clone https://github.com/selectel/pyxs && cd pyxs && python3 setup.py install && cd /root/ && apt -y install xenstore-utils 
+
+ https://github.com/chen116/demo_pacer.git && cd demo_pacer && make && cd /root/ 
+
