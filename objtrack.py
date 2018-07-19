@@ -1,11 +1,9 @@
 import cv2
 import sys
  
-(major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')￼
+(major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')
 print(major_ver,minor_ver,subminor_ver)
- 
 
- 
 # Set up tracker.
 # Instead of MIL, you can also use
 
