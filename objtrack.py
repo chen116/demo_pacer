@@ -51,9 +51,9 @@ bbox = (148, 12, 43, 160)
 
 # Initialize tracker with first frame and bounding box
 ok = tracker.init(frame, bbox)
-
+cnt= 0
 while True:
-
+    cnt+=1
     # Read a new frame
     ok, frame = video.read()
     if not ok:
@@ -63,7 +63,8 @@ while True:
     timer = cv2.getTickCount()
 
     # Update tracker
-    ok, bbox = tracker.update(frame)
+    if cnt%10==0:
+        ok, bbox = tracker.update(frame)
 
     # Calculate Frames per second (FPS)
     fps = cv2.getTickFrequency() / (cv2.getTickCount() - timer);
