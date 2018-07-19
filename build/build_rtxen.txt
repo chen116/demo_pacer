@@ -38,4 +38,4 @@ python3 monitor.py 2 10 1,2 10000
 
 at domU:
 
-python3 pacer.py
+run python app
