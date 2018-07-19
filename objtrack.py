@@ -47,7 +47,7 @@ if not ok:
 bbox = (148, 12, 43, 160)
 
 # Uncomment the line below to select a different bounding box
-bbox = cv2.selectROI(frame, False)
+# bbox = cv2.selectROI(frame, False)
 
 # Initialize tracker with first frame and bounding box
 ok = tracker.init(frame, bbox)
