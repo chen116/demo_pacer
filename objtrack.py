@@ -51,7 +51,7 @@ bbox = (148, 12, 43, 160)
 
 # Initialize tracker with first frame and bounding box
 ok = tracker.init(frame, bbox)
-cnt= 0
+cnt= -1
 while True:
     cnt+=1
     # Read a new frame
