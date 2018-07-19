@@ -86,7 +86,8 @@ while True:
     cv2.putText(frame, "FPS : " + str(int(fps)), (100,50), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2);
 
     # Display result
-    cv2.imshow("Tracking", frame)
+    # cv2.imshow("Tracking", frame)
+    print(fps)
 
     # Exit if ESC pressed
     k = cv2.waitKey(1) & 0xff
