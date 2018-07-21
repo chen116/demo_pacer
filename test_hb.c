@@ -1,3 +1,4 @@
+//gcc test_hb.c -lhb-shared -lhrm-shared
 #include <sys/time.h>
 #include <unistd.h>
 #include <heartbeats/heartbeat.h>

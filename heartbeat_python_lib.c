@@ -36,6 +36,7 @@ float get_instant_heartrate(int anchors_hb_shm_key, int index)
   if(hb!=NULL) {
     shmdt(hb);
   }
+  printf("from c file:%f\n", tempRetVal);
   return tempRetVal;
        
 
