@@ -25,7 +25,7 @@ heart = heartbeat_init(vic_win_size, vic_buf_depth, vic_log_file, vic_min_target
 	{
 		gettimeofday(&tv1, NULL);
 		/* stuff to do! */
-heartbeat(heart, some_int);
+heartbeat(heart, 1);
 
 
 		sleep(1);
