@@ -30,9 +30,9 @@ class MonitorThread(threading.Thread):
 	def __init__(self, threadLock,shared_data,domuid,xen_sched,timeslice_us,min_heart_rate,max_heart_rate,keys=['test'],base_path='/local/domain'):
 		threading.Thread.__init__(self)
 		self.domuid=(domuid)
-		self.other_domuid='2'
-		if self.domuid=='2':
-			self.other_domuid='3'
+		self.other_domuid='5'
+		if self.domuid=='5':
+			self.other_domuid='6'
 		self.stride = int(10/int(domuid))
 		self.keys=keys
 		self.base_path=base_path
@@ -285,8 +285,8 @@ class MonitorThread(threading.Thread):
 
 		if cur_bw+other_cur_bw>self.timeslice_us:
 
-			my_pass_val = self.shared_data['pass_val'][int(self.domuid)-2]
-			other_pass_val = self.shared_data['pass_val'][int(self.other_domuid)-2]
+			my_pass_val = self.shared_data['pass_val'][int(self.domuid)-5]
+			other_pass_val = self.shared_data['pass_val'][int(self.other_domuid)-5]
 			last_time = self.shared_data['last_time_val']
 			now_time = time.time()
 			if last_time==0:
@@ -311,9 +311,9 @@ class MonitorThread(threading.Thread):
 			if self.shared_data["contention_time_passed"]>=process_unit_time:# and int(self.shared_data["contention_time_passed"])%5==0:
 				self.shared_data["contention_time_passed"]=0
 				if my_pass_val<=other_pass_val:
-					self.shared_data['pass_val'][int(self.domuid)-1]+=self.shared_data['stride_val'][int(self.domuid)-2]
+					self.shared_data['pass_val'][int(self.domuid)-1]+=self.shared_data['stride_val'][int(self.domuid)-5]
 				else:
-					self.shared_data['pass_val'][int(self.other_domuid)-1]+=self.shared_data['stride_val'][int(self.other_domuid)-2]
+					self.shared_data['pass_val'][int(self.other_domuid)-1]+=self.shared_data['stride_val'][int(self.other_domuid)-5]
 
 				with open("info.txt", "a") as myfile:
 					myfile.write(self.domuid+" "+self.domuid+" time slice len 6"+ " "+str(now_time)+"\n")							
