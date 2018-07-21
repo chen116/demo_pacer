@@ -16,53 +16,50 @@ _HB_global_state_t* HB_alloc_state(int );
 int anchors_heartbeat_finish(int) ;
 int64_t anchors_heartbeat( int, int );
 
-int64_t get_instant_heartrate(int , int);
-// float get_instant_heartrate(int , int);
+// int64_t get_instant_heartrate(int , int);
+float get_instant_heartrate(int , int);
 float get_window_heartrate(int , int);
 float get_global_heartrate(int , int);
 int anchors_heartbeat_init(int,int64_t,int64_t ,const char* , double ,double );
 
-int64_t get_instant_heartrate(int anchors_hb_shm_key, int index)
-{
-  int shmid;
-  int64_t tempRetVal;
-  if ((shmid = shmget(anchors_hb_shm_key, 1*sizeof(heartbeat_t), 0666)) < 0) {
-        perror("shmget");
-        return 0;
-    }
-  heartbeat_t* hb = (heartbeat_t*) shmat(shmid, NULL, 0);
-  tempRetVal =( (int64_t)hb->log[index].instant_rate )*1000000000;
-  if(hb!=NULL) {
-    shmdt(hb);
-  }
-  printf("from c file:%ld\n", tempRetVal);
-  return tempRetVal;
-       
-
-
-}
-
-
-
-// float get_instant_heartrate(int anchors_hb_shm_key, int index)
+// int64_t get_instant_heartrate(int anchors_hb_shm_key, int index)
 // {
 //   int shmid;
-//   double tempRetVal;
+//   int64_t tempRetVal;
 //   if ((shmid = shmget(anchors_hb_shm_key, 1*sizeof(heartbeat_t), 0666)) < 0) {
 //         perror("shmget");
 //         return 0;
 //     }
 //   heartbeat_t* hb = (heartbeat_t*) shmat(shmid, NULL, 0);
-//   tempRetVal = hb->log[index].instant_rate;
+//   tempRetVal =( (int64_t)hb->log[index].instant_rate )*1000000000;
 //   if(hb!=NULL) {
 //     shmdt(hb);
 //   }
-//   printf("from c file:%f\n", tempRetVal);
+//   printf("from c file:%ld\n", tempRetVal);
 //   return tempRetVal;
        
 
 
 // }
+
+
+
+float get_instant_heartrate(int anchors_hb_shm_key, int index)
+{
+  int shmid;
+  double tempRetVal;
+  if ((shmid = shmget(anchors_hb_shm_key, 1*sizeof(heartbeat_t), 0666)) < 0) {
+        perror("shmget");
+        return 0;
+    }
+  heartbeat_t* hb = (heartbeat_t*) shmat(shmid, NULL, 0);
+  tempRetVal = hb->log[index].instant_rate;
+  if(hb!=NULL) {
+    shmdt(hb);
+  }
+  printf("from c file:%f\n", tempRetVal);
+  return tempRetVal;
+}
 
 
 

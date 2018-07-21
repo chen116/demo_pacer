@@ -35,8 +35,8 @@ class Heartbeat:
 		self.heartbeat_python_lib.anchors_heartbeat.restype = ctypes.c_int64
 		hbtime = self.heartbeat_python_lib.anchors_heartbeat(self.shm_key,self.cnt) # hbtime/1e9 = seconds
 	def get_instant_heartrate(self):
-		# self.heartbeat_python_lib.get_instant_heartrate.restype = ctypes.c_double
-		self.heartbeat_python_lib.get_instant_heartrate.restype = ctypes.c_int64
+		self.heartbeat_python_lib.get_instant_heartrate.restype = ctypes.c_float
+		# self.heartbeat_python_lib.get_instant_heartrate.restype = ctypes.c_int64
 		return self.heartbeat_python_lib.get_instant_heartrate(self.shm_key,self.cnt)
 	def get_window_heartrate(self):
 		self.heartbeat_python_lib.get_window_heartrate.restype = ctypes.c_double
