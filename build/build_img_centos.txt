@@ -1,35 +1,62 @@
 assuming u have a rtxen running:
 at /root/
 
-$ dd if=/dev/zero of=pacer4g.img bs=1024M count=4  
+$ dd if=/dev/zero of=centos.img bs=1024M count=4  
  # that gives to count*1024 => 10gb img will be 20gb
 
 to mount on loop device to create file system on it
-$ losetup /dev/loop2 pacer4g.img
+$ losetup /dev/loop3 centos.img
 to create file system
-$ mkfs.ext4 /dev/loop2
+$ mkfs.ext4 /dev/loop3
 
+nano c.cfg
+wget http://vault.centos.org/7.2.1511/os/x86_64/images/pxeboot/vmlinuz
+wget http://vault.centos.org/7.2.1511/os/x86_64/images/pxeboot/initrd.img
 
-
-
-wget http://archive.ubuntu.com/ubuntu/dists/xenial-updates/main/installer-amd64/current/images/netboot/xen/vmlinuz 
-wget http://archive.ubuntu.com/ubuntu/dists/xenial-updates/main/installer-amd64/current/images/netboot/xen/initrd.gz
-
-
-nano pacer4g.cfg
-
-
-name="pacer4g"
-memory=4096
-vcpus=8
-disk=['file:/root/pacer4g.img,xvda,w']
-vif=['bridge=virbr0'] #(use this f libvirt-bin is installed)
-#vif=['']  (use this f libvirt-bin is not installed)
+name="cent"
+vcpus=4
+memory=2048
+disk=['file:/root/centos.img,xvda,w']
+vif=['bridge=virbr0']
+on_reboot="restart"
+on_crash="restart"
 kernel="/root/vmlinuz"
 ramdisk="/root/initrd.img"
-extra="debian-installer/exit/alwaus_halt=true -- console=hvc0"
+extra="ksdevice= inst.repo=http://vault.centos.org/centos/7.2.1511/os/x86_64/"
 
 
+xl create -f c.cfg
+xl console cent
+
+# after install
+nano c.cfg
+
+name="cent"
+vcpus=4
+memory=2048
+disk=['file:/root/centos.img,xvda,w']
+vif=['bridge=virbr0']
+on_reboot="restart"
+on_crash="restart"
+bootloader="pygrub"
+
+xl create -f c.cfg
+xl console cent
+
+
+# setting up domU
+
+echo "SUBSYSTEM==\"cpu\",ACTION==\"add\",RUN+=\"/bin/sh -c '[ ! -e /sys\$devpath/online ] || echo 1 > /sys\$devpath/online'\"" > /etc/udev/rules.d/cpu-online.rules && udevadm control --reload-rules 
+yum -y install git gcc wget
+yum install -y epel-release && yum install -y python34 python34-setuptools python34-devel 
+
+wget http://semanchuk.com/philip/sysv_ipc/sysv_ipc-1.0.0.tar.gz && tar -xzf sysv_ipc-1.0.0.tar.gz && cd sysv_ipc-1.0.0 && python3 setup.py install && cd /root/
+easy_install-3.4 pip 
+apt -y install python3-pip && pip3 install --upgrade pip && pip install numpy && cd /root/ && git clone https://github.com/libheartbeats/heartbeats.git && cd heartbeats && mkdir hbed && echo "export HEARTBEAT_ENABLED_DIR='/root/heartbeats/hbed/'" >> ~/.bashrc && source ~/.bashrc && make clean && make uninstall && make && make install && ldconfig && cd /root/ && git clone https://github.com/selectel/pyxs && cd pyxs && python3 setup.py install && cd /root/ && apt -y install xenstore-utils && cd /root/ && git clone https://github.com/chen116/demo_pacer.git && cd demo_pacer && make && cd /root/ 
+
+
+
+=====end of centos ======
 
 xl create -f pacer.cfg
 
