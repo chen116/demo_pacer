@@ -22,9 +22,9 @@ for i in range(50):
 	# print(time.time()-tn)
 	time.sleep(0.1)
 	hb.heartbeat_beat()
-	print("instant hr",hb.get_instant_heartrate())
+	print("get_instant_heartrate:",hb.get_instant_heartrate())
 	if i%window_size_hr==0:
-		comm.write(hb.get_window_heartrate())
+		comm.write("heart_rate", hb.get_window_heartrate())
 
 
 
