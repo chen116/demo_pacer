@@ -81,7 +81,9 @@ wget http://mirror.centos.org/centos/6/os/x86_64/Packages/dev86-0.16.17-15.1.el6
 rpm -ivh dev86-0.16.17-15.1.el6.x86_64.rpm
 git clone https://github.com/PennPanda/RT-Xen.git && cd RT-Xen
 ./configure --with-extra-qemuu-configure-args='--disable-werror' 
-make -j8 dist PYTHON_PREFIX_ARG= && make -j8 install PYTHON_PREFIX_ARG= && /sbin/ldconfig 
+make -j8 dist PYTHON_PREFIX_ARG=
+make -j8 install PYTHON_PREFIX_ARG=
+/sbin/ldconfig 
 #https://wiki.centos.org/HowTos/Xen/Xen4QuickStart
 yum -y install centos-release-xen
 yum update -y
