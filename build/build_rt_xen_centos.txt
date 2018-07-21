@@ -72,6 +72,9 @@ nmcli con
 # check {interface#}
 nmcli con up {interface#}
 
+vi /etc/sysconfig/network-scripts/ifcfg-{interface#}
+ONBOOT=yes
+
 #https://lvtao.net/server/574.html 
 yum update -y && yum -y groupinstall "Development Tools" && yum install -y gcc gcc-c++ git patch texinfo && yum install -y python-devel acpica-tools libuuid-devel ncurses-devel glib2 glib2-devel libaio-devel openssl-devel yajl-devel glibc-devel glibc-devel.i686 pixman-devel && yum -y install wget nano
 wget http://mirror.centos.org/centos/6/os/x86_64/Packages/dev86-0.16.17-15.1.el6.x86_64.rpm
@@ -115,7 +118,7 @@ reboot
 === install for pacer ====
 
 
-yum install -y epel-release && easy_install-3.4 pip && yum install -y python34 && yum install -y python34-setuptools && yum install -y python34-devel && easy_install-3.4 pip 
+yum install -y epel-release && yum install -y python34 && yum install -y python34-setuptools && yum install -y python34-devel && easy_install-3.4 pip 
 
 wget http://semanchuk.com/philip/sysv_ipc/sysv_ipc-1.0.0.tar.gz && tar -xzf sysv_ipc-1.0.0.tar.gz && cd sysv_ipc-1.0.0 && python3 setup.py install && cd /root/
 

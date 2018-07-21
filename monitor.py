@@ -311,9 +311,9 @@ class MonitorThread(threading.Thread):
 			if self.shared_data["contention_time_passed"]>=process_unit_time:# and int(self.shared_data["contention_time_passed"])%5==0:
 				self.shared_data["contention_time_passed"]=0
 				if my_pass_val<=other_pass_val:
-					self.shared_data['pass_val'][int(self.domuid)-1]+=self.shared_data['stride_val'][int(self.domuid)-5]
+					self.shared_data['pass_val'][int(self.domuid)-5]+=self.shared_data['stride_val'][int(self.domuid)-5]
 				else:
-					self.shared_data['pass_val'][int(self.other_domuid)-1]+=self.shared_data['stride_val'][int(self.other_domuid)-5]
+					self.shared_data['pass_val'][int(self.other_domuid)-5]+=self.shared_data['stride_val'][int(self.other_domuid)-5]
 
 				with open("info.txt", "a") as myfile:
 					myfile.write(self.domuid+" "+self.domuid+" time slice len 6"+ " "+str(now_time)+"\n")							
