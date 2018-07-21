@@ -36,13 +36,13 @@ class Heartbeat:
 		hbtime = self.heartbeat_python_lib.anchors_heartbeat(self.shm_key,self.cnt) # hbtime/1e9 = seconds
 	def get_instant_heartrate(self):
 		self.heartbeat_python_lib.get_instant_heartrate.restype = ctypes.c_float
-		# self.heartbeat_python_lib.get_instant_heartrate.restype = ctypes.c_int64
+		# self.heartbeat_python_lib.get_instant_heartrate.restype = ctypes.c_double
 		return self.heartbeat_python_lib.get_instant_heartrate(self.shm_key,self.cnt)
 	def get_window_heartrate(self):
-		self.heartbeat_python_lib.get_window_heartrate.restype = ctypes.c_double
+		self.heartbeat_python_lib.get_window_heartrate.restype = ctypes.c_float
 		return self.heartbeat_python_lib.get_window_heartrate(self.shm_key,self.cnt)
 	def get_global_heartrate(self):
-		self.heartbeat_python_lib.get_global_heartrate.restype = ctypes.c_double
+		self.heartbeat_python_lib.get_global_heartrate.restype = ctypes.c_float
 		return self.heartbeat_python_lib.get_global_heartrate(self.shm_key,self.cnt)
 	def heartbeat_finish(self):
 		if self.heartbeat_python_lib.anchors_heartbeat_finish(self.shm_key):
