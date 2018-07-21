@@ -31,7 +31,7 @@ int64_t get_instant_heartrate(int anchors_hb_shm_key, int index)
         return 0;
     }
   heartbeat_t* hb = (heartbeat_t*) shmat(shmid, NULL, 0);
-  tempRetVal = (__int64)hb->log[index].instant_rate*1000000000;
+  tempRetVal =( (int64_t)hb->log[index].instant_rate )*1000000000;
   if(hb!=NULL) {
     shmdt(hb);
   }
