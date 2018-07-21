@@ -20,8 +20,8 @@ int main()
 heart = heartbeat_init(vic_win_size, vic_buf_depth, vic_log_file, vic_min_target, vic_max_target);
 
 	struct timeval  tv1, tv2;
-
-	for (int i = 0; i < 5; ++i)
+int i=0;
+	for (i = 0; i < 5; ++i)
 	{
 		gettimeofday(&tv1, NULL);
 		/* stuff to do! */
