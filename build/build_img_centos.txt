@@ -68,6 +68,9 @@ git clone https://github.com/chen116/demo_pacer.git && cd demo_pacer && make && 
 # https://www.rootusers.com/how-to-install-xfce-gui-in-centos-7-linux/
 wget https://turbovnc.org/pmwiki/uploads/Downloads/TurboVNC.repo -P /etc/yum.repos.d && yum install turbovnc -y && yum install epel-release -y && yum groupinstall "X Window System" -y && yum groupinstall "Xfce" -y
 
+reboot (to accpect centos license)
+
+
 # check out the themes in /usr/share/themes/, and then check in /usr/lib/
 
 
@@ -82,6 +85,14 @@ nano ~/.vnc/xstartup.turbovnc
 
 /opt/TurboVNC/bin/vncserver -kill :1
 /opt/TurboVNC/bin/vncserver
+
+NOTE:
+after creating the domU image, when recreate the domU need to run /opt/TurboVNC/bin/vncserver 
+
+# nano /etc/ssh/ssh_config
+# AllowTcpForwarding yes
+# systemctl restart sshd
+
 
 ===using vnc====
 
@@ -109,8 +120,9 @@ xfwm4 &
 
 =====setting opencv======
 
-cp /demo_pacer/build/cv3_install_for_py3.sh /root/
-sh cv3_install_for_py3.sh
+
+cp /root/demo_pacer/build/cv3_install_for_py3.sh /root/ && sh cv3_install_for_py3.sh
+
 
 ===adding space to img(doesnt work)====
 
