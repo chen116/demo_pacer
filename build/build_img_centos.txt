@@ -1,7 +1,7 @@
 assuming u have a rtxen running:
 at /root/
 
-$ dd if=/dev/zero of=centos.img bs=1024M count=10  
+$ dd if=/dev/zero of=centos.img bs=1024M count=15  
  # that gives to count*1024 => 10gb img will be 10gb
 
 to mount on loop device to create file system on it
@@ -109,10 +109,10 @@ xfwm4 &
 
 =====setting opencv======
 
-cp /demo_pacer/cv3_install_for_py3.sh /root/
-sh cv3_install_for_py3
+cp /demo_pacer/build/cv3_install_for_py3.sh /root/
+sh cv3_install_for_py3.sh
 
-===adding space to img====
+===adding space to img(doesnt work)====
 
 dd if=/dev/zero bs=1024M count=5 >> ./centos.img
 # thiss will add 5G

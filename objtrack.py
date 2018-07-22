@@ -63,7 +63,7 @@ while True:
     timer = cv2.getTickCount()
 
     # Update tracker
-    if cnt%10==0:
+    if cnt%1==0:
         ok, bbox = tracker.update(frame)
 
         # Calculate Frames per second (FPS)
