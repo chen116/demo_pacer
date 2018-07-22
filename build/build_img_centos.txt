@@ -107,11 +107,33 @@ xfwm4 &
 
 # enter password
 
-===setting opencv====
+=====setting opencv======
 
-# https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_setup/py_setup_in_fedora/py_setup_in_fedora.html
-yum install numpy opencv* -y
+cp /demo_pacer/cv3_install_for_py3.sh /root/
+sh cv3_install_for_py3
+
+===adding space to img====
+
+dd if=/dev/zero bs=1024M count=5 >> ./centos.img
+# thiss will add 5G
+
+parted centos.img
+
+#inside parted console
+
+print free
+
+#Number  Start   End     Size    Type     File system  Flags
+#        32.3kB  1049kB  1016kB           Free Space
+# 1      1049kB  525MB   524MB   primary  xfs          boot
+# 2      525MB   10.7GB  10.2GB  primary               lvm
+#        10.7GB  16.1GB  5369MB           Free Space
+
+resizepart 2 16.1GB
+
+q
 
 
+now create a domU, xl console in, agree terms, blah blah blah, u good to go
 
 
