@@ -1,8 +1,8 @@
 assuming u have a rtxen running:
 at /root/
 
-$ dd if=/dev/zero of=centos.img bs=1024M count=4  
- # that gives to count*1024 => 10gb img will be 20gb
+$ dd if=/dev/zero of=centos.img bs=1024M count=10  
+ # that gives to count*1024 => 10gb img will be 10gb
 
 to mount on loop device to create file system on it
 $ losetup /dev/loop3 centos.img
@@ -14,8 +14,8 @@ wget http://vault.centos.org/7.2.1511/os/x86_64/images/pxeboot/vmlinuz
 wget http://vault.centos.org/7.2.1511/os/x86_64/images/pxeboot/initrd.img
 
 name="cent"
-vcpus=4
-memory=2048
+vcpus=8
+memory=4096
 disk=['file:/root/centos.img,xvda,w']
 vif=['bridge=virbr0']
 on_reboot="restart"
@@ -28,12 +28,12 @@ extra="ksdevice= inst.repo=http://vault.centos.org/centos/7.2.1511/os/x86_64/"
 xl create -f c.cfg
 xl console cent
 
-# after install
+# after install vanilla centos
 nano c.cfg
 
 name="cent"
-vcpus=4
-memory=2048
+vcpus=8
+memory=4096
 disk=['file:/root/centos.img,xvda,w']
 vif=['bridge=virbr0']
 on_reboot="restart"
@@ -44,86 +44,74 @@ xl create -f c.cfg
 xl console cent
 
 
-# setting up domU
+====setting up domU
+
+# one line:
+echo "SUBSYSTEM==\"cpu\",ACTION==\"add\",RUN+=\"/bin/sh -c '[ ! -e /sys\$devpath/online ] || echo 1 > /sys\$devpath/online'\"" > /etc/udev/rules.d/cpu-online.rules && udevadm control --reload-rules && yum -y install nano git gcc wget && yum install -y epel-release && yum install -y python34 python34-setuptools python34-devel && easy_install-3.4 pip && pip3 install numpy && wget http://semanchuk.com/philip/sysv_ipc/sysv_ipc-1.0.0.tar.gz && tar -xzf sysv_ipc-1.0.0.tar.gz && cd sysv_ipc-1.0.0 && python3 setup.py install && cd /root/ && cd /root/ && git clone https://github.com/libheartbeats/heartbeats.git && cd heartbeats && mkdir hbed && echo "export HEARTBEAT_ENABLED_DIR='/root/heartbeats/hbed/'" >> ~/.bashrc && source ~/.bashrc && make clean && make uninstall && make && make install && ldconfig && echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib" >> ~/.bashrc && source ~/.bashrc && cd /root/ && git clone https://github.com/selectel/pyxs && cd pyxs && python3 setup.py install && cd /root/ && git clone https://github.com/chen116/demo_pacer.git && cd demo_pacer && make && cd /root/ 
+
+# break it down:
+
 
 echo "SUBSYSTEM==\"cpu\",ACTION==\"add\",RUN+=\"/bin/sh -c '[ ! -e /sys\$devpath/online ] || echo 1 > /sys\$devpath/online'\"" > /etc/udev/rules.d/cpu-online.rules && udevadm control --reload-rules 
-yum -y install git gcc wget && yum install -y epel-release && yum install -y python34 python34-setuptools python34-devel && easy_install-3.4 pip && pip3 install numpy 
-
+yum -y install nano git gcc wget && yum install -y epel-release && yum install -y python34 python34-setuptools python34-devel && easy_install-3.4 pip && pip3 install numpy 
 wget http://semanchuk.com/philip/sysv_ipc/sysv_ipc-1.0.0.tar.gz && tar -xzf sysv_ipc-1.0.0.tar.gz && cd sysv_ipc-1.0.0 && python3 setup.py install && cd /root/
-
-
 cd /root/ && git clone https://github.com/libheartbeats/heartbeats.git && cd heartbeats && mkdir hbed && echo "export HEARTBEAT_ENABLED_DIR='/root/heartbeats/hbed/'" >> ~/.bashrc && source ~/.bashrc && make clean && make uninstall && make && make install && ldconfig && echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib" >> ~/.bashrc && source ~/.bashrc && cd /root/  
 git clone https://github.com/selectel/pyxs && cd pyxs && python3 setup.py install && cd /root/ 
-
 #&& apt -y install xenstore-utils && cd /root/ && 
-
 git clone https://github.com/chen116/demo_pacer.git && cd demo_pacer && make && cd /root/ 
 
-# addition steps:
+# addition steps(not required, get this from original heartbit repo issues):
+# hmod 750 /usr/local/include/heartbeats/
+
+====setting up vnc server=====
+# https://turbovnc.org/Downloads/YUM
+# https://www.rootusers.com/how-to-install-xfce-gui-in-centos-7-linux/
+wget https://turbovnc.org/pmwiki/uploads/Downloads/TurboVNC.repo -P /etc/yum.repos.d && yum install turbovnc -y && yum install epel-release -y && yum groupinstall "X Window System" -y && yum groupinstall "Xfce" -y
+
+# check out the themes in /usr/share/themes/, and then check in /usr/lib/
+
+
+/opt/TurboVNC/bin/vncserver
+
+nano ~/.vnc/xstartup.turbovnc
+#!/bin/sh
+/usr/bin/xfce4-terminal --geometry=60x20 --show-menubar --show-borders --show-scrollbar --font=10
 
 
 
 
-hmod 750 /usr/local/include/heartbeats/
+/opt/TurboVNC/bin/vncserver -kill :1
+/opt/TurboVNC/bin/vncserver
 
-=====end of building vanilla centos ======
+===using vnc====
 
-xl create -f pacer.cfg
+2 terminal,t1,t2 at dom0:
 
-xl console pacer
+t1:
 
-# go install linux
+ssh -L 5701:localhost:5901 {domU ip}
 
-# choose guided entore disk with setpup LVM
+t2 with vncing to dom0:
+/opt/TurboVNC/bin/vncviewer 
 
-# after installation complete, xen will restart the domu, xl shutdown it frist
+(localhost:5701)
 
-xl shutdown pacer4g
+after getting in :
 
-nano pacer4g.cfg
+openbox &
 
-name="pacer4g"
-memory=4096
-vcpus=8
-disk=['file:/root/pacer4g.img,xvda,w']
-#vif=['bridge=virbr0'] (use this f libvirt-bin is installed)
-#vif=['']  (use this f libvirt-bin is not installed)
-bootloader="pygrub"
+or 
 
-xl create -f pacer4g.cfg
-
-now setup up domU:
-
-sudo -i
-passwd
-nano /etc/ssh/sshd_config
-# Authentication:
-#LoginGraceTime 120
-PermitRootLogin yes
-#StrictModes yes
-
-service sshd restart
-
-ifconfig to see ip
+xfwm4 &
 
 
-one line setup:
-echo "SUBSYSTEM==\"cpu\",ACTION==\"add\",RUN+=\"/bin/sh -c '[ ! -e /sys\$devpath/online ] || echo 1 > /sys\$devpath/online'\"" > /etc/udev/rules.d/cpu-online.rules && udevadm control --reload-rules && apt update &&  apt -y install git && apt -y install gcc && apt -y install python3-dev && wget http://semanchuk.com/philip/sysv_ipc/sysv_ipc-1.0.0.tar.gz && tar -xzf sysv_ipc-1.0.0.tar.gz && cd sysv_ipc-1.0.0 && python3 setup.py install && cd /root/ && apt -y install python3-pip && pip3 install --upgrade pip && pip install numpy && cd /root/ && git clone https://github.com/libheartbeats/heartbeats.git && cd heartbeats && mkdir hbed && echo "export HEARTBEAT_ENABLED_DIR='/root/heartbeats/hbed/'" >> ~/.bashrc && source ~/.bashrc && make clean && make uninstall && make && make install && ldconfig && cd /root/ && git clone https://github.com/selectel/pyxs && cd pyxs && python3 setup.py install && cd /root/ && apt -y install xenstore-utils && cd /root/ && git clone https://github.com/chen116/demo_pacer.git && cd demo_pacer && make && cd /root/ 
+# enter password
+
+===setting opencv====
+
+# https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_setup/py_setup_in_fedora/py_setup_in_fedora.html
+yum install numpy opencv* -y
 
 
 
-breaking it down:
-
-
-echo "SUBSYSTEM==\"cpu\",ACTION==\"add\",RUN+=\"/bin/sh -c '[ ! -e /sys\$devpath/online ] || echo 1 > /sys\$devpath/online'\"" > /etc/udev/rules.d/cpu-online.rules && udevadm control --reload-rules && apt update &&  apt -y install git && apt -y install gcc && apt -y install python3-dev 
-
-wget http://semanchuk.com/philip/sysv_ipc/sysv_ipc-1.0.0.tar.gz && tar -xzf sysv_ipc-1.0.0.tar.gz && cd sysv_ipc-1.0.0 && python3 setup.py install
-
-cd /root/ && apt -y install python3-pip && pip3 install --upgrade pip && pip install numpy 
-
-cd /root/ && git clone https://github.com/libheartbeats/heartbeats.git && cd heartbeats && mkdir hbed && echo "export HEARTBEAT_ENABLED_DIR='/root/heartbeats/hbed/'" >> ~/.bashrc && source ~/.bashrc && make clean && make uninstall && make && make install && ldconfig 
-
-cd /root/ && git clone https://github.com/selectel/pyxs && cd pyxs && python3 setup.py install && cd /root/ && apt -y install xenstore-utils 
-
-cd /root/ && git clone https://github.com/chen116/demo_pacer.git && cd demo_pacer && make && cd /root/ 
 

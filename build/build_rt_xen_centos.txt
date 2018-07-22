@@ -1,68 +1,4 @@
-==== satrt of gpu3======
-# install minimal.iso centos7
 
-systemctl start sshd
-systemctl enable sshd
-nmcli con
-# check {interface#}
-nmcli con up {interface#}
-
-#https://lvtao.net/server/574.html 
-yum update -y && yum -y groupinstall "Development Tools" && yum install -y gcc gcc-c++ git patch texinfo && yum install -y python-devel acpica-tools libuuid-devel ncurses-devel glib2 glib2-devel libaio-devel openssl-devel yajl-devel glibc-devel glibc-devel.i686 pixman-devel && yum -y install wget nano
-wget http://mirror.centos.org/centos/6/os/x86_64/Packages/dev86-0.16.17-15.1.el6.x86_64.rpm
-rpm -ivh dev86-0.16.17-15.1.el6.x86_64.rpm
-git clone https://github.com/PennPanda/RT-Xen.git && cd RT-Xen
-./configure --with-extra-qemuu-configure-args='--disable-werror' 
-make dist -j8
-make install -j8
-
-#make -j8 dist PYTHON_PREFIX_ARG= && make -j8 install PYTHON_PREFIX_ARG= && /sbin/ldconfig && grub2-mkconfig -o /etc/grub2.cfg && reboot
-
-
-
-/sbin/ldconfig
-#https://wiki.centos.org/HowTos/Xen/Xen4QuickStart
-yum -y install centos-release-xen
-yum update -y
-#https://lvtao.net/server/574.html
-nano /etc/default/grub
-GRUB_CMDLINE_XEN_DEFAULT="dom0_mem=24000M,max:24000M dom0_max_vcpus=8 dom0_vcpus_pin sched=rtds"
-grub2-mkconfig -o /etc/grub2.cfg
-
-
-#change boot order https://wiki.centos.org/HowTos/Grub2
-awk -F\' '$1=="menuentry " {print i++ " : " $2}' /etc/grub2.cfg
-# check the {number#} for xen entry
-grub2-set-default {number#}
-
-
-reboot
-cd /usr/lib/
-ln -sf /usr/local/lib/libxlutil.so.4.6.0 libxlutil.so.4.6 && ln -sf /usr/local/lib/libxlutil.so.4.6.0 libxlutil.so && ln -sf /usr/local/lib/libxenlight.so.4.6.0 libxenlight.so.4.6 && ln -sf /usr/local/lib/libxenlight.so.4.6.0 libxenlight.so && ln -sf /usr/local/lib/libxenctrl.so.4.6.0 libxenctrl.so.4.6 && ln -sf /usr/local/lib/libxenguest.so.4.6.0 libxenguest.so.4.6 && ln -sf /usr/local/lib/libxenguest.so.4.6.0 libxenguest.so && ln -sf /usr/local/lib/libxenstat.so.0.0 libxenstat.so.0 && ln -sf /usr/local/lib/libxenstat.so.0.0 libxenstat.so && ln -sf /usr/local/lib/libxenstore.so.3.0.3 libxenstore.so.3.0 && ln -sf /usr/local/lib/libxenstore.so.3.0.3 libxenstore.so && ln -sf /usr/local/lib/libxenvchan.so.1.0.0 libxenvchan.so.1.0 && ln -sf /usr/local/lib/libxenvchan.so.1.0.0 libxenvchan.so && ln -sf /usr/local/lib/libblktapctl.so.1.0.0 libblktapctl.so.1.0 && ln -sf /usr/local/lib/libblktapctl.so.1.0.0 libblktapctl.so
-ldconfig
-
-
-#https://unix.stackexchange.com/questions/234873/xen-error-xl-list-complains-about-libxl
-
-/etc/init.d/xencommons start    
-/etc/init.d/xendomains start    
-/etc/init.d/xen-watchdog start    
-/etc/init.d/xendriverdomain start
-
-# install libvirt
-# https://wiki.centos.org/HowTos/Xen/Xen4QuickStart/Xen4Libvirt
-yum -y install rsync wget vim-enhanced openssh-clients
-yum -y install libvirt libvirt-daemon-xen
-reboot
-
-
-
-
-
-====end of gpu3======
-
-
-============try this start ======
 
 # install minimal.iso centos7
 
@@ -85,18 +21,18 @@ make -j8 dist PYTHON_PREFIX_ARG=
 make -j8 install PYTHON_PREFIX_ARG=
 /sbin/ldconfig 
 #https://wiki.centos.org/HowTos/Xen/Xen4QuickStart
-yum -y install centos-release-xen
-yum update -y
+yum -y install centos-release-xen && yum update -y
 #https://lvtao.net/server/574.html
-nano /etc/default/grub
-GRUB_CMDLINE_XEN_DEFAULT="dom0_mem=24000M,max:24000M dom0_max_vcpus=8 dom0_vcpus_pin sched=rtds"
-grub2-mkconfig -o /etc/grub2.cfg
 
 
-#change boot order https://wiki.centos.org/HowTos/Grub2
-awk -F\' '$1=="menuentry " {print i++ " : " $2}' /etc/grub2.cfg
-# check the {number#} for xen entry
-grub2-set-default {number#}
+
+# nano /etc/default/grub
+# GRUB_CMDLINE_XEN_DEFAULT="dom0_mem=24000M,max:24000M dom0_max_vcpus=8 dom0_vcpus_pin sched=rtds"
+# grub2-mkconfig -o /etc/grub2.cfg
+# #change boot order https://wiki.centos.org/HowTos/Grub2
+# awk -F\' '$1=="menuentry " {print i++ " : " $2}' /etc/grub2.cfg
+# # check the {number#} for xen entry
+# grub2-set-default {number#}
 
 
 # reboot
@@ -105,17 +41,48 @@ ln -sf /usr/local/lib/libxlutil.so.4.6.0 libxlutil.so.4.6 && ln -sf /usr/local/l
 ldconfig
 
 
-#https://unix.stackexchange.com/questions/234873/xen-error-xl-list-complains-about-libxl
 
-/etc/init.d/xencommons start    
-/etc/init.d/xendomains start    
-/etc/init.d/xen-watchdog start    
-/etc/init.d/xendriverdomain start
+chkconfig xencommons on
+chkconfig xendomains on
+chkconfig xen-watchdog on
 
-# install libvirt
-# https://wiki.centos.org/HowTos/Xen/Xen4QuickStart/Xen4Libvirt
+sed -i 's/#autoballoon="auto"/autoballoon=0/g' /etc/xen/xl.conf
+
+
+echo 'BOOT_XEN_AS_DEFAULT="yes"' >> /etc/sysconfig/xen-kernel
+echo 'XEN_KERNEL_ARGS="dom0_mem=24000M,max:24000M dom0_max_vcpus=8 dom0_vcpus_pin sched=rtds"' >> /etc/sysconfig/xen-kernel
+echo 'LINUX_XEN_KERNEL_ARGS="splash quiet"' >> /etc/sysconfig/xen-kernel
+echo "xenfs" > /etc/modules-load.d/xenfs.conf
+
+grub-bootxen.sh
+
 yum -y install libvirt 
+
 reboot
+
+===== install for turbo vnc =====
+# https://turbovnc.org/Downloads/YUM
+# https://www.rootusers.com/how-to-install-xfce-gui-in-centos-7-linux/
+wget https://turbovnc.org/pmwiki/uploads/Downloads/TurboVNC.repo -P /etc/yum.repos.d && yum install turbovnc -y && yum install java-devel -y && yum install epel-release -y && yum groupinstall "X Window System" -y && yum groupinstall "Xfce" -y
+
+/opt/TurboVNC/bin/vncserver
+
+nano ~/.vnc/xstartup.turbovnc
+#!/bin/sh
+/usr/bin/xfce4-terminal --geometry=120x40 --show-menubar --show-borders --show-scrollbar --font=10
+
+
+/opt/TurboVNC/bin/vncserver -kill :1
+
+/opt/TurboVNC/bin/vncserver  (for outside to vnc into dom0)
+
+
+# now from outside machine to are vnc viewing at dom0:
+openbox &
+/opt/TurboVNC/bin/vncviewer  (for dom0 to vnc into domU)
+
+
+
 
 === install for pacer ====
 
@@ -130,31 +97,3 @@ cd /root &&  git clone https://github.com/chen116/demo_pacer.git && cd demo_pace
 
 python3 monitor.py 2 10 1,2 10000
 
-
-=============try this end =======
-#networking
-
-/etc/sysconfig/network-scripts
-
-
-nmcli con
-nmcli con up eno2
-nmcli con up eno3
-nmcli con up eno4
-
-cat ifcfg-eno1
-TYPE="Ethernet"
-PROXY_METHOD="none"
-BROWSER_ONLY="no"
-BOOTPROTO="dhcp"
-DEFROUTE="yes"
-IPV4_FAILURE_FATAL="no"
-IPV6INIT="yes"
-IPV6_AUTOCONF="yes"
-IPV6_DEFROUTE="yes"
-IPV6_FAILURE_FATAL="no"
-IPV6_ADDR_GEN_MODE="stable-privacy"
-NAME="eno1"
-UUID="59f2b143-4987-46d1-af58-e12772ae36ed"
-DEVICE="eno1"
-ONBOOT="yes"

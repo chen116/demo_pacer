@@ -32,7 +32,6 @@ reboot
 
 
 
-
 cd /root/  && apt update && apt -y install git &&  apt -y install gcc && apt -y install python3-dev && wget http://semanchuk.com/philip/sysv_ipc/sysv_ipc-1.0.0.tar.gz && tar -xzf sysv_ipc-1.0.0.tar.gz && cd sysv_ipc-1.0.0 && python3 setup.py install && cd /root/  && apt -y install python3-pip && pip3 install numpy && apt-get -y install python3-setuptools && git clone https://github.com/selectel/pyxs && cd pyxs && python3 setup.py install && cd /root/ && apt -y install xenstore-utils && cd /root &&  git clone https://github.com/chen116/demo2018.git && cd demo2018/pacer 
 python3 monitor.py 2 10 1,2 10000
 
