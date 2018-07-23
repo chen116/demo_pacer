@@ -266,7 +266,7 @@ for frame in vidarray:
 	cnt+=1
 	input_q.put(stuff)
 
-	if not output_q.empty():
+	if True:#not output_q.empty():
 		object_detected = ''
 		stuff = output_q.get()
 		# stuff=None
