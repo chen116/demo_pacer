@@ -33,7 +33,7 @@ while True:
     # grab the current frame and initialize the occupied/unoccupied
     # text
     frame = vs.read()
-    frame = frame if args.get("video", None) is None else frame[1]
+    # frame = frame if args.get("video", None) is None else frame[1]
     text = "Unoccupied"
  
     # if the frame could not be grabbed, then we have reached the end
