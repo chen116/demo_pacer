@@ -12,7 +12,7 @@ import numpy as np
 
 from tkinter import *
 master = Tk()
-w = 100 # width for the Tk root
+w = 1000 # width for the Tk root
 h = 50 # height for the Tk root
 # get screen width and height
 ws = master.winfo_screenwidth() # width of the screen
@@ -32,10 +32,10 @@ anchors_var.set("Resource:")
 anchors_label = Label(master, textvariable=anchors_var,font = "Verdana 10 bold" )
 anchors_label.pack(side=LEFT)
 anchors_options = [
-    ("simple", 1),
+    ("aimd", 1),
     ("50%",0),
     ("100%", 2),
-    ("aimd", 4),
+    ("aimd-r", 4),
     ("apid", 3)
 ]
 checked = IntVar()
