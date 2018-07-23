@@ -162,8 +162,8 @@ for frame in vidarray:
         (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
  
     # show the frame and record if the user presses a key
-    namedWindow( "Thresh", CV_WINDOW_AUTOSIZE );
-    namedWindow( "Frame Delta", CV_WINDOW_AUTOSIZE );
+    cv2.namedWindow( "Thresh", CV_WINDOW_AUTOSIZE );
+    cv2.namedWindow( "Frame Delta", CV_WINDOW_AUTOSIZE );
     cv2.imshow("vid Feed", frame)
     if text != "sdno car":
         cv2.imshow("Thresh", thresh)
