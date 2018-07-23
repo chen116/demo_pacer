@@ -72,7 +72,7 @@ blank_len = 25
 rollback_len = 50
 car = np.zeros((car_len,hh,ww,3),dtype=np.uint8)
 blank = np.zeros((blank_len,hh,ww,3),dtype=np.uint8)
-rollback = np.zeros((blank_len,hh,ww,3),dtype=np.uint8)
+rollback = np.zeros((rollback_len,hh,ww,3),dtype=np.uint8)
 
 
 vs= FileVideoStream(args["video"]).start()
