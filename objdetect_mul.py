@@ -362,6 +362,7 @@ for frame in vidarray:
 vs.stop() #if args.get("video", None) is None else vs.release()
 cv2.destroyAllWindows()
 hb.heartbeat_finish()
+comm.write("heart_rate", "done")
 
 
 threadLock.acquire()

@@ -275,6 +275,7 @@ vs.stop() #if args.get("video", None) is None else vs.release()
 cv2.destroyAllWindows()
 print("[INFO] elapsed time: {:.2f}".format(fps.elapsed()))
 print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
+comm.write("heart_rate", "done")
 
 
 # import cv2
