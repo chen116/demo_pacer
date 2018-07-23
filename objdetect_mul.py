@@ -299,7 +299,7 @@ for frame in vidarray:
 
 
 
-	if not output_q.empty():
+	if True:#not output_q.empty():
 		object_detected = ''
 		stuff = output_q.get()
 		# stuff=None
