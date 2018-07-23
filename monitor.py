@@ -267,7 +267,7 @@ class MonitorThread(threading.Thread):
 			default_bw=int(self.timeslice_us/2) #dummy
 			if cur_bw!=default_bw:
 				cur_bw=default_bw	
-			cur_bw = 800
+			cur_bw = 2000
 
 
 		other_cur_bw = 0
@@ -396,7 +396,7 @@ threads = []
 shared_data = xen_interface.get_global_info()
 
 for uid in monitoring_domU:
-	xen_interface.sched_rtds(int(uid),timeslice_us,800,[])
+	xen_interface.sched_rtds(int(uid),timeslice_us,2000,[])
 
 # if '1' in shared_data['rtxen']:
 # 	xen_interface.sched_rtds(1,timeslice_us,default_bw,[])
