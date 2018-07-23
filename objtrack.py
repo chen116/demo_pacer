@@ -190,9 +190,8 @@ for frame in vidarray:
         cv2.namedWindow( "Thresh");
         cv2.imshow("Thresh", thresh)
     else:
-        if cv2.getWindowProperty("Thresh",cv2.WND_PROP_VISIBLE) != -1:
-            cv2.namedWindow( "Thresh");
-            cv2.destroyWindow("Thresh")
+        cv2.namedWindow( "Thresh");
+        cv2.destroyWindow("Thresh")
     if f_open:
         cv2.namedWindow( "Frame Delta" );
         cv2.imshow("Frame Delta", frameDelta)
