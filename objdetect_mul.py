@@ -218,7 +218,7 @@ output_q_cnt=-1
 
 if "mp4" in args["video"]:
     hh=360
-    ww=640
+    ww=480
 
 else:
     hh=144
