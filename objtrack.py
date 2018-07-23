@@ -30,7 +30,7 @@ vs= FileVideoStream(args["video"]).start()
 time.sleep(1.0)
 for i in range(vid_len):
     frame = vs.read()
-        vidarray[i,:,:,:]=frame
+    vidarray[i,:,:,:]=frame
 vs.stop()   
 
 
