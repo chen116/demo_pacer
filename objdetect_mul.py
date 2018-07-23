@@ -9,7 +9,7 @@ import cv2
 import threading 
 from queue import Queue
 
-tracking_target = ["cat","person","car"]  # outvid # fastcat
+tracking_target = ["cat","person","car","dog"]  # outvid # fastcat
 
 from tkinter import *
 master = Tk()
