@@ -163,7 +163,7 @@ for frame in vidarray:
     cv2.imshow("vid Feed", frame)
     if text != "sdno car":
         cv2.imshow("Thresh", thresh)
-        cv2.imshow("Frame Delta", frameDelta)
+        # cv2.imshow("Frame Delta", frameDelta)
     # print(cv2.getTickFrequency() / (cv2.getTickCount() - timer))
     fps.update()
 
@@ -172,6 +172,11 @@ for frame in vidarray:
     # if the `q` key is pressed, break from the lop
     if key == ord("q"):
         break
+    if key == ord("t"):
+        cv2.imshow("Thresh", thresh)
+    if key == ord("f"):
+        cv2.imshow("Frame Delta", frameDelta)
+
     hb.heartbeat_beat()
     print("get_instant_heartrate:",hb.get_instant_heartrate())
     print("get_window_heartrate:",hb.get_window_heartrate())
