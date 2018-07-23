@@ -34,6 +34,8 @@ print('what')
 while vs.more():
     timer = cv2.getTickCount()
     frame = vs.read()
+    frame = imutils.resize(frame, width=300)
+
     cv2.imshow("vid Feed", frame)
     cvfps = cv2.getTickFrequency() / (cv2.getTickCount() - timer);
     print(cvfps)
