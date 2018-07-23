@@ -38,7 +38,10 @@ class MonitorThread(threading.Thread):
 		self.base_path=base_path
 		self.threadLock=threadLock
 		self.shared_data=shared_data
+
 		self.algo = 4
+		if self.domuid==monitoring_domU[1]:
+			self.algo = 0
 		self.xen_sched = xen_sched # 1 is rtds, 0 is credit
 		self.target_reached_cnt = 0
 		self.min_heart_rate=min_heart_rate
@@ -264,7 +267,7 @@ class MonitorThread(threading.Thread):
 			default_bw=int(self.timeslice_us/2) #dummy
 			if cur_bw!=default_bw:
 				cur_bw=default_bw	
-
+			cur_bw = 800
 
 
 		other_cur_bw = 0
@@ -393,7 +396,7 @@ threads = []
 shared_data = xen_interface.get_global_info()
 
 for uid in monitoring_domU:
-	xen_interface.sched_rtds(int(uid),timeslice_us,default_bw,[])
+	xen_interface.sched_rtds(int(uid),timeslice_us,800,[])
 
 # if '1' in shared_data['rtxen']:
 # 	xen_interface.sched_rtds(1,timeslice_us,default_bw,[])
