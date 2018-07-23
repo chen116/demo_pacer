@@ -7,6 +7,7 @@ import datetime
 import imutils
 import time
 import cv2
+import numpy as np
 
 # # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -23,10 +24,19 @@ args = vars(ap.parse_args())
 # else:
 #     vs = cv2.VideoCapture(args["video"])
  
+vid_len = 300
+vidarray = np.zeros((vid_len,360,640,3),dtype=np.uint8)
+vs= FileVideoStream(args["video"]).start()
+time.sleep(1.0)
+for i in range(vid_len):
+    frame = vs.read()
+        vidarray[i,:,:,:]=frame
+vs.stop()   
 
 
-vs = FileVideoStream(args["video"]).start()
-time.sleep(2.0)
+
+# vs = FileVideoStream(args["video"]).start()
+# time.sleep(1.0)
 
 # initialize the first frame in the video stream
 firstFrame = None
@@ -34,12 +44,15 @@ firstFrame = None
 fps = FPS().start()
 
 # loop over the frames of the video
-while vs.more():
+# while vs.more():
+for frame in vidarray:
+
     timer = cv2.getTickCount()
 
     # grab the current frame and initialize the occupied/unoccupied
     # text
-    frame = vs.read()
+    # frame = vs.read()
+
     # frame = frame if args.get("video", None) is None else frame[1]
     text = "Unoccupied"
  
