@@ -245,8 +245,10 @@ for i in range(250):#blank_len+car_len):
 
 
 vs.stop()   
-
+rollforward = flip(rollback, 0)
+carbackword = flip(car,0)
 vidarray = np.concatenate((blank,blank,car,blank,rollback,car,blank,rollback,car,blank,rollback,car,blank,rollback,car,blank,rollback),axis=0)
+vidarray = np.concatenate((blank,blank,car,blank,rollback,rollforward,blank,carbackword,car,blank,blank),axis=0)
 # vidarray = np.concatenate((blank,blank,car,blank,blank,car,blank,blank,car),axis=0)
 
 
