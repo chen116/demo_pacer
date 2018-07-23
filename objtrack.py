@@ -55,15 +55,34 @@ args = vars(ap.parse_args())
 # else:
 #     vs = cv2.VideoCapture(args["video"])
  
-vid_len = 250
-vidarray = np.zeros((vid_len,144,176,3),dtype=np.uint8)
+
+
+
+
+if "mp4" in args["video"]:
+    hh=360
+    ww=640
+
+else:
+    hh=144
+    ww=176
+
+car = np.zeros((75,144,176,3),dtype=np.uint8)
+blank = np.zeros((50,144,176,3),dtype=np.uint8)
+
+
 vs= FileVideoStream(args["video"]).start()
 time.sleep(1.0)
-for i in range(vid_len):
+for i in range(125):
     frame = vs.read()
-    vidarray[i,:,:,:]=frame
+    if i<75:
+        car[i,:,:,:]=frame
+    else:
+        blank[i,:,:,:]=frame
+
 vs.stop()   
 
+vidarray = np.concatenate((car),axis=0)
 
 
 # vs = FileVideoStream(args["video"]).start()
