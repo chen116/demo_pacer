@@ -10,12 +10,21 @@ import cv2
 import numpy as np
 
 
+from tkinter import *
+master = Tk()
+w = 1000 # width for the Tk root
+h = 50 # height for the Tk root
+# get screen width and height
+ws = master.winfo_screenwidth() # width of the screen
+hs = master.winfo_screenheight() # height of the screen
+
 
 
 
 import heartbeat
 window_size_hr=5
 hb = heartbeat.Heartbeat(1024,window_size_hr,100,"vic.log",10,100)
+
 
 
 
@@ -158,8 +167,8 @@ for frame in vidarray:
     # draw the text and timestamp on the frame
     cv2.putText(frame, "-> {}".format(text), (10, 20),
         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-    cv2.putText(frame, datetime.datetime.now().strftime("%A %d %B %Y %I:%M:%S%p"),
-        (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
+    # cv2.putText(frame, datetime.datetime.now().strftime("%A %d %B %Y %I:%M:%S%p"),
+    #     (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
  
     # show the frame and record if the user presses a key
 
