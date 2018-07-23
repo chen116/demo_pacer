@@ -67,22 +67,24 @@ else:
     hh=144
     ww=176
 
-car = np.zeros((75,144,176,3),dtype=np.uint8)
-blank = np.zeros((50,144,176,3),dtype=np.uint8)
+car_len = 75
+blank_len = 23
+car = np.zeros((car_len,144,176,3),dtype=np.uint8)
+blank = np.zeros((blank_len,144,176,3),dtype=np.uint8)
 
 
 vs= FileVideoStream(args["video"]).start()
 time.sleep(1.0)
-for i in range(125):
+for i in range(blank_len+car_len):
     frame = vs.read()
-    if i<75:
+    if i<car_len:
         car[i,:,:,:]=frame
     else:
-        blank[i-75,:,:,:]=frame
+        blank[i-car_len,:,:,:]=frame
 
 vs.stop()   
 
-vidarray = np.concatenate((car,blank),axis=0)
+vidarray = np.concatenate((car,blank,car),axis=0)
 
 
 # vs = FileVideoStream(args["video"]).start()
