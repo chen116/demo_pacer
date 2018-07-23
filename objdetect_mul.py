@@ -207,9 +207,8 @@ cnt=0
 output_q_cnt=-1
 
 
-vs = FileVideoStream("walkman.mp4").start()
 
-time.sleep(1.0)
+
 
 if "mp4" in args["video"]:
     hh=360
@@ -219,14 +218,29 @@ else:
     hh=144
     ww=176
 
-vid_len = 150
-vidarray = np.zeros((vid_len,144,176,3),dtype=np.uint8)
+car_len = 75
+blank_len = 25
+rollback_len = 50
+car = np.zeros((car_len,hh,ww,3),dtype=np.uint8)
+blank = np.zeros((blank_len,hh,ww,3),dtype=np.uint8)
+rollback = np.zeros((rollback_len,hh,ww,3),dtype=np.uint8)
+
+
 vs= FileVideoStream(args["video"]).start()
 time.sleep(1.0)
-for i in range(vid_len):
+for i in range(250):#blank_len+car_len):
     frame = vs.read()
-    vidarray[i,:,:,:]=frame
+    if i<car_len:
+        car[i,:,:,:]=frame
+    elif i < blank_len+car_len:
+        blank[i-car_len,:,:,:]=frame
+    elif i >= 200:
+        rollback[i-200,:,:,:]=frame
+
+
 vs.stop()   
+
+vidarray = np.concatenate((car,blank,rollback,car,blank,rollback),axis=0)
 
 
 
@@ -330,8 +344,8 @@ for frame in vidarray:
 		# #print("hb: before heartbeat_beat()")
 		hb.heartbeat_beat()
 		print("get_instant_heartrate:",hb.get_instant_heartrate())
-		print("get_window_heartrate:",hb.get_window_heartrate())
-		print("get_global_heartrate:",hb.get_global_heartrate())
+		# print("get_window_heartrate:",hb.get_window_heartrate())
+		# print("get_global_heartrate:",hb.get_global_heartrate())
 		master.update_idletasks()
 		master.update()
 
