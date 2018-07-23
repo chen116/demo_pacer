@@ -27,18 +27,18 @@ args = vars(ap.parse_args())
 
 
 
-vs= FileVideoStream(args["video"]).start()
-time.sleep(1.0)
+# vs= FileVideoStream(args["video"]).start()
+# time.sleep(1.0)
 
-print('what')
-while vs.more():
-    timer = cv2.getTickCount()
-    frame = vs.read()
-    frame = imutils.resize(frame, width=300)
+# print('what')
+# while vs.more():
+#     timer = cv2.getTickCount()
+#     frame = vs.read()
+#     frame = imutils.resize(frame, width=300)
 
-    cv2.imshow("vid Feed", frame)
-    cvfps = cv2.getTickFrequency() / (cv2.getTickCount() - timer);
-    print(cvfps)
+#     cv2.imshow("vid Feed", frame)
+#     cvfps = cv2.getTickFrequency() / (cv2.getTickCount() - timer);
+#     print(cvfps)
 
 
 
@@ -65,8 +65,8 @@ vs.stop()
 
 
 
-# vs = FileVideoStream(args["video"]).start()
-# time.sleep(1.0)
+vs = FileVideoStream(args["video"]).start()
+time.sleep(1.0)
 
 # initialize the first frame in the video stream
 firstFrame = None
@@ -74,14 +74,14 @@ firstFrame = None
 fps = FPS().start()
 
 # loop over the frames of the video
-# while vs.more():
-for frame in vidarray:
+while vs.more():
+# for frame in vidarray:
 
     timer = cv2.getTickCount()
 
     # grab the current frame and initialize the occupied/unoccupied
     # text
-    # frame = vs.read()
+    frame = vs.read()
 
     # frame = frame if args.get("video", None) is None else frame[1]
     text = "Unoccupied"
