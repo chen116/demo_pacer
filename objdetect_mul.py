@@ -88,7 +88,7 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
 	"sofa", "train", "tvmonitor"]
 
 tracking_target = ["cat","person","car","dog"]  # outvid # fastcat
-COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
+COLORS = np.random.uniform(0, 150, size=(len(CLASSES), 3))
 
 
 net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt.txt", "MobileNetSSD_deploy.caffemodel")
