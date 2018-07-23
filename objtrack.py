@@ -161,8 +161,9 @@ for frame in vidarray:
  
     # show the frame and record if the user presses a key
     cv2.imshow("vid Feed", frame)
-    # cv2.imshow("Thresh", thresh)
-    # cv2.imshow("Frame Delta", frameDelta)
+    if text == "no car":
+        cv2.imshow("Thresh", thresh)
+        cv2.imshow("Frame Delta", frameDelta)
     # print(cv2.getTickFrequency() / (cv2.getTickCount() - timer))
     fps.update()
 
