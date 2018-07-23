@@ -67,8 +67,11 @@ for text, mode in FSIZE:
 
 
 import heartbeat
+import host_guest_comm
 window_size_hr=5
 hb = heartbeat.Heartbeat(1024,window_size_hr,100,"vic.log",10,100)
+monitoring_items = ["heart_rate","app_mode","frame_size","timeslice"]
+comm = host_guest_comm.DomU(monitoring_items)
 
 
 
@@ -259,6 +262,7 @@ for frame in vidarray:
     print("get_instant_heartrate:",hb.get_instant_heartrate())
     print("get_window_heartrate:",hb.get_window_heartrate())
     print("get_global_heartrate:",hb.get_global_heartrate())
+    comm.write("heart_rate", hb.get_window_heartrate())
     master.update_idletasks()
     master.update()
 
