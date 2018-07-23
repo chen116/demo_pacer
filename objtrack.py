@@ -29,6 +29,7 @@ args = vars(ap.parse_args())
 
 vs= FileVideoStream(args["video"]).start()
 
+print('what')
 while vs.more():
     timer = cv2.getTickCount()
     frame = vs.read()
