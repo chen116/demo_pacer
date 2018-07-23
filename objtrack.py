@@ -1,5 +1,6 @@
 from imutils.video import VideoStream
 from imutils.video import FileVideoStream
+from imutils.video import FPS
 
 import argparse
 import datetime
@@ -30,7 +31,7 @@ time.sleep(2.0)
 # initialize the first frame in the video stream
 firstFrame = None
 
-
+fps = FPS().start()
 # loop over the frames of the video
 while vs.more():
     # grab the current frame and initialize the occupied/unoccupied
@@ -86,6 +87,8 @@ while vs.more():
     cv2.imshow("Security Feed", frame)
     cv2.imshow("Thresh", thresh)
     cv2.imshow("Frame Delta", frameDelta)
+    fps.update()
+
     key = cv2.waitKey(1) & 0xFF
  
     # if the `q` key is pressed, break from the lop
@@ -93,8 +96,11 @@ while vs.more():
         break
  
 # cleanup the camera and close any open windows
+fps.stop()
 vs.stop() #if args.get("video", None) is None else vs.release()
 cv2.destroyAllWindows()
+print("[INFO] elapsed time: {:.2f}".format(fps.elapsed()))
+print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
 # import cv2
 # import sys
  
