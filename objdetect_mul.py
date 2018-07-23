@@ -348,7 +348,7 @@ for frame in vidarray:
 		# hb stuff
 		# #print("hb: before heartbeat_beat()")
 		hb.heartbeat_beat()
-		print("get_instant_heartrate:",hb.get_instant_heartrate())
+		print("get_instant_heartrate:",hb.get_window_heartrate())
 		comm.write("heart_rate", hb.get_window_heartrate())
 		# print("get_window_heartrate:",hb.get_window_heartrate())
 		# print("get_global_heartrate:",hb.get_global_heartrate())
