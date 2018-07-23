@@ -1,4 +1,6 @@
 from imutils.video import VideoStream
+from imutils.video import FileVideoStream
+
 import argparse
 import datetime
 import imutils
@@ -22,7 +24,7 @@ import cv2
  
 
 
-vs = cv2.VideoCapture("walkcat.mp4")
+vs = FileVideoStream("walkcat.mp4").start()
 time.sleep(2.0)
 
 # initialize the first frame in the video stream
@@ -30,7 +32,7 @@ firstFrame = None
 
 
 # loop over the frames of the video
-while True:
+while vs.more():
     # grab the current frame and initialize the occupied/unoccupied
     # text
     frame = vs.read()
