@@ -78,7 +78,7 @@ for i in range(125):
     if i<75:
         car[i,:,:,:]=frame
     else:
-        blank[i,:,:,:]=frame
+        blank[i-75,:,:,:]=frame
 
 vs.stop()   
 
