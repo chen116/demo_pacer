@@ -32,7 +32,13 @@ vs = FileVideoStream("walkman.mp4").start()
 
 time.sleep(1.0)
 
+if "mp4" in args["video"]:
+    hh=360
+    ww=640
 
+else:
+    hh=144
+    ww=176
 
 vid_len = 150
 vidarray = np.zeros((vid_len,144,176,3),dtype=np.uint8)
