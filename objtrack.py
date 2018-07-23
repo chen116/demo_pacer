@@ -133,8 +133,7 @@ for frame in vidarray:
     cv2.imshow("vid Feed", frame)
     # cv2.imshow("Thresh", thresh)
     # cv2.imshow("Frame Delta", frameDelta)
-    cvfps = cv2.getTickFrequency() / (cv2.getTickCount() - timer);
-    print(cvfps)
+    print(cv2.getTickFrequency() / (cv2.getTickCount() - timer))
     fps.update()
 
     key = cv2.waitKey(1) & 0xFF
