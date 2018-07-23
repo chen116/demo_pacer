@@ -251,6 +251,7 @@ vidarray = np.concatenate((car,blank,rollback,car,blank,rollback,car,blank,rollb
 
 
 
+firstFrame = None
 
 
 for frame in vidarray:
@@ -316,61 +317,90 @@ for frame in vidarray:
 		#print('output cnt:',order,'global cnt:',output_q_cnt)
 		output_q_cnt+=1
 
-		if detections[0][0][0][0] == -1:
-			if len(prev_boxes)>0:
-				for prev_box in prev_boxes:
-					startX=prev_box['startX']
-					startY=prev_box['startY']
-					endX=prev_box['endX']
-					endY=prev_box['endY']
-					idx=prev_box['idx']
-					label=prev_box['label']
-					cv2.rectangle(frame, (startX, startY), (endX, endY),
-						COLORS[idx], 2)
-					y = startY - 15 if startY - 15 > 15 else startY + 15
-					cv2.putText(frame, label, (startX, y),
-						cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)					
-		else:
-			prev_boxes=[]
-			for i in np.arange(0, detections.shape[2]):
-				# extract the confidence (i.e., probability) associated with
-				# the prediction
-				confidence = detections[0, 0, i, 2]
-				idx2 = int(detections[0,0,i,1])
-				# filter out weak detections by ensuring the `confidence` is
-				# greater than the minimum confidence
-				if ((confidence > 0.009) and (CLASSES[idx2] in tracking_target)):
-					object_detected = CLASSES[idx2]
-					# extract the index of the class label from the
-					# `detections`, then compute the (x, y)-coordinates of
-					# the bounding box for the object
-					# #print('catttttttttttttttttt')
-					idx = int(detections[0, 0, i, 1])
-					box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
-					(startX, startY, endX, endY) = box.astype("int")
-				#	#print('startX=',startX)
-				#	#print('endX=',endX)
 
-					# label =str(order)+'--'
-					label = "{}: {:.2f}%".format(CLASSES[idx],
-						confidence * 100)
-					cv2.rectangle(frame, (startX, startY), (endX, endY),
-						COLORS[idx], 2)
-					y = startY - 15 if startY - 15 > 15 else startY + 15
-					cv2.putText(frame, label, (startX, y),
-						cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
-					prev_box = {}
-					prev_box['startX']=startX
-					prev_box['startY']=startY
-					prev_box['endX']=endX
-					prev_box['endY']=endY
-					prev_box['idx']=idx
-					prev_box['label']= label
-					prev_boxes.append(prev_box)
-					localtrack = 1
-					localsearch = 0
-					sentlostmessage = 0
-					centered = 0		
+
+		object_present=0
+		gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+		gray = cv2.GaussianBlur(gray, (21, 21), 0)
+
+		# if the first frame is None, initialize it
+		if firstFrame is None:
+			firstFrame = gray
+			continue
+		# compute the absolute difference between the current frame and
+		# first frame
+		frameDelta = cv2.absdiff(firstFrame, gray)
+		thresh = cv2.threshold(frameDelta, 25, 255, cv2.THRESH_BINARY)[1]
+
+		# dilate the thresholded image to fill in holes, then find contours
+		# on thresholded image
+		thresh = cv2.dilate(thresh, None, iterations=2)
+		cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
+			cv2.CHAIN_APPROX_SIMPLE)
+		cnts = cnts[0] if imutils.is_cv2() else cnts[1]
+		for c in cnts:
+			# if the contour is too small, ignore it
+				if cv2.contourArea(c) > args["min_area"]:
+				object_present=1
+
+		if object_present:
+
+
+			if detections[0][0][0][0] == -1:
+				if len(prev_boxes)>0:
+					for prev_box in prev_boxes:
+						startX=prev_box['startX']
+						startY=prev_box['startY']
+						endX=prev_box['endX']
+						endY=prev_box['endY']
+						idx=prev_box['idx']
+						label=prev_box['label']
+						cv2.rectangle(frame, (startX, startY), (endX, endY),
+							COLORS[idx], 2)
+						y = startY - 15 if startY - 15 > 15 else startY + 15
+						cv2.putText(frame, label, (startX, y),
+							cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)					
+			else:
+				prev_boxes=[]
+				for i in np.arange(0, detections.shape[2]):
+					# extract the confidence (i.e., probability) associated with
+					# the prediction
+					confidence = detections[0, 0, i, 2]
+					idx2 = int(detections[0,0,i,1])
+					# filter out weak detections by ensuring the `confidence` is
+					# greater than the minimum confidence
+					if ((confidence > 0.009) and (CLASSES[idx2] in tracking_target)):
+						object_detected = CLASSES[idx2]
+						# extract the index of the class label from the
+						# `detections`, then compute the (x, y)-coordinates of
+						# the bounding box for the object
+						# #print('catttttttttttttttttt')
+						idx = int(detections[0, 0, i, 1])
+						box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
+						(startX, startY, endX, endY) = box.astype("int")
+					#	#print('startX=',startX)
+					#	#print('endX=',endX)
+
+						# label =str(order)+'--'
+						label = "{}: {:.2f}%".format(CLASSES[idx],
+							confidence * 100)
+						cv2.rectangle(frame, (startX, startY), (endX, endY),
+							COLORS[idx], 2)
+						y = startY - 15 if startY - 15 > 15 else startY + 15
+						cv2.putText(frame, label, (startX, y),
+							cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
+						prev_box = {}
+						prev_box['startX']=startX
+						prev_box['startY']=startY
+						prev_box['endX']=endX
+						prev_box['endY']=endY
+						prev_box['idx']=idx
+						prev_box['label']= label
+						prev_boxes.append(prev_box)
+						localtrack = 1
+						localsearch = 0
+						sentlostmessage = 0
+						centered = 0		
 		# show the output frame
 		cv2.imshow("Frame", frame)
 		# hb stuff
