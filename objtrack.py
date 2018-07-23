@@ -9,11 +9,37 @@ import time
 import cv2
 import numpy as np
 
+
+
+
+
+
+
+
+
+
+
 # # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", help="path to the video file")
 ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
 args = vars(ap.parse_args())
+
+
+
+vs= FileVideoStream(args["video"]).start()
+
+while vs.more():
+    timer = cv2.getTickCount()
+    frame = vs.read()
+    cv2.imshow("vid Feed", frame)
+    cvfps = cv2.getTickFrequency() / (cv2.getTickCount() - timer);
+    print(cvfps)
+
+
+
+
+exit()
  
 # # if the video argument is None, then we are reading from webcam
 # if args.get("video", None) is None:
@@ -104,8 +130,8 @@ for frame in vidarray:
     # cv2.imshow("Thresh", thresh)
     # cv2.imshow("Frame Delta", frameDelta)
     cvfps = cv2.getTickFrequency() / (cv2.getTickCount() - timer);
-    fps.update()
     print(cvfps)
+    fps.update()
 
     key = cv2.waitKey(1) & 0xFF
  
