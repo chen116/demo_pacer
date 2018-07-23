@@ -464,7 +464,7 @@ for t in threads:
 pp = pprint.PrettyPrinter(indent=2)
 print('Final domUs info:')
 shared_data_clean_up = xen_interface.get_global_info()
-default_bw=int(timeslice_us/len(monitoring_domU))
+default_bw=int(timeslice_us/(len(monitoring_domU)+2.0))
 
 for uid in monitoring_domU:
 	xen_interface.sched_rtds(int(uid),timeslice_us,default_bw,[])
