@@ -22,7 +22,9 @@ y = (hs)-h*2
 # set the dimensions of the screen 
 # and where it is placed
 master.geometry('%dx%d+%d+%d' % (w, h, x, y))
-sched_label = Label(master, "hi",fg = "blue",bg = "white")
+sched_var = StringVar()
+sched_var.set("hii")
+sched_label = Label(master, textvariable=sched_var,fg = "blue",bg = "white")
 sched_label.pack(side=LEFT)
 
 
