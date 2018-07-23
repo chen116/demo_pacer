@@ -48,7 +48,7 @@ for text, mode in anchors_options:
 
 
 frame_var = StringVar()
-frame_var.set("Freq:")
+frame_var.set(" | Freq:")
 frame_label = Label(master, textvariable=frame_var,font = "Verdana 10 bold" )
 frame_label.pack(side=LEFT)
 FSIZE = [
@@ -218,12 +218,12 @@ for frame in vidarray:
     # show the frame and record if the user presses a key
 
     cv2.imshow("Obj Tracking", frame)
-    # if text == "no car":
-    #     cv2.destroyWindow("Thresh")
-    #     cv2.destroyWindow("Frame Delta")
-    # else:
-    #     cv2.imshow("Thresh", thresh)
-    #     cv2.imshow("Frame Delta", frameDelta)
+    if text == "no car":
+        cv2.destroyWindow("Thresh")
+        cv2.destroyWindow("Frame Delta")
+    else:
+        cv2.imshow("Thresh", thresh)
+        cv2.imshow("Frame Delta", frameDelta)
 
 
     # print(cv2.getTickFrequency() / (cv2.getTickCount() - timer))
@@ -240,18 +240,18 @@ for frame in vidarray:
         f_open=not f_open
 
 
-    if t_open:
-        cv2.namedWindow( "Thresh");
-        cv2.imshow("Thresh", thresh)
-    else:
-        cv2.namedWindow( "Thresh");
-        cv2.destroyWindow("Thresh")
-    if f_open:
-        cv2.namedWindow( "Frame Delta" );
-        cv2.imshow("Frame Delta", frameDelta)
-    else:
-        cv2.namedWindow( "Frame Delta" );
-        cv2.destroyWindow("Frame Delta")
+    # if t_open:
+    #     cv2.namedWindow( "Thresh");
+    #     cv2.imshow("Thresh", thresh)
+    # else:
+    #     cv2.namedWindow( "Thresh");
+    #     cv2.destroyWindow("Thresh")
+    # if f_open:
+    #     cv2.namedWindow( "Frame Delta" );
+    #     cv2.imshow("Frame Delta", frameDelta)
+    # else:
+    #     cv2.namedWindow( "Frame Delta" );
+    #     cv2.destroyWindow("Frame Delta")
 
     hb.heartbeat_beat()
     print("get_instant_heartrate:",hb.get_instant_heartrate())
