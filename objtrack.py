@@ -13,8 +13,9 @@ import numpy as np
 
 
 
-
-
+import heartbeat
+window_size_hr=5
+hb = heartbeat.Heartbeat(1024,window_size_hr,100,"vic.log",10,100)
 
 
 
@@ -170,6 +171,12 @@ for frame in vidarray:
     # if the `q` key is pressed, break from the lop
     if key == ord("q"):
         break
+    hb.heartbeat_beat()
+    print("get_instant_heartrate:",hb.get_instant_heartrate())
+    print("get_window_heartrate:",hb.get_window_heartrate())
+    print("get_global_heartrate:",hb.get_global_heartrate())
+
+hb.heartbeat_finish()
  
 # cleanup the camera and close any open windows
 fps.stop()

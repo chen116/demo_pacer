@@ -6,6 +6,11 @@ import argparse
 import imutils
 import time
 import cv2
+
+
+import heartbeat
+
+
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", help="path to the video file")
 ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
