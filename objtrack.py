@@ -169,10 +169,10 @@ for frame in vidarray:
 
         cv2.imshow("Thresh", thresh)
         cv2.imshow("Frame Delta", frameDelta)
-    else:
-        if cv2.getWindowProperty("Thresh",0) >= 0:
-            cv2.destroyWindow("Thresh")
-            cv2.destroyWindow("Frame Delta")
+    # else:
+        # if cv2.getWindowProperty("Thresh",0) >= 0:
+    cv2.destroyWindow("Thresh")
+    cv2.destroyWindow("Frame Delta")
 
     # print(cv2.getTickFrequency() / (cv2.getTickCount() - timer))
     fps.update()
