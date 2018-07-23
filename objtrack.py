@@ -56,7 +56,7 @@ args = vars(ap.parse_args())
 #     vs = cv2.VideoCapture(args["video"])
  
 vid_len = 150
-vidarray = np.zeros((vid_len,360,640,3),dtype=np.uint8)
+vidarray = np.zeros((vid_len,360,480,3),dtype=np.uint8)
 vs= FileVideoStream(args["video"]).start()
 time.sleep(1.0)
 for i in range(vid_len):
