@@ -162,8 +162,7 @@ for frame in vidarray:
         (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
  
     # show the frame and record if the user presses a key
-    cv2.namedWindow( "Thresh");
-    cv2.namedWindow( "Frame Delta" );
+
     cv2.imshow("vid Feed", frame)
     # if text == "no car":
     #     cv2.destroyWindow("Thresh")
@@ -188,14 +187,17 @@ for frame in vidarray:
 
 
     if t_open:
+        cv2.namedWindow( "Thresh");
         cv2.imshow("Thresh", thresh)
     else:
-        if cv2.getWindowProperty("Thresh",cv2.WND_PROP_VISIBLE) >= 1:
-            cv2.destroyWindow("Thresh")
+        # if cv2.getWindowProperty("Thresh",cv2.WND_PROP_VISIBLE) >= 1:
+        cv2.destroyWindow("Thresh")
     if f_open:
+        cv2.namedWindow( "Frame Delta" );
         cv2.imshow("Frame Delta", frameDelta)
-        if cv2.getWindowProperty("Frame Delta",cv2.WND_PROP_VISIBLE) >= 1:
-            cv2.destroyWindow("Frame Delta")
+    else:
+        # if cv2.getWindowProperty("Frame Delta",cv2.WND_PROP_VISIBLE) >= 1:
+        cv2.destroyWindow("Frame Delta")
 
     hb.heartbeat_beat()
     print("get_instant_heartrate:",hb.get_instant_heartrate())
