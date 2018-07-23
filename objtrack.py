@@ -89,7 +89,7 @@ for i in range(250):#blank_len+car_len):
 
 vs.stop()   
 
-vidarray = np.concatenate((car,blank,rollback),axis=0)
+vidarray = np.concatenate((car,blank,rollback,car,blank,rollback),axis=0)
 
 
 # vs = FileVideoStream(args["video"]).start()
