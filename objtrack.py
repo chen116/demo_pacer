@@ -77,14 +77,14 @@ rollback = np.zeros((rollback_len,hh,ww,3),dtype=np.uint8)
 
 vs= FileVideoStream(args["video"]).start()
 time.sleep(1.0)
-for i in range(200):#blank_len+car_len):
+for i in range(250):#blank_len+car_len):
     frame = vs.read()
     if i<car_len:
         car[i,:,:,:]=frame
     elif i < blank_len+car_len:
         blank[i-car_len,:,:,:]=frame
-    elif i >= 150:
-        rollback[i-150,:,:,:]=frame
+    elif i >= 200:
+        rollback[i-200,:,:,:]=frame
 
 
 vs.stop()   
