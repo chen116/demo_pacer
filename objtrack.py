@@ -103,6 +103,8 @@ fps = FPS().start()
 
 # loop over the frames of the video
 # while vs.more():
+t_open=False
+f_open=False
 ctn=0
 for frame in vidarray:
     print("frame:",ctn)
@@ -173,9 +175,20 @@ for frame in vidarray:
     if key == ord("q"):
         break
     if key == ord("t"):
-        cv2.imshow("Thresh", thresh)
+        t_open=not t_open
     if key == ord("f"):
+        f_open=not f_open
+
+
+    if t_open:
+        cv2.imshow("Thresh", thresh)
+    else:
+        if cv2.getWindowProperty("Thresh",cv2.WND_PROP_VISIBLE) >= 1:
+            cv2.destroyWindow("Thresh")
+    if f_open:
         cv2.imshow("Frame Delta", frameDelta)
+        if cv2.getWindowProperty("Frame Delta",cv2.WND_PROP_VISIBLE) >= 1:
+            cv2.destroyWindow("Frame Delta")
 
     hb.heartbeat_beat()
     print("get_instant_heartrate:",hb.get_instant_heartrate())
