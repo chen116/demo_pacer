@@ -219,6 +219,9 @@ for frame in vidarray:
     print("get_instant_heartrate:",hb.get_instant_heartrate())
     print("get_window_heartrate:",hb.get_window_heartrate())
     print("get_global_heartrate:",hb.get_global_heartrate())
+    master.update_idletasks()
+    master.update()
+
 
 hb.heartbeat_finish()
  
