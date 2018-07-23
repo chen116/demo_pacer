@@ -23,6 +23,7 @@ import numpy as np
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", help="path to the video file")
 ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
+ap.add_argument("-w", "--width", type=int, default=500, help="im show width")
 args = vars(ap.parse_args())
 
 
@@ -92,7 +93,7 @@ for frame in vidarray:
         break
  
     # resize the frame, convert it to grayscale, and blur it
-    frame = imutils.resize(frame, width=500)
+    frame = imutils.resize(frame, width=args["width"])
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gray = cv2.GaussianBlur(gray, (21, 21), 0)
  
