@@ -44,7 +44,7 @@ if not ok:
  
 # Define an initial bounding box
 # bbox = (287, 23, 86, 320)
-bbox = (85, 24, 75, 200)
+bbox = (80, 24, 70, 320)
 
 # Uncomment the line below to select a different bounding box
 # bbox = cv2.selectROI(frame, False)
