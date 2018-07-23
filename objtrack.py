@@ -12,7 +12,7 @@ import numpy as np
 
 from tkinter import *
 master = Tk()
-w = 1000 # width for the Tk root
+w = 100 # width for the Tk root
 h = 50 # height for the Tk root
 # get screen width and height
 ws = master.winfo_screenwidth() # width of the screen
@@ -26,6 +26,44 @@ sched_var = StringVar()
 sched_var.set("hii")
 sched_label = Label(master, textvariable=sched_var,fg = "blue",bg = "white")
 sched_label.pack(side=LEFT)
+
+anchors_var = StringVar()
+anchors_var.set("Resource:")
+anchors_label = Label(master, textvariable=anchors_var,font = "Verdana 10 bold" )
+anchors_label.pack(side=LEFT)
+anchors_options = [
+    ("simple", 1),
+    ("50%",0),
+    ("100%", 2),
+    ("aimd", 4),
+    ("apid", 3)
+]
+checked = IntVar()
+checked.set(0) # initialize
+previous_checked = checked.get()
+
+for text, mode in anchors_options:
+    b = Radiobutton(master, text=text,variable=checked, value=mode)
+    b.pack(side=LEFT)
+
+
+frame_var = StringVar()
+frame_var.set("Freq:")
+frame_label = Label(master, textvariable=frame_var,font = "Verdana 10 bold" )
+frame_label.pack(side=LEFT)
+FSIZE = [
+    ("L", 6),
+    ("M", 4),
+    ("H", 3)
+]
+w1 = IntVar()
+w1.set(FSIZE[0][1]) # initialize
+previous_freq = w1.get()
+for text, mode in FSIZE:
+    b = Radiobutton(master, text=text,variable=w1, value=mode)
+    b.pack(side=LEFT)
+
+
 
 
 import heartbeat
