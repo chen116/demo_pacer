@@ -231,9 +231,6 @@ vs.stop()
 
 
 for frame in vidarray:
-    hb.heartbeat_beat()
-    print("get_instant_heartrate:",hb.get_instant_heartrate())
-    print("get_window_heartrate:",hb.get_window_heartrate())
 
 # while vs.more():
 	timer = cv2.getTickCount()
