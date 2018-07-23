@@ -27,7 +27,7 @@ args = vars(ap.parse_args())
 vid_len = 300
 vidarray = np.zeros((vid_len,360,640,3),dtype=np.uint8)
 vs= FileVideoStream(args["video"]).start()
-time.sleep(1.0)
+time.sleep(2.0)
 for i in range(vid_len):
     frame = vs.read()
     vidarray[i,:,:,:]=frame
