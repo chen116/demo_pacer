@@ -252,7 +252,7 @@ carbackword = np.copy(car)
 
 carbackword = np.flipud(carbackword)
 vidarray = np.concatenate((blank,blank,car,blank,rollback,car,blank,rollback,car,blank,rollback,car,blank,rollback,car,blank,rollback),axis=0)
-vidarray = np.concatenate((blank,blank,car,blank,rollback,rollforward,blank,carbackword,car,blank,blank),axis=0)
+vidarray = np.concatenate((blank,blank,car,blank,rollback,rollforward,blank,blank,carbackword,car,blank),axis=0)
 # vidarray = np.concatenate((blank,blank,car,blank,blank,car,blank,blank,car),axis=0)
 
 
