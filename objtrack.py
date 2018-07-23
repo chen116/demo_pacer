@@ -23,6 +23,7 @@ import cv2
 
 
 vs = cv2.VideoCapture("walkcat.mp4")
+time.sleep(2.0)
 
 # initialize the first frame in the video stream
 firstFrame = None
