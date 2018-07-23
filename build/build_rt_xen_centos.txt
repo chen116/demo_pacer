@@ -87,7 +87,8 @@ openbox &
 === install for pacer ====
 
 
-yum install -y epel-release && yum install -y python34 && yum install -y python34-setuptools && yum install -y python34-devel && easy_install-3.4 pip && pip3 install matplotlib
+
+yum install -y epel-release && yum install -y python34 && yum install -y python34-setuptools && yum install -y python34-devel && easy_install-3.4 pip && pip3 install matplotlib && yum -y install python34-tkinter 
 
 wget http://semanchuk.com/philip/sysv_ipc/sysv_ipc-1.0.0.tar.gz && tar -xzf sysv_ipc-1.0.0.tar.gz && cd sysv_ipc-1.0.0 && python3 setup.py install && cd /root/
 
