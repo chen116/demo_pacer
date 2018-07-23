@@ -9,7 +9,7 @@ import cv2
 import threading 
 from queue import Queue
 
-tracking_target = ["cat","person","car","dog"]  # outvid # fastcat
+
 
 from tkinter import *
 master = Tk()
@@ -86,6 +86,8 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
 	"bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
 	"dog", "horse", "motorbike", "person", "pottedplant", "sheep",
 	"sofa", "train", "tvmonitor"]
+
+tracking_target = CLASSES#["cat","person","car","dog"]  # outvid # fastcat
 COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 
 
@@ -310,7 +312,7 @@ for frame in vidarray:
 				idx2 = int(detections[0,0,i,1])
 				# filter out weak detections by ensuring the `confidence` is
 				# greater than the minimum confidence
-				if ((confidence > 0.2) and (CLASSES[idx2] in tracking_target)):
+				if ((confidence > 0.009) and (CLASSES[idx2] in tracking_target)):
 					object_detected = CLASSES[idx2]
 					# extract the index of the class label from the
 					# `detections`, then compute the (x, y)-coordinates of
