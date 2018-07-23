@@ -6,6 +6,11 @@ import argparse
 import imutils
 import time
 import cv2
+ap = argparse.ArgumentParser()
+ap.add_argument("-v", "--video", help="path to the video file")
+ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
+args = vars(ap.parse_args())
+
 
 # COLORS=np.array([[5,200,250]])
 CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
@@ -23,9 +28,22 @@ vs = FileVideoStream("walkman.mp4").start()
 time.sleep(1.0)
 
 
-while vs.more():
+
+vid_len = 150
+vidarray = np.zeros((vid_len,360,640,3),dtype=np.uint8)
+vs= FileVideoStream(args["video"]).start()
+time.sleep(1.0)
+for i in range(vid_len):
+    frame = vs.read()
+    vidarray[i,:,:,:]=frame
+vs.stop()   
+
+
+for frame in vidarray:
+
+# while vs.more():
 	timer = cv2.getTickCount()
-	frame = vs.read()
+	# frame = vs.read()
 	frame = imutils.resize(frame, width=300)
 	(h, w) = frame.shape[:2]
 	blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)),0.007843, (300, 300), 127.5)
