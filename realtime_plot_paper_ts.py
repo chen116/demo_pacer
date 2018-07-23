@@ -91,7 +91,7 @@ def animate2(i):
             if cnt==0:
                 time_start = float(line[-1])
             time_end = float(line[-1])
-            index=int(line[0])-1
+            index=int(line[0])-23
             if len(line)==3+1:
                 x[index].append(cnt)
                 hrs[index].append(float(line[1]))
