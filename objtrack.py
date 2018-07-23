@@ -32,10 +32,11 @@ time.sleep(2.0)
 firstFrame = None
 
 fps = FPS().start()
-timer = cv2.getTickCount()
 
 # loop over the frames of the video
 while vs.more():
+    timer = cv2.getTickCount()
+
     # grab the current frame and initialize the occupied/unoccupied
     # text
     frame = vs.read()
