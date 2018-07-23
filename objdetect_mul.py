@@ -340,7 +340,7 @@ for frame in vidarray:
 		cnts = cnts[0] if imutils.is_cv2() else cnts[1]
 		for c in cnts:
 			# if the contour is too small, ignore it
-				if cv2.contourArea(c) > args["min_area"]:
+			if cv2.contourArea(c) > args["min_area"]:
 				object_present=1
 
 		if object_present:
