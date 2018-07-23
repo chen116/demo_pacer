@@ -165,14 +165,13 @@ for frame in vidarray:
     cv2.namedWindow( "Thresh");
     cv2.namedWindow( "Frame Delta" );
     cv2.imshow("vid Feed", frame)
-    if text != "sdno car":
-
+    if text == "no car":
+        cv2.destroyWindow("Thresh")
+        cv2.destroyWindow("Frame Delta")
+    else:
         cv2.imshow("Thresh", thresh)
         cv2.imshow("Frame Delta", frameDelta)
-    # else:
-        # if cv2.getWindowProperty("Thresh",0) >= 0:
-    cv2.destroyWindow("Thresh")
-    cv2.destroyWindow("Frame Delta")
+
 
     # print(cv2.getTickFrequency() / (cv2.getTickCount() - timer))
     fps.update()
