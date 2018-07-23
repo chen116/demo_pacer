@@ -17,8 +17,13 @@ h = 50 # height for the Tk root
 # get screen width and height
 ws = master.winfo_screenwidth() # width of the screen
 hs = master.winfo_screenheight() # height of the screen
-
-
+x = (ws/2) - (w/2)
+y = (hs)-h*2
+# set the dimensions of the screen 
+# and where it is placed
+master.geometry('%dx%d+%d+%d' % (w, h, x, y))
+sched_label = Label(master, "hi",fg = "blue",bg = "white")
+sched_label.pack(side=LEFT)
 
 
 import heartbeat
@@ -172,7 +177,7 @@ for frame in vidarray:
  
     # show the frame and record if the user presses a key
 
-    cv2.imshow("vid Feed", frame)
+    cv2.imshow("Obj Tracking", frame)
     # if text == "no car":
     #     cv2.destroyWindow("Thresh")
     #     cv2.destroyWindow("Frame Delta")
