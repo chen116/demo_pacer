@@ -22,9 +22,9 @@ vs = FileVideoStream("walkman.mp4").start()
 
 time.sleep(1.0)
 
-fps = FPS().start()
+
 while vs.more():
-    timer = cv2.getTickCount()
+	timer = cv2.getTickCount()
 	frame = vs.read()
 	frame = imutils.resize(frame, width=300)
 	(h, w) = frame.shape[:2]
@@ -46,7 +46,7 @@ while vs.more():
 		cv2.putText(frame, label, (startX, y),
 			cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
 	cv2.imshow("Frame", frame)
-    print(cv2.getTickFrequency() / (cv2.getTickCount() - timer))
+	print(cv2.getTickFrequency() / (cv2.getTickCount() - timer))
 	key = cv2.waitKey(1) & 0xFF
 vs.stop() #if args.get("video", None) is None else vs.release()
 cv2.destroyAllWindows()
