@@ -32,6 +32,8 @@ time.sleep(2.0)
 firstFrame = None
 
 fps = FPS().start()
+timer = cv2.getTickCount()
+
 # loop over the frames of the video
 while vs.more():
     # grab the current frame and initialize the occupied/unoccupied
@@ -87,7 +89,9 @@ while vs.more():
     cv2.imshow("Security Feed", frame)
     cv2.imshow("Thresh", thresh)
     cv2.imshow("Frame Delta", frameDelta)
+    cvfps = cv2.getTickFrequency() / (cv2.getTickCount() - timer);
     fps.update()
+    print(cvfps)
 
     key = cv2.waitKey(1) & 0xFF
  
