@@ -216,6 +216,8 @@ for frame in vidarray:
     #     (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
  
     # show the frame and record if the user presses a key
+    cv2.namedWindow( "Thresh");
+    cv2.namedWindow( "Frame Delta" );
 
     cv2.imshow("Obj Tracking", frame)
     if text == "no car":
