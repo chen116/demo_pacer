@@ -87,7 +87,7 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
 	"dog", "horse", "motorbike", "person", "pottedplant", "sheep",
 	"sofa", "train", "tvmonitor"]
 
-tracking_target = CLASSES#["cat","person","car","dog"]  # outvid # fastcat
+tracking_target = ["cat","person","car","dog"]  # outvid # fastcat
 COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 
 
