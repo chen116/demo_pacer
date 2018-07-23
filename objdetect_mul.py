@@ -192,6 +192,7 @@ input_q = Queue()  # fps is better if queue is higher but then more lags
 output_q = Queue()
 
 
+
 threads = []
 every_n_frame = {'cnt':-1,'n':w1.get()}
 threadLock = threading.Lock()
@@ -261,7 +262,6 @@ vidarray = np.concatenate((blank,blank,car,blank,rollback,rollforward,blank,blan
 
 firstFrame = None
 
-
 for frame in vidarray:
 
 # while vs.more():
@@ -281,6 +281,7 @@ for frame in vidarray:
 	stuff={'blob':blob,'cnt':cnt,'n':w1.get()}
 	cnt+=1
 	input_q.put(stuff)
+	current_freq=w1.get()
 
 
     # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -346,10 +347,19 @@ for frame in vidarray:
 		cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
 			cv2.CHAIN_APPROX_SIMPLE)
 		cnts = cnts[0] if imutils.is_cv2() else cnts[1]
+		w1.set(FSIZE[0][1])
+
+
 		for c in cnts:
 			# if the contour is too small, ignore it
 			if cv2.contourArea(c) > args["min_area"]:
 				object_present=1
+				w1.set(FSIZE[2][1])
+
+
+
+
+
 
 		if object_present:
 
@@ -411,6 +421,9 @@ for frame in vidarray:
 						centered = 0		
 		# show the output frame
 		cv2.imshow("Frame", frame)
+		if current_freq!=previous_freq and output_q_cnt%w1.get()==0:
+			comm.write("frame_size",current_freq)
+			previous_freq=current_freq
 		# hb stuff
 		# #print("hb: before heartbeat_beat()")
 		hb.heartbeat_beat()
