@@ -170,7 +170,7 @@ for frame in vidarray:
         cv2.imshow("Thresh", thresh)
         cv2.imshow("Frame Delta", frameDelta)
     else:
-        if cv2.getWindowProperty("Thresh",cv2.WND_PROP_VISIBLE) >= 1:
+        if cv2.getWindowProperty("Thresh",0) >= 0:
             cv2.destroyWindow("Thresh")
             cv2.destroyWindow("Frame Delta")
 
