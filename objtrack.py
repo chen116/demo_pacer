@@ -87,9 +87,9 @@ while vs.more():
         (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
  
     # show the frame and record if the user presses a key
-    cv2.imshow("Security Feed", frame)
-    cv2.imshow("Thresh", thresh)
-    cv2.imshow("Frame Delta", frameDelta)
+    cv2.imshow("vid Feed", frame)
+    # cv2.imshow("Thresh", thresh)
+    # cv2.imshow("Frame Delta", frameDelta)
     cvfps = cv2.getTickFrequency() / (cv2.getTickCount() - timer);
     fps.update()
     print(cvfps)
