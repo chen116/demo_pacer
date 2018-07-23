@@ -42,7 +42,7 @@ while vs.more():
 
 
 
-exit()
+# exit()
 
  
 # # if the video argument is None, then we are reading from webcam
