@@ -268,11 +268,11 @@ for frame in vidarray:
 	every_n_frame['n']=w1.get()
 	threadLock.release()
 
-	stuff={'blob':blob,'cnt':cnt,'n':w1.get()}
-	cnt+=1
-	input_q.put(stuff)
 
-	if True:#not output_q.empty():
+
+
+
+	if not output_q.empty():
 		object_detected = ''
 		stuff = output_q.get()
 		# stuff=None
