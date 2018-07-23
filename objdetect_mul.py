@@ -67,7 +67,7 @@ for text, mode in FSIZE:
 
 import heartbeat
 import host_guest_comm
-window_size_hr=5
+window_size_hr=12
 hb = heartbeat.Heartbeat(1024,window_size_hr,100,"vic.log",10,100)
 monitoring_items = ["heart_rate","app_mode","frame_size","timeslice"]
 comm = host_guest_comm.DomU(monitoring_items)
@@ -189,8 +189,7 @@ class Workers(threading.Thread):
 input_q = Queue()  # fps is better if queue is higher but then more lags
 output_q = Queue()
 
-m1 = IntVar()
-m1.set(5)
+
 threads = []
 every_n_frame = {'cnt':-1,'n':w1.get()}
 threadLock = threading.Lock()
