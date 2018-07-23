@@ -6,7 +6,7 @@ import argparse
 import imutils
 import time
 import cv2
-
+import threading 
 from tkinter import *
 master = Tk()
 w = 1000 # width for the Tk root
