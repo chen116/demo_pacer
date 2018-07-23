@@ -154,7 +154,7 @@ for frame in vidarray:
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
         text = "car detected"#str(len(cnts))
     # draw the text and timestamp on the frame
-    cv2.putText(frame, "Status: {}".format(text), (10, 20),
+    cv2.putText(frame, "-> {}".format(text), (10, 20),
         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
     cv2.putText(frame, datetime.datetime.now().strftime("%A %d %B %Y %I:%M:%S%p"),
         (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
