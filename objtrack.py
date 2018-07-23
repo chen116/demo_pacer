@@ -76,8 +76,10 @@ fps = FPS().start()
 
 # loop over the frames of the video
 # while vs.more():
+int ctn=0
 for frame in vidarray:
-
+    print("frame:",ctn)
+    ctn+=1
     timer = cv2.getTickCount()
 
     # grab the current frame and initialize the occupied/unoccupied
