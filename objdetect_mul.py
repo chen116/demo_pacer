@@ -348,7 +348,8 @@ for frame in vidarray:
 		# #print("hb: before heartbeat_beat()")
 		hb.heartbeat_beat()
 		print("get_instant_heartrate:",hb.get_window_heartrate())
-		comm.write("heart_rate", hb.get_window_heartrate())
+		if cnt%window_size_hr==0:
+			comm.write("heart_rate", hb.get_window_heartrate())
 		# print("get_window_heartrate:",hb.get_window_heartrate())
 		# print("get_global_heartrate:",hb.get_global_heartrate())
 		master.update_idletasks()
