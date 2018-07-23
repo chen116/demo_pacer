@@ -76,7 +76,7 @@ fps = FPS().start()
 
 # loop over the frames of the video
 # while vs.more():
-int ctn=0
+ctn=0
 for frame in vidarray:
     print("frame:",ctn)
     ctn+=1
