@@ -66,6 +66,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 
 	c.write(key_path_hash_frame_number_entry,('ready').encode())
 	frame_number_entry = "init"
+	prev_frame = -1
 	while frame_number_entry != "done":
 		frame_number_entry = c.read(key_path_hash_frame_number_entry).decode()
 		try:
@@ -73,7 +74,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 		except:
 			frame_num = -1
 
-		if frame_num > -1:
+		if frame_num > -1 and frame_num>prev_frame:
 			print('frame:',frame_num)
 			frame = vidarray[frame_num]
 			frame = imutils.resize(frame, width=300)
@@ -91,6 +92,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			if sum((startX, startY, endX, endY))==0:
 				print("got no box")
 			c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
+			prev_frame = frame_num
 
 
 
