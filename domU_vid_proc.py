@@ -151,8 +151,8 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			self_cnt+=1
 
 			hb.heartbeat_beat()
-			print("get_instant_heartrate:",hb.get_window_heartrate())
-			if self_cnt%window_size_hr==0:
+			print("get_window_heartrate:",hb.get_window_heartrate())
+			if self_cnt%window_size_hr==0 and self_cnt>window_size_hr:
 				comm.write("heart_rate", hb.get_window_heartrate())
 			if prev_every_n_frame!=every_n_frame:
 				prev_every_n_frame=every_n_frame
