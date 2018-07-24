@@ -110,7 +110,10 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			key_path_hash=('/local/domain/'+domuid+'/frame_number_entry').encode()
 			c.write(key_path_hash,str(frame_cnt).encode()) # write in frame number
 			key_path_hash=('/local/domain/'+domuid+'/box_entry').encode()
-			boxes[domuid]=tuple(map(int, c.read(key_path_hash).decode().split(' ')))#(startX, startY, endX, endY)
+			try:
+				boxes[domuid]=tuple(map(int, c.read(key_path_hash).decode().split(' ')))#(startX, startY, endX, endY)	
+			except:
+				boxes[domuid]=(0,0,0,0)
 		idx=-1
 		for domuid in domu_ids:
 			idx+=1
