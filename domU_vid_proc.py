@@ -90,7 +90,7 @@ carbackword = np.copy(car)
 carbackword = np.flipud(carbackword)
 vidarray = np.concatenate((blank,blank,car,blank,rollback,car,blank,rollback,car,blank,rollback,car,blank,rollback,car,blank,rollback),axis=0)
 vidarray = np.concatenate((car,carbackword,blank,blank,car,blank,rollback,rollforward,blank,blank,carbackword,blank,blank,car,blank),axis=0)
-vidarray = np.concatenate((car,carbackword,blank,blank,car,carbackword,blank,blank,car,carbackword,blank,blank,car,carbackword,blank,blank),axis=0)
+vidarray = np.concatenate((blank,blank,car,carbackword,blank,blank,car,carbackword,blank,blank,car,carbackword,blank,blank,car,carbackword,blank,blank),axis=0)
 
 
 
@@ -143,6 +143,8 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 						(startX, startY, endX, endY) = box.astype("int")
 				if sum((startX, startY, endX, endY))>0:
 					every_n_frame = 2
+				else:
+					every_n_frame = 4
 				c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
 			prev_frame = frame_num
 			self_cnt+=1
