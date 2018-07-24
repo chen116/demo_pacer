@@ -80,7 +80,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			print('frame:',frame_num)
 			frame = vidarray[frame_num]
 			frame = imutils.resize(frame, width=300)
-			# (startX, startY, endX, endY)=(0,0,0,0) 
+			(startX, startY, endX, endY)=(0,0,0,0) 
 			if self_cnt%every_n_frame==0:
 				(startX, startY, endX, endY)=(0,0,0,0) 
 				(h, w) = frame.shape[:2]
@@ -93,8 +93,8 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 						box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
 						(startX, startY, endX, endY) = box.astype("int")
 						print("got a box")
-				if sum((startX, startY, endX, endY))>0:
-					c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
+				# if sum((startX, startY, endX, endY))>0:
+				c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
 			prev_frame = frame_num
 			self_cnt+=1
 
