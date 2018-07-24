@@ -116,7 +116,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	frame_number_entry = "init"
 	prev_frame = -1
 	self_cnt = 0
-	every_n_frame = 4
+	every_n_frame = 2
 	prev_every_n_frame = every_n_frame
 	while frame_number_entry != "done":
 		frame_number_entry = c.read(key_path_hash_frame_number_entry).decode()
@@ -153,7 +153,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			print("get_window_heartrate:",hb.get_window_heartrate())
 			if self_cnt%window_size_hr==0 and self_cnt>window_size_hr:
 				comm.write("heart_rate", hb.get_window_heartrate())
-			if prev_every_n_frame!=every_n_frame and self_cnt>window_size_hr:
+			if prev_every_n_frame!=every_n_frame :
 				prev_every_n_frame=every_n_frame
 				comm.write("frame_size",every_n_frame)
 
