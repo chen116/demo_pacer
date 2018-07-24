@@ -62,10 +62,11 @@ else:
 
 
 
+
 car_len = 75
 blank_len = 25
 rollback_len = 50
-car = np.zeros((50,hh,ww,3),dtype=np.uint8)
+car = np.zeros((30,hh,ww,3),dtype=np.uint8)
 blank = np.zeros((blank_len,hh,ww,3),dtype=np.uint8)
 rollback = np.zeros((rollback_len,hh,ww,3),dtype=np.uint8)
 
@@ -74,9 +75,9 @@ vs= FileVideoStream(args["video"]).start()
 time.sleep(1.0)
 for i in range(250):#blank_len+car_len):
     frame = vs.read()
-    if i<car_len and i <60 and i>=10:
-        car[i-10,:,:,:]=frame
-    elif i < blank_len+car_len and i >=10:
+    if i<car_len and i <50 and i>=20:
+        car[i-20,:,:,:]=frame
+    elif i < blank_len+car_len and i >=20:
         blank[i-car_len,:,:,:]=frame
     elif i >= 200:
         rollback[i-200,:,:,:]=frame
@@ -87,13 +88,8 @@ vs.stop()
 rollforward = np.copy(rollback)
 rollforward = np.flipud(rollforward)
 carbackword = np.copy(car)
-
 carbackword = np.flipud(carbackword)
-vidarray = np.concatenate((blank,blank,car,blank,rollback,car,blank,rollback,car,blank,rollback,car,blank,rollback,car,blank,rollback),axis=0)
-vidarray = np.concatenate((car,carbackword,blank,blank,car,blank,rollback,rollforward,blank,blank,carbackword,blank,blank,car,blank),axis=0)
-vidarray = np.concatenate((blank,blank,car,carbackword,blank,blank,car,carbackword,blank,blank,car,carbackword,blank,blank,car,carbackword,blank,blank),axis=0)
-vidarray = np.concatenate((car,car,car,car,blank,blank,blank,blank,blank,car,car,car,car,car),axis=0)
-
+vidarray = np.concatenate((car,car,car,car,car,car,blank,blank,blank,blank,blank,blank,blank,car,car,car,car,car,car,car),axis=0)
 
 
 COLORS=[]
