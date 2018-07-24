@@ -99,7 +99,7 @@ net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt.txt", "MobileNetSSD
 
 import heartbeat
 import host_guest_comm
-window_size_hr=6
+window_size_hr=4
 hb = heartbeat.Heartbeat(1024,window_size_hr,100,"vic.log",10,100)
 monitoring_items = ["heart_rate","app_mode","frame_size","timeslice"]
 comm = host_guest_comm.DomU(monitoring_items)
@@ -116,7 +116,8 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	frame_number_entry = "init"
 	prev_frame = -1
 	self_cnt = 0
-	every_n_frame = 3
+	every_n_frame = 4
+	prev_every_n_frame = every_n_frame
 	while frame_number_entry != "done":
 		frame_number_entry = c.read(key_path_hash_frame_number_entry).decode()
 		try:
@@ -140,8 +141,8 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 					if confidence > 0.5:
 						box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
 						(startX, startY, endX, endY) = box.astype("int")
-						print("got a box")
-				# if sum((startX, startY, endX, endY))>0:
+				if sum((startX, startY, endX, endY))>0:
+					every_n_frame = 2
 				c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
 			prev_frame = frame_num
 			self_cnt+=1
@@ -150,6 +151,10 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			print("get_instant_heartrate:",hb.get_window_heartrate())
 			if self_cnt%window_size_hr==0:
 				comm.write("heart_rate", hb.get_window_heartrate())
+			if prev_every_n_frame!=every_n_frame:
+				prev_every_n_frame=every_n_frame
+				comm.write("frame_size",every_n_frame)
+
 
 hb.heartbeat_finish()
 comm.write("heart_rate", "done")
