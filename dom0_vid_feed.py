@@ -15,7 +15,7 @@ import cv2
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", default="rollcar.3gp", help="path to the video file")
 ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
-ap.add_argument("-f", "--fps", type=int, default=15, help="minimum area size")
+ap.add_argument("-f", "--fps", type=int, default=30, help="minimum area size")
 args = vars(ap.parse_args())
 
 if "mp4" in args["video"]:

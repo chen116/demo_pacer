@@ -50,7 +50,7 @@ class MonitorThread(threading.Thread):
 		self.threadLock=threadLock
 		self.shared_data=shared_data
 
-		self.algo = 4
+		self.algo = 5
 		if self.domuid==monitoring_domU[1]:
 			self.algo = 0
 		self.xen_sched = xen_sched # 1 is rtds, 0 is credit
@@ -279,6 +279,23 @@ class MonitorThread(threading.Thread):
 			if cur_bw!=default_bw:
 				cur_bw=default_bw	
 			cur_bw = 2000/2
+		if self.algo==5:
+			if(heart_rate<self.min_heart_rate):
+				if cur_bw<self.timeslice_us-minn:
+					cur_bw+=minn
+			if(heart_rate>self.max_heart_rate):
+				if cur_bw>minn:
+					cur_bw-=minn
+			if heart_rate > self.min_heart_rate:
+				self.target_reached_cnt+=1
+				if self.target_reached_cnt==16:
+					self.target_reached_cnt-=8
+					if cur_bw>minn:
+						cur_bw-=minn
+			else:
+				self.target_reached_cnt=0
+
+
 
 
 		other_cur_bw = 0
