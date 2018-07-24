@@ -99,7 +99,7 @@ COLORS=[]
 
 
 minmax = open("minmax.txt","r").read()
-fps_val = float(minmax.split('\n')[0].split()[1])*1.5
+fps_val = float(minmax.split('\n')[0].split()[1])*2
 print(fps_val)
 
 
