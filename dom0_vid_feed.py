@@ -102,6 +102,10 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			print("dom",domuid,"ready")
 
 	print("applcation start...")
+	for domuid in domu_ids:
+		key_path_hash=('/local/domain/'+domuid+'/vid_entry').encode()
+		c.write(key_path_hash,domuid.encode())
+
 	print(vidarray)
 
 
