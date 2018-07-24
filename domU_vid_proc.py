@@ -110,7 +110,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 
 			hb.heartbeat_beat()
 			print("get_instant_heartrate:",hb.get_window_heartrate())
-			if cnt%window_size_hr==0:
+			if self_cnt%window_size_hr==0:
 				comm.write("heart_rate", hb.get_window_heartrate())
 
 hb.heartbeat_finish()
