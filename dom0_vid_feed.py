@@ -97,7 +97,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 
 	frame_cnt=0
 	for frame in vidarray:
-		frame = imutils.resize(frame, width=300)
+		frame = imutils.resize(frame, width=500)
 		cv2.imshow("Frame", frame)
 		key = cv2.waitKey(1) & 0xFF
 
