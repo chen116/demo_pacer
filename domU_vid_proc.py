@@ -67,6 +67,8 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	c.write(key_path_hash_frame_number_entry,('ready').encode())
 	frame_number_entry = "init"
 	prev_frame = -1
+	self_cnt = 0
+	every_n_frame = 5
 	while frame_number_entry != "done":
 		frame_number_entry = c.read(key_path_hash_frame_number_entry).decode()
 		try:
@@ -78,21 +80,24 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			print('frame:',frame_num)
 			frame = vidarray[frame_num]
 			frame = imutils.resize(frame, width=300)
-			(h, w) = frame.shape[:2]
-			blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)),0.007843, (300, 300), 127.5)
-			net.setInput(blob)
-			detections = net.forward()
-			(startX, startY, endX, endY)=(0,0,0,0) 
-			for i in np.arange(0, detections.shape[2]):
-				confidence = detections[0, 0, i, 2]
-				if confidence > 0.5:
-					box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
-					(startX, startY, endX, endY) = box.astype("int")
-					print("got a box")
-			if sum((startX, startY, endX, endY))==0:
-				print("got no box")
-			c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
+			# (startX, startY, endX, endY)=(0,0,0,0) 
+			if self_cnt%every_n_frame==0:
+				(startX, startY, endX, endY)=(0,0,0,0) 
+				(h, w) = frame.shape[:2]
+				blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)),0.007843, (300, 300), 127.5)			
+				net.setInput(blob)
+				detections = net.forward()
+				for i in np.arange(0, detections.shape[2]):
+					confidence = detections[0, 0, i, 2]
+					if confidence > 0.5:
+						box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
+						(startX, startY, endX, endY) = box.astype("int")
+						print("got a box")
+				if sum((startX, startY, endX, endY))==0:
+					print("got no box")
+				c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
 			prev_frame = frame_num
+			self_cnt+=1
 
 
 
