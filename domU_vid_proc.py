@@ -68,7 +68,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	frame_number_entry = "init"
 	prev_frame = -1
 	self_cnt = 0
-	every_n_frame = 5
+	every_n_frame = 1
 	while frame_number_entry != "done":
 		frame_number_entry = c.read(key_path_hash_frame_number_entry).decode()
 		try:
