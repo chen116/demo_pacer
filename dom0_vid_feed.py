@@ -105,6 +105,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 
 	frame_cnt=-1
 	for frame in vidarray:
+		frame = imutils.resize(frame, width=300)
 		frame_cnt+=1
 		for domuid in domu_ids:
 			key_path_hash=('/local/domain/'+domuid+'/frame_number_entry').encode()
@@ -125,7 +126,6 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				cv2.rectangle(frame, (startX, startY), (endX, endY),COLORS[idx], 2)  
 				y = startY - 15 if startY - 15 > 15 else startY + 15
 				cv2.putText(frame, label, (startX, y),cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
-		frame = imutils.resize(frame, width=300)
 		cv2.imshow("Frame", frame)
 		key = cv2.waitKey(1) & 0xFF
 
