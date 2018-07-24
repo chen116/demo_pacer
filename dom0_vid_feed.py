@@ -67,7 +67,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	if domu_ids==[]:
 		for x in c.list('/local/domain'.encode()):
 			domu_ids.append(x.decode())
-			boxes[x.decode()]=[]
+			boxes[x.decode()]=tuple()
 		domu_ids.pop(0)
 		boxes.remove('0')
 
@@ -107,10 +107,10 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			key_path_hash=('/local/domain/'+domuid+'/vid_entry').encode()
 			c.write(key_path_hash,str(frame_cnt).encode())
 			key_path_hash=('/local/domain/'+domuid+'/box_entry').encode()
-			boxes[domuid]=c.read(key_path_hash).decode().split()
-		
-
-
+			boxes[domuid]=tuple(map(int, c.read(key_path_hash).decode().split(' ')))#(startX, startY, endX, endY)
+		for domuid in domu_ids:
+			(startX, startY, endX, endY) = boxes[domuid]
+			
 		frame = imutils.resize(frame, width=300)
 		cv2.imshow("Frame", frame)
 		key = cv2.waitKey(1) & 0xFF
