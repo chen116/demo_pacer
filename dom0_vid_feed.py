@@ -15,6 +15,7 @@ import cv2
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", default="rollcar.3gp", help="path to the video file")
 ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
+ap.add_argument("-f", "--fps", type=int, default=15, help="minimum area size")
 args = vars(ap.parse_args())
 
 if "mp4" in args["video"]:
@@ -152,15 +153,15 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 		for domuid in domu_ids:
 			key_path_hash=('/local/domain/'+domuid+'/frame_number_entry').encode()
 			c.write(key_path_hash,str(frame_cnt).encode()) # write in frame number
+		while time.time()- tn < 1/args["fps"]:
+			continue
+		idx=-1
+		for domuid in domu_ids:
 			key_path_hash=('/local/domain/'+domuid+'/box_entry').encode()
 			try:
 				boxes[domuid]=tuple(map(int, c.read(key_path_hash).decode().split(' ')))#(startX, startY, endX, endY)	
 			except:
 				boxes[domuid]=(0,0,0,0)
-		while time.time()-tn < 0.10:
-			continue
-		idx=-1
-		for domuid in domu_ids:
 			idx+=1
 			(startX, startY, endX, endY) = boxes[domuid]
 			if sum((startX, startY, endX, endY))>0:

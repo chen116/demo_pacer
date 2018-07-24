@@ -11,18 +11,6 @@ from pyxs import Client
 import apid
 with open("info.txt", "w") as myfile:
 	myfile.write("")
-import argparse
-
-ap = argparse.ArgumentParser()
-ap.add_argument("-v", "--video", default="rollcar.3gp", help="path to the video file")
-ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
-ap.add_argument("-d", "--domUs", help="domUs' id")
-ap.add_argument("-f", "--fps", type=float, default=15, help="target fps")
-args = vars(ap.parse_args())
-
-
-print(args["domUs"])
-exit()
 
 monitoring_items = ["heart_rate","app_mode","frame_size","timeslice"]
 
