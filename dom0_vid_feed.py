@@ -22,8 +22,8 @@ keys=['vid']
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	if domu_ids==[]:
 		for x in c.list('/local/domain'.encode()):
-			self.domu_ids.append(x.decode())
-		self.domu_ids.pop(0)
+			domu_ids.append(x.decode())
+		domu_ids.pop(0)
 	for domuid in self.domu_ids:
 		permissions = []
 		permissions.append(('b'+'0').encode())
