@@ -117,7 +117,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	COLORS = np.random.uniform(100, 255, size=(len(domu_ids), 3))
 	# COLORS= np.array([[100,500,250],[200,50,250]])#np.vstack((np.array([[5,200,250]]),np.array([[100,500,250]])))
 	COLORS = [[ 120 , 240 , 120],[ 240 , 120,  240]] # green, pink 
-	COLORS = [ [144,30,255],[ 120 , 240 , 120],] 
+	COLORS = [ [255,144,30],[ 120 , 240 , 120],] 
 
 
 	not_ready_domUs = copy.deepcopy(domu_ids)
@@ -172,7 +172,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				label = "domU: {}".format(domuid)
 				cv2.rectangle(frame, (startX, startY), (endX, endY),COLORS[idx], 2-idx)  
 				y = startY - 15 if startY - 15 > 15 else startY + 15
-				cv2.putText(frame, label, (startX, y),cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
+				cv2.putText(frame, label, (startX, y),cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2-idx)
 
 		cv2.imshow("Frame", frame)
 		key = cv2.waitKey(1) & 0xFF
