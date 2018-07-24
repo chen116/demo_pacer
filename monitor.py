@@ -50,7 +50,7 @@ class MonitorThread(threading.Thread):
 		self.threadLock=threadLock
 		self.shared_data=shared_data
 
-		self.algo = 4
+		self.algo = 5
 		if self.domuid==monitoring_domU[1]:
 			self.algo = 0
 		self.xen_sched = xen_sched # 1 is rtds, 0 is credit
