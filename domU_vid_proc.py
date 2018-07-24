@@ -88,9 +88,10 @@ rollforward = np.flipud(rollforward)
 carbackword = np.copy(car)
 carbackword = np.flipud(carbackword)
 
-vidarray = np.concatenate((car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,blank,blank,blank,blank,blank,blank,blank,blank,blank,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword),axis=0)
-
-
+vidarray = np.concatenate((car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,
+	blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,
+	car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword
+	),axis=0)
 
 net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt.txt", "MobileNetSSD_deploy.caffemodel")
 
