@@ -98,3 +98,8 @@ cd /root &&  git clone https://github.com/chen116/demo_pacer.git && cd demo_pace
 
 python3 monitor.py 2 10 1,2 10000
 
+== install opencv =====
+
+cp /root/demo_pacer/build/cv3_install_for_py3.sh /root/ && sh cv3_install_for_py3.sh
+
+
