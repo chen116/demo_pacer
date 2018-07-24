@@ -16,23 +16,22 @@ import argparse
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", default="rollcar.3gp", help="path to the video file")
 ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
-ap.add_argument("-d", "--domUs", help="domUs' id")
-ap.add_argument("-f", "--fps", type=float, default=15, help="target fps")
+ap.add_argument("-d", "--domUs", help="domUs id,sperate by comma")
+ap.add_argument("-t", "--timeslice",type=int, default=10000, help="sched quantum")
+ap.add_argument("-f", "--fps", type=float, default=30, help="target fps")
 args = vars(ap.parse_args())
 
-
-print(args["domUs"])
-exit()
 
 monitoring_items = ["heart_rate","app_mode","frame_size","timeslice"]
 
 # c = heartbeat.Dom0(monitoring_items,['1','2','3','4'])
-monitoring_domU = (sys.argv[3]).split(',')
+monitoring_domU = (args["domUs"]).split(',')
 
 
 c = host_guest_comm.Dom0(monitoring_items,monitoring_domU)
 
-timeslice_us=int(sys.argv[4])
+timeslice_us=args["timeslice"]
+
 minn=int(timeslice_us*0.01)
 default_bw=int(timeslice_us/len(monitoring_domU))
 
@@ -442,12 +441,12 @@ pp.pprint(shared_data)
 
 print('monitoring:',monitoring_domU)
 
-min_heart_rate = float(sys.argv[1])
-max_heart_rate = float(sys.argv[2])
+min_heart_rate = float(args["fps"])
+max_heart_rate = float(args["fps"])
 
 with open("minmax.txt", "w") as myfile:
-	myfile.write("min "+sys.argv[1]+"\n")
-	myfile.write("max "+sys.argv[2]+"\n")
+	myfile.write("min "+str(args["fps"])+"\n")
+	myfile.write("max "+str(args["fps"])+"\n")
 	myfile.write("timeslice_us "+str(timeslice_us/1000)+"\n")
 
 
