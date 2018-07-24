@@ -56,75 +56,52 @@ vidarray = np.concatenate((blank,blank,car,blank,rollback,car,blank,rollback,car
 vidarray = np.concatenate((blank,blank,car,blank,rollback,rollforward,blank,blank,carbackword,blank,blank,car,blank),axis=0)
 
 
-import numpy as np
-import cv2
-
-# cap = cv2.VideoCapture(args["video"])
-
-# while(cap.isOpened()):
-#     ret, frame = cap.read()
-
-#     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-#     cv2.imshow('frame',gray)
-#     if cv2.waitKey(1) & 0xFF == ord('q'):
-#         break
-
-# cap.release()
-# cv2.destroyAllWindows()
 
 
-for frame in vidarray:
-	print('showing')
 
-	frame = imutils.resize(frame, width=300)
-	cv2.imshow("Frame", frame)
-	key = cv2.waitKey(1) & 0xFF
 
+with Client(xen_bus_path="/dev/xen/xenbus") as c:
+	domu_ids=[]
+	keys=['vid_entry','box_entry']
+	if domu_ids==[]:
+		for x in c.list('/local/domain'.encode()):
+			domu_ids.append(x.decode())
+		domu_ids.pop(0)
+	not_ready_domUs = copy.deepcopy(domu_ids)
+	for domuid in domu_ids:
+		permissions = []
+		permissions.append(('b'+'0').encode())
+		permissions.append(('b'+domuid).encode())
+		for key in keys:
+			tmp_key_path = ('/local/domain'+'/'+domuid+'/'+key).encode()
+			tmp_val = ('init').encode()
+			c.write(tmp_key_path,tmp_val)
+			c.set_perms(tmp_key_path,permissions)
+			print('created',key,'for dom',domuid)
+
+	print('waiting for domUs getting ready...')
+	while len(not_ready_domUs)>0:
+		ready_domUs = []
+		for domuid in not_ready_domUs:
+			key_path_hash=('/local/domain/'+domuid+'/vid_entry').encode()
+			if c.read(key_path_hash).decode() == "ready":
+				ready_domUs.append(domuid)
+		for domuid in ready_domUs:
+			not_ready_domUs.remove(domuid)
+			print("dom",domuid,"ready")
+
+	print("applcation start...")
+	for domuid in domu_ids:
+		key_path_hash=('/local/domain/'+domuid+'/vid_entry').encode()
+		c.write(key_path_hash,domuid.encode())
+
+	frame_cnt=0
+	for frame in vidarray:
+		frame = imutils.resize(frame, width=300)
+		cv2.imshow("Frame", frame)
+		key = cv2.waitKey(1) & 0xFF
 
 cv2.destroyAllWindows()
-
-
-# with Client(xen_bus_path="/dev/xen/xenbus") as c:
-# 	domu_ids=[]
-# 	keys=['vid_entry','box_entry']
-# 	if domu_ids==[]:
-# 		for x in c.list('/local/domain'.encode()):
-# 			domu_ids.append(x.decode())
-# 		domu_ids.pop(0)
-# 	not_ready_domUs = copy.deepcopy(domu_ids)
-# 	for domuid in domu_ids:
-# 		permissions = []
-# 		permissions.append(('b'+'0').encode())
-# 		permissions.append(('b'+domuid).encode())
-# 		for key in keys:
-# 			tmp_key_path = ('/local/domain'+'/'+domuid+'/'+key).encode()
-# 			tmp_val = ('init').encode()
-# 			c.write(tmp_key_path,tmp_val)
-# 			c.set_perms(tmp_key_path,permissions)
-# 			print('created',key,'for dom',domuid)
-
-# 	print('waiting for domUs getting ready...')
-# 	while len(not_ready_domUs)>0:
-# 		ready_domUs = []
-# 		for domuid in not_ready_domUs:
-# 			key_path_hash=('/local/domain/'+domuid+'/vid_entry').encode()
-# 			if c.read(key_path_hash).decode() == "ready":
-# 				ready_domUs.append(domuid)
-# 		for domuid in ready_domUs:
-# 			not_ready_domUs.remove(domuid)
-# 			print("dom",domuid,"ready")
-
-# 	print("applcation start...")
-# 	for domuid in domu_ids:
-# 		key_path_hash=('/local/domain/'+domuid+'/vid_entry').encode()
-# 		c.write(key_path_hash,domuid.encode())
-
-# 	frame_cnt=0
-# 	for frame in vidarray:
-# 		frame = imutils.resize(frame, width=300)
-# 		cv2.imshow("Frame", frame)
-# cv2.destroyAllWindows()
 
 
 
