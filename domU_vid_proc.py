@@ -67,27 +67,30 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	c.write(key_path_hash_frame_number_entry,('ready').encode())
 	frame_number_entry = "init"
 	while frame_number_entry != "done":
-		while frame_number_entry=="ready" or frame_number_entry == "init":
-			frame_number_entry = c.read(key_path_hash_frame_number_entry).decode()
-			print(frame_number_entry)
-		if frame_number_entry=="done":
-			break
-		frame = vidarray[int(frame_number_entry)]
-		frame = imutils.resize(frame, width=300)
-		(h, w) = frame.shape[:2]
-		blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)),0.007843, (300, 300), 127.5)
-		net.setInput(blob)
-		detections = net.forward()
-		(startX, startY, endX, endY)=(0,0,0,0) 
-		for i in np.arange(0, detections.shape[2]):
-			confidence = detections[0, 0, i, 2]
-			if confidence > 0.5:
-				box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
-				(startX, startY, endX, endY) = box.astype("int")
-				print("got a box")
-		if sum(startX, startY, endX, endY)==0:
-			print("got no box")
-		c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
+		frame_number_entry = c.read(key_path_hash_frame_number_entry).decode()
+		try:
+			frame_num = int(frame_number_entry)
+		except:
+			frame_num = -1
+
+		if frame_num > -1:
+			print('frame:',frame_num)
+			frame = vidarray[frame_num]
+			frame = imutils.resize(frame, width=300)
+			(h, w) = frame.shape[:2]
+			blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)),0.007843, (300, 300), 127.5)
+			net.setInput(blob)
+			detections = net.forward()
+			(startX, startY, endX, endY)=(0,0,0,0) 
+			for i in np.arange(0, detections.shape[2]):
+				confidence = detections[0, 0, i, 2]
+				if confidence > 0.5:
+					box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
+					(startX, startY, endX, endY) = box.astype("int")
+					print("got a box")
+			if sum(startX, startY, endX, endY)==0:
+				print("got no box")
+			c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
 
 
 
