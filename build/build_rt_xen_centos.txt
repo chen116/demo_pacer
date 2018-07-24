@@ -102,4 +102,4 @@ python3 monitor.py 2 10 1,2 10000
 
 cp /root/demo_pacer/build/cv3_install_for_py3.sh /root/ && sh cv3_install_for_py3.sh
 
-
+pip3 install imutils
