@@ -62,11 +62,15 @@ vidarray = np.concatenate((blank,blank,car,blank,rollback,rollforward,blank,blan
 
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	domu_ids=[]
+	boxes = {}
 	keys=['vid_entry','box_entry']
 	if domu_ids==[]:
 		for x in c.list('/local/domain'.encode()):
 			domu_ids.append(x.decode())
+			boxes[x.decode()]=[]
 		domu_ids.pop(0)
+		boxes.remove('0')
+
 	not_ready_domUs = copy.deepcopy(domu_ids)
 	for domuid in domu_ids:
 		permissions = []
@@ -91,13 +95,23 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			print("dom",domuid,"ready")
 
 	print("applcation start...")
-	for domuid in domu_ids:
-		key_path_hash=('/local/domain/'+domuid+'/vid_entry').encode()
-		c.write(key_path_hash,domuid.encode())
+	time.sleep(1)
+	# for domuid in domu_ids:
+	# 	key_path_hash=('/local/domain/'+domuid+'/vid_entry').encode()
+	# 	c.write(key_path_hash,domuid.encode())
 
-	frame_cnt=0
+	frame_cnt=-1
 	for frame in vidarray:
-		frame = imutils.resize(frame, width=500)
+		frame_cnt+=1
+		for domuid in domu_ids:
+			key_path_hash=('/local/domain/'+domuid+'/vid_entry').encode()
+			c.write(key_path_hash,str(frame_cnt).encode())
+			key_path_hash=('/local/domain/'+domuid+'/box_entry').encode()
+			boxes[domuid]=c.read(key_path_hash).decode().split()
+		
+
+
+		frame = imutils.resize(frame, width=300)
 		cv2.imshow("Frame", frame)
 		key = cv2.waitKey(1) & 0xFF
 
