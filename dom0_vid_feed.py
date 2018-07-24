@@ -73,7 +73,7 @@ vidarray = [1,2,3]
 
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	domu_ids=[]
-	keys=['vid_entry']
+	keys=['vid_entry','box_entry']
 	if domu_ids==[]:
 		for x in c.list('/local/domain'.encode()):
 			domu_ids.append(x.decode())
