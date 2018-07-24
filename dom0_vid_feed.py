@@ -92,12 +92,16 @@ carbackword = np.flipud(carbackword)
 vidarray = np.concatenate((blank,blank,car,blank,rollback,car,blank,rollback,car,blank,rollback,car,blank,rollback,car,blank,rollback),axis=0)
 vidarray = np.concatenate((car,carbackword,blank,blank,car,blank,rollback,rollforward,blank,blank,carbackword,blank,blank,car,blank),axis=0)
 vidarray = np.concatenate((blank,blank,car,carbackword,blank,blank,car,carbackword,blank,blank,car,carbackword,blank,blank,car,carbackword,blank,blank),axis=0)
+vidarray = np.concatenate((car,car,car,car,blank,blank,blank,blank,blank,car,car,car,car,car),axis=0)
 
 
 
 COLORS=[]
 
 
+minmax = open("minmax.txt","r").read()
+fps_val = float(minmax.split('\n')[0].split()[1])*2
+print(fps_val)
 
 
 
@@ -153,7 +157,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 		for domuid in domu_ids:
 			key_path_hash=('/local/domain/'+domuid+'/frame_number_entry').encode()
 			c.write(key_path_hash,str(frame_cnt).encode()) # write in frame number
-		while time.time()- tn < 1/args["fps"]:
+		while time.time()- tn < 1/fps_val:
 			continue
 		idx=-1
 		for domuid in domu_ids:
