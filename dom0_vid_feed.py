@@ -58,8 +58,11 @@ vidarray = np.concatenate((blank,blank,car,blank,rollback,rollforward,blank,blan
 
 
 for frame in vidarray:
+	print('showing')
 	frame = imutils.resize(frame, width=300)
 	cv2.imshow("Frame", frame)
+
+
 
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	domu_ids=[]
