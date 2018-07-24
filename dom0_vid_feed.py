@@ -60,7 +60,8 @@ vidarray = np.concatenate((blank,blank,car,blank,rollback,rollforward,blank,blan
 for frame in vidarray:
 	print('showing')
 	frame = imutils.resize(frame, width=300)
-	cv2.imshow("Frame", frame)
+	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+	cv2.imshow("Frame", gray)
 
 cv2.destroyAllWindows()
 
