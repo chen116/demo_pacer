@@ -11,6 +11,8 @@ import time
 import cv2
 
 
+
+
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", default="rollcar.3gp", help="path to the video file")
 ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
@@ -57,6 +59,14 @@ vidarray = np.concatenate((blank,blank,car,blank,rollback,rollforward,blank,blan
 net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt.txt", "MobileNetSSD_deploy.caffemodel")
 
 
+import heartbeat
+import host_guest_comm
+window_size_hr=6
+hb = heartbeat.Heartbeat(1024,window_size_hr,100,"vic.log",10,100)
+monitoring_items = ["heart_rate","app_mode","frame_size","timeslice"]
+comm = host_guest_comm.DomU(monitoring_items)
+
+
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	domu_id = c.read("domid".encode())
 	key_path_hash_frame_number_entry=('/local/domain/'+domu_id.decode()+'/frame_number_entry').encode()
@@ -68,7 +78,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	frame_number_entry = "init"
 	prev_frame = -1
 	self_cnt = 0
-	every_n_frame = 1
+	every_n_frame = 3
 	while frame_number_entry != "done":
 		frame_number_entry = c.read(key_path_hash_frame_number_entry).decode()
 		try:
@@ -97,6 +107,14 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
 			prev_frame = frame_num
 			self_cnt+=1
+
+			hb.heartbeat_beat()
+			print("get_instant_heartrate:",hb.get_window_heartrate())
+			if cnt%window_size_hr==0:
+				comm.write("heart_rate", hb.get_window_heartrate())
+
+hb.heartbeat_finish()
+comm.write("heart_rate", "done")
 
 
 
