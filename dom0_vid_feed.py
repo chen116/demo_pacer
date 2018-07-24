@@ -13,7 +13,7 @@ import cv2
 
 
 ap = argparse.ArgumentParser()
-ap.add_argument("-v", "--video", help="path to the video file")
+ap.add_argument("-v", "--video", default="rollcar.3gp", help="path to the video file")
 ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
 args = vars(ap.parse_args())
 
@@ -56,6 +56,8 @@ vidarray = np.concatenate((blank,blank,car,blank,rollback,car,blank,rollback,car
 vidarray = np.concatenate((blank,blank,car,blank,rollback,rollforward,blank,blank,carbackword,blank,blank,car,blank),axis=0)
 
 
+COLORS=[]
+
 
 
 
@@ -63,13 +65,14 @@ vidarray = np.concatenate((blank,blank,car,blank,rollback,rollforward,blank,blan
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	domu_ids=[]
 	boxes = {}
-	keys=['vid_entry','box_entry']
+	keys=['frame_number_entry','box_entry']
 	if domu_ids==[]:
 		for x in c.list('/local/domain'.encode()):
 			domu_ids.append(x.decode())
 			boxes[x.decode()]=tuple()
 		domu_ids.pop(0)
 		boxes.remove('0')
+	COLORS = np.random.uniform(100, 255, size=(len(domu_ids), 3))
 
 	not_ready_domUs = copy.deepcopy(domu_ids)
 	for domuid in domu_ids:
@@ -87,7 +90,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	while len(not_ready_domUs)>0:
 		ready_domUs = []
 		for domuid in not_ready_domUs:
-			key_path_hash=('/local/domain/'+domuid+'/vid_entry').encode()
+			key_path_hash=('/local/domain/'+domuid+'/frame_number_entry').encode()
 			if c.read(key_path_hash).decode() == "ready":
 				ready_domUs.append(domuid)
 		for domuid in ready_domUs:
@@ -97,25 +100,36 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	print("applcation start...")
 	time.sleep(1)
 	# for domuid in domu_ids:
-	# 	key_path_hash=('/local/domain/'+domuid+'/vid_entry').encode()
+	# 	key_path_hash=('/local/domain/'+domuid+'/frame_number_entry').encode()
 	# 	c.write(key_path_hash,domuid.encode())
 
 	frame_cnt=-1
 	for frame in vidarray:
 		frame_cnt+=1
 		for domuid in domu_ids:
-			key_path_hash=('/local/domain/'+domuid+'/vid_entry').encode()
-			c.write(key_path_hash,str(frame_cnt).encode())
+			key_path_hash=('/local/domain/'+domuid+'/frame_number_entry').encode()
+			c.write(key_path_hash,str(frame_cnt).encode()) # write in frame number
 			key_path_hash=('/local/domain/'+domuid+'/box_entry').encode()
 			boxes[domuid]=tuple(map(int, c.read(key_path_hash).decode().split(' ')))#(startX, startY, endX, endY)
+		idx=-1
 		for domuid in domu_ids:
+			idx+=1
 			(startX, startY, endX, endY) = boxes[domuid]
-			
+			if sum((startX, startY, endX, endY))>0:
+				label = "domU: {}".format(domuid)
+				cv2.rectangle(frame, (startX, startY), (endX, endY),COLORS[idx], 2)  
+				y = startY - 15 if startY - 15 > 15 else startY + 15
+				cv2.putText(frame, label, (startX, y),cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
 		frame = imutils.resize(frame, width=300)
 		cv2.imshow("Frame", frame)
 		key = cv2.waitKey(1) & 0xFF
 
-cv2.destroyAllWindows()
+
+	for domuid in domu_ids:
+		key_path_hash=('/local/domain/'+domuid+'/frame_number_entry').encode()
+		c.write(key_path_hash,'done'.encode()) # write in frame number	
+
+	cv2.destroyAllWindows()
 
 
 

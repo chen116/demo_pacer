@@ -11,18 +11,83 @@ import time
 import cv2
 
 
-vidarray = [1,2,3]
+ap = argparse.ArgumentParser()
+ap.add_argument("-v", "--video", default="rollcar.3gp", help="path to the video file")
+ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
+args = vars(ap.parse_args())
+
+if "mp4" in args["video"]:
+    hh=360
+    ww=480
+
+else:
+    hh=144
+    ww=176
+
+car_len = 75
+blank_len = 25
+rollback_len = 50
+car = np.zeros((car_len,hh,ww,3),dtype=np.uint8)
+blank = np.zeros((blank_len,hh,ww,3),dtype=np.uint8)
+rollback = np.zeros((rollback_len,hh,ww,3),dtype=np.uint8)
+
+
+vs= FileVideoStream(args["video"]).start()
+time.sleep(1.0)
+for i in range(250):#blank_len+car_len):
+    frame = vs.read()
+    if i<car_len:
+        car[i,:,:,:]=frame
+    elif i < blank_len+car_len:
+        blank[i-car_len,:,:,:]=frame
+    elif i >= 200:
+        rollback[i-200,:,:,:]=frame
+
+
+vs.stop()   
+
+rollforward = np.copy(rollback)
+rollforward = np.flipud(rollforward)
+carbackword = np.copy(car)
+
+carbackword = np.flipud(carbackword)
+vidarray = np.concatenate((blank,blank,car,blank,rollback,car,blank,rollback,car,blank,rollback,car,blank,rollback,car,blank,rollback),axis=0)
+vidarray = np.concatenate((blank,blank,car,blank,rollback,rollforward,blank,blank,carbackword,blank,blank,car,blank),axis=0)
+
+net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt.txt", "MobileNetSSD_deploy.caffemodel")
 
 
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	domu_id = c.read("domid".encode())
-	key_path_hash=('/local/domain/'+domu_id.decode()+'/vid_entry').encode()
-	while c.read(key_path_hash).decode() != "init":
+	key_path_hash_frame_number_entry=('/local/domain/'+domu_id.decode()+'/frame_number_entry').encode()
+	key_path_hash_box_entry=('/local/domain/'+domu_id.decode()+'/box_entry').encode()
+	while c.read(key_path_hash_frame_number_entry).decode() != "init":
 		continue
-	c.write(key_path_hash,('ready').encode())
 
-	for x in range(1,10):
-		print(c.read(key_path_hash).decode())
+	c.write(key_path_hash_frame_number_entry,('ready').encode())
+	frame_number_entry = "init"
+	while frame_number_entry != "done":
+		while frame_number_entry=="init":
+			frame_number_entry = c.read(key_path_hash_frame_number_entry).decode()
+		if frame_number_entry=="done":
+			break
+		frame = vidarray[int(frame_number_entry)]
+		frame = imutils.resize(frame, width=300)
+		(h, w) = frame.shape[:2]
+		blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)),0.007843, (300, 300), 127.5)
+		net.setInput(blob)
+		detections = net.forward()
+		(startX, startY, endX, endY)=(0,0,0,0) 
+		for i in np.arange(0, detections.shape[2]):
+			confidence = detections[0, 0, i, 2]
+			if confidence > 0.5:
+				box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
+				(startX, startY, endX, endY) = box.astype("int")
+		c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
+
+
+
+
 
 
 
