@@ -114,6 +114,8 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				boxes[domuid]=tuple(map(int, c.read(key_path_hash).decode().split(' ')))#(startX, startY, endX, endY)	
 			except:
 				boxes[domuid]=(0,0,0,0)
+		time.sleep(1)
+
 		idx=-1
 		for domuid in domu_ids:
 			idx+=1
