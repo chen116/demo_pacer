@@ -76,9 +76,12 @@ cv2.destroyAllWindows()
 
 for frame in vidarray:
 	print('showing')
+
 	frame = imutils.resize(frame, width=300)
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	cv2.imshow("Frame", gray)
+	key = cv2.waitKey(1) & 0xFF
+
 
 cv2.destroyAllWindows()
 
