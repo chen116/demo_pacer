@@ -117,7 +117,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	COLORS = np.random.uniform(100, 255, size=(len(domu_ids), 3))
 	# COLORS= np.array([[100,500,250],[200,50,250]])#np.vstack((np.array([[5,200,250]]),np.array([[100,500,250]])))
 	COLORS = [[ 120 , 240 , 120],[ 240 , 120,  240]] # green, pink 
-	COLORS = [ [30,144,255],[ 120 , 240 , 120],] 
+	COLORS = [ [144,30,255],[ 120 , 240 , 120],] 
 
 
 	not_ready_domUs = copy.deepcopy(domu_ids)
