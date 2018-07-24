@@ -96,7 +96,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 
 	frame_cnt=0
 	for frame in vidarray:
-		time.sleep(1)
+		frame = imutils.resize(frame, width=300)
 		cv2.imshow("Frame", frame)
 cv2.destroyAllWindows()
 
