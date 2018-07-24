@@ -157,7 +157,8 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				boxes[domuid]=tuple(map(int, c.read(key_path_hash).decode().split(' ')))#(startX, startY, endX, endY)	
 			except:
 				boxes[domuid]=(0,0,0,0)
-
+		while time.time()-tn < 0.03:
+			continue
 		idx=-1
 		for domuid in domu_ids:
 			idx+=1
@@ -170,8 +171,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 
 		cv2.imshow("Frame", frame)
 		key = cv2.waitKey(1) & 0xFF
-		while time.time()-tn < 0.03:
-			continue
+
 
 	for domuid in domu_ids:
 		key_path_hash=('/local/domain/'+domuid+'/frame_number_entry').encode()
