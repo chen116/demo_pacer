@@ -56,6 +56,23 @@ vidarray = np.concatenate((blank,blank,car,blank,rollback,car,blank,rollback,car
 vidarray = np.concatenate((blank,blank,car,blank,rollback,rollforward,blank,blank,carbackword,blank,blank,car,blank),axis=0)
 
 
+import numpy as np
+import cv2
+
+cap = cv2.VideoCapture(args["video"])
+
+while(cap.isOpened()):
+    ret, frame = cap.read()
+
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+    cv2.imshow('frame',gray)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()
+
 
 for frame in vidarray:
 	print('showing')
