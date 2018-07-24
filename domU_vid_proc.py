@@ -67,7 +67,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	c.write(key_path_hash_frame_number_entry,('ready').encode())
 	frame_number_entry = "init"
 	while frame_number_entry != "done":
-		while frame_number_entry=="init":
+		while frame_number_entry=="ready":
 			frame_number_entry = c.read(key_path_hash_frame_number_entry).decode()
 		if frame_number_entry=="done":
 			break
