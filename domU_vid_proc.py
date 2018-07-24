@@ -69,6 +69,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	while frame_number_entry != "done":
 		while frame_number_entry=="ready" or frame_number_entry == "init":
 			frame_number_entry = c.read(key_path_hash_frame_number_entry).decode()
+			print(frame_number_entry)
 		if frame_number_entry=="done":
 			break
 		frame = vidarray[int(frame_number_entry)]
