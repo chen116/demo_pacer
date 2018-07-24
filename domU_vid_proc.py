@@ -19,7 +19,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	key_path_hash=('/local/domain/'+domu_id.decode()+'/vid_entry').encode()
 	while c.read(key_path_hash).decode() != "init":
 		continue
-	for x in xrange(1,10):
+	for x in range(1,10):
 		print(c.read(key_path_hash).decode())
 	# c.write(key_path_hash,('ready').encode())
 
