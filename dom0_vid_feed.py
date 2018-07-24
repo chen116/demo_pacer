@@ -71,7 +71,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			domu_ids.append(x.decode())
 			boxes[x.decode()]=tuple()
 		domu_ids.pop(0)
-		boxes.remove('0')
+		boxes.pop('0')
 	COLORS = np.random.uniform(100, 255, size=(len(domu_ids), 3))
 
 	not_ready_domUs = copy.deepcopy(domu_ids)
