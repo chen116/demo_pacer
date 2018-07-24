@@ -157,7 +157,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				boxes[domuid]=tuple(map(int, c.read(key_path_hash).decode().split(' ')))#(startX, startY, endX, endY)	
 			except:
 				boxes[domuid]=(0,0,0,0)
-		while time.time()-tn < 0.03:
+		while time.time()-tn < 0.10:
 			continue
 		idx=-1
 		for domuid in domu_ids:
