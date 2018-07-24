@@ -111,7 +111,8 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	key_path_hash_box_entry=('/local/domain/'+domu_id.decode()+'/box_entry').encode()
 	while c.read(key_path_hash_frame_number_entry).decode() != "init":
 		continue
-
+	(startX, startY, endX, endY)=(0,0,0,0) 
+	c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
 	c.write(key_path_hash_frame_number_entry,('ready').encode())
 	frame_number_entry = "init"
 	prev_frame = -1
