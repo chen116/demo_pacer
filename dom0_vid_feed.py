@@ -94,12 +94,12 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	while len(not_ready_domUs)>0:
 		ready_domUs = []
 		for domuid in not_ready_domUs:
-			key_path_hash=('/local/domain/'+domu_id+'/vid_entry').encode()
+			key_path_hash=('/local/domain/'+domuid+'/vid_entry').encode()
 			if c.read(key_path_hash).decode() == "ready":
-				ready_domUs.append(domu_id)
+				ready_domUs.append(domuid)
 		for domuid in ready_domUs:
 			not_ready_domUs.remove(domuid)
-			print("dom",domu_id,"ready")
+			print("dom",domuid,"ready")
 
 	print("applcation start...")
 	print(vidarray)
