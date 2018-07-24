@@ -75,7 +75,7 @@ for i in range(250):#blank_len+car_len):
     frame = vs.read()
     if i<car_len and i <60 and i>10:
         car[i,:,:,:]=frame
-    elif i < blank_len+car_len:
+    elif i < blank_len+car_len and i >10:
         blank[i-car_len,:,:,:]=frame
     elif i >= 200:
         rollback[i-200,:,:,:]=frame
