@@ -146,6 +146,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 
 	frame_cnt=-1
 	for frame in vidarray:
+		tn = time.time()
 		frame = imutils.resize(frame, width=300)
 		frame_cnt+=1
 		for domuid in domu_ids:
@@ -156,7 +157,6 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				boxes[domuid]=tuple(map(int, c.read(key_path_hash).decode().split(' ')))#(startX, startY, endX, endY)	
 			except:
 				boxes[domuid]=(0,0,0,0)
-		time.sleep(0.04)
 
 		idx=-1
 		for domuid in domu_ids:
@@ -167,9 +167,11 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				cv2.rectangle(frame, (startX, startY), (endX, endY),COLORS[idx], 2)  
 				y = startY - 15 if startY - 15 > 15 else startY + 15
 				cv2.putText(frame, label, (startX, y),cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
+
 		cv2.imshow("Frame", frame)
 		key = cv2.waitKey(1) & 0xFF
-
+		while time.time()-tn < 0.03:
+			continue
 
 	for domuid in domu_ids:
 		key_path_hash=('/local/domain/'+domuid+'/frame_number_entry').encode()
