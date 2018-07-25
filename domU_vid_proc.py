@@ -102,8 +102,6 @@ window_size_hr=4
 hb = heartbeat.Heartbeat(1024,window_size_hr,100,"vic.log",10,100)
 monitoring_items = ["heart_rate","app_mode","frame_size","timeslice"]
 comm = host_guest_comm.DomU(monitoring_items)
-
-
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	domu_id = c.read("domid".encode())
 	key_path_hash_frame_number_entry=('/local/domain/'+domu_id.decode()+'/frame_number_entry').encode()
@@ -124,7 +122,6 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			frame_num = int(frame_number_entry)
 		except:
 			frame_num = -1
-
 		if frame_num > -1 and frame_num>prev_frame:
 			print('frame:',frame_num)
 			frame = vidarray[frame_num]
@@ -142,7 +139,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 						box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
 						(startX, startY, endX, endY) = box.astype("int")
 				if sum((startX, startY, endX, endY)) == 0 :
-					every_n_frame = 4
+					every_n_frame = 2
 				else:
 					every_n_frame = 2
 				c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())

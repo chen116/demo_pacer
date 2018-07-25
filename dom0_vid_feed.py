@@ -182,9 +182,10 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 
 	for domuid in domu_ids:
 		key_path_hash=('/local/domain/'+domuid+'/frame_number_entry').encode()
-		c.write(key_path_hash,'done'.encode()) # write in frame number	
+		c.write(key_path_hash,"done".encode()) # write in frame number	
 
 	cv2.destroyAllWindows()
+	print("finish")
 
 
 
