@@ -160,7 +160,7 @@ def animate2(i):
         # ax1.plot([0,time_end-time_start],miny[0:2],'r')
         # ax1.plot([0,time_end-time_start],[(miny[0]+maxy[0])/2,(miny[0]+maxy[0])/2],'pink')
         # ax1.plot([0,time_end-time_start],maxy[0:2],'r',label= 'Target\nFPS')
-        ax1.plot([0,58],maxy[0:2],'r',label= 'Target\nFPS')
+        ax1.plot([-5,48],maxy[0:2],'r',label= 'Target\nFPS')
     fontP = FontProperties()
     fontP.set_size('small')
     ax1.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.,prop=fontP)
