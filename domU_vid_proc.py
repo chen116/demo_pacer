@@ -151,7 +151,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 					else:
 						every_n_frame = window_size_hr
 					prev_detect_car=detect_car
-					print("detect car:" detect_car)
+					print("detect car:" ,detect_car)
 					comm.write("frame_size",every_n_frame)
 				# if sum((startX, startY, endX, endY)) > 0 :
 				# 	every_n_frame = window_size_hr/2
