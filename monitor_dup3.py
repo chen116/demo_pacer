@@ -460,7 +460,7 @@ pp.pprint(shared_data)
 print('monitoring:',monitoring_domU)
 
 min_heart_rate = float(args["fps"])
-max_heart_rate = float(args["fps"])*1.5
+max_heart_rate = float(args["fps"])*1.25
 
 with open("minmax.txt", "w") as myfile:
 	myfile.write("min "+str(args["fps"])+"\n")
