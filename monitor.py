@@ -34,7 +34,7 @@ args = vars(ap.parse_args())
 
 
 if args["domUs"]!="":
-	print("asdf")
+	print(args["domUs"])
 exit()
 monitoring_items = ["heart_rate","app_mode","frame_size","timeslice"]
 
