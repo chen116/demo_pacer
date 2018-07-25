@@ -1,4 +1,6 @@
 # with fancy arg, foucsing on just managing 2 vm ( or more if no contention)
+
+# example usage : python3 monitor.py -d 23,24 -f 15
 import host_guest_comm
 import xen_interface
 import threading
@@ -16,10 +18,7 @@ import argparse
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", default="rollcar.3gp", help="path to the video file")
 ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
-ap.add_argument("-r", "--RTdomUs", help="domUs id,sperate by comma")
-ap.add_argument("-rd", "--RTdomUs-Dummy", help="domUs id,sperate by comma")
-ap.add_argument("-c", "--CreditdomUs", help="domUs id,sperate by comma")
-ap.add_argument("-cd", "--CreditdomUs-Dummy", help="domUs id,sperate by comma")
+ap.add_argument("-d", "--domUs", help="domUs id,sperate by comma")
 ap.add_argument("-t", "--timeslice",type=int, default=10000, help="sched quantum")
 ap.add_argument("-f", "--fps", type=float, default=30, help="target fps")
 args = vars(ap.parse_args())
@@ -28,7 +27,7 @@ args = vars(ap.parse_args())
 monitoring_items = ["heart_rate","app_mode","frame_size","timeslice"]
 
 # c = heartbeat.Dom0(monitoring_items,['1','2','3','4'])
-monitoring_domU = [args["RTdomUs"],args["CreditdomUs"]]
+monitoring_domU = (args["domUs"]).split(',')
 
 
 c = host_guest_comm.Dom0(monitoring_items,monitoring_domU)
@@ -41,12 +40,12 @@ default_bw=int(timeslice_us/len(monitoring_domU))
 
 
 class MonitorThread(threading.Thread):
-	def __init__(self, threadLock,shared_data,domuid,rtxen_or_credit,timeslice_us,min_heart_rate,max_heart_rate,keys=['test'],base_path='/local/domain'):
+	def __init__(self, threadLock,shared_data,domuid,xen_sched,timeslice_us,min_heart_rate,max_heart_rate,keys=['test'],base_path='/local/domain'):
 		threading.Thread.__init__(self)
 		self.domuid=(domuid)
-		self.other_domuid=args["RTdomUs-Dummy"]
-		if self.domuid==args["CreditdomUs"]:
-			self.other_domuid=args["CreditdomUs-Dummy"]
+		self.other_domuid=monitoring_domU[0]
+		if self.domuid==monitoring_domU[0]:
+			self.other_domuid=monitoring_domU[1]
 		self.stride = int(10/int(domuid))
 		self.keys=keys
 		self.base_path=base_path
@@ -56,7 +55,7 @@ class MonitorThread(threading.Thread):
 		self.algo = 5
 		if self.domuid==monitoring_domU[1]:
 			self.algo = 0
-		self.rtxen_or_credit = rtxen_or_credit # 1 is rtds, 0 is credit
+		self.xen_sched = xen_sched # 1 is rtds, 0 is credit
 		self.target_reached_cnt = 0
 		self.min_heart_rate=min_heart_rate
 		self.max_heart_rate=max_heart_rate
@@ -99,7 +98,7 @@ class MonitorThread(threading.Thread):
 					self.pid.reset()
 					if msg.isdigit():
 						tmp_new_timeslice_us = int(msg)*1000
-						if self.rtxen_or_credit ==1:
+						if self.xen_sched ==1:
 							cur_bw = 0
 							myinfo = self.shared_data[self.domuid]
 							for vcpu in myinfo:
@@ -137,12 +136,12 @@ class MonitorThread(threading.Thread):
 						heart_rate=-1
 					if heart_rate>-1:
 						self.res_allocat(heart_rate)					
-						#self.res_allo(self.algo,self.rtxen_or_credit,float(msg),self.shared_data,self.domuid ,self.min_heart_rate,self.max_heart_rate)					
+						#self.res_allo(self.algo,self.xen_sched,float(msg),self.shared_data,self.domuid ,self.min_heart_rate,self.max_heart_rate)					
 
 				# try :
 				# 	if self.keys[0] in path.decode():
 				# 		self.res_allocat(float(msg))					
-				# 		#self.res_allo(self.algo,self.rtxen_or_credit,float(msg),self.shared_data,self.domuid ,self.min_heart_rate,self.max_heart_rate)					
+				# 		#self.res_allo(self.algo,self.xen_sched,float(msg),self.shared_data,self.domuid ,self.min_heart_rate,self.max_heart_rate)					
 				# except:
 				# 	#print("meow",int(self.domuid),token.decode(),msg)
 
@@ -177,11 +176,11 @@ class MonitorThread(threading.Thread):
 		cur_bw = 0
 		myinfo = self.shared_data[self.domuid]
 
-		if self.rtxen_or_credit==1:
+		if self.xen_sched==1:
 			for vcpu in myinfo:
 				if vcpu['pcpu']!=-1:
 					cur_bw=int(vcpu['b'])
-		elif self.rtxen_or_credit==0:
+		elif self.xen_sched==0:
 			for vcpu in myinfo:
 				if vcpu['pcpu']!=-1:
 					cur_bw=int(vcpu['w'])
@@ -309,12 +308,12 @@ class MonitorThread(threading.Thread):
 		cur_bw = cur_bw
 		myinfo = self.shared_data[self.domuid]
 
-		if self.rtxen_or_credit==1:
+		if self.xen_sched==1:
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
 					other_cur_bw=vcpu['b']		
 
-		elif self.rtxen_or_credit==0:
+		elif self.xen_sched==0:
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
 					other_cur_bw=vcpu['w']
@@ -354,7 +353,17 @@ class MonitorThread(threading.Thread):
 
 				with open("info.txt", "a") as myfile:
 					myfile.write(self.domuid+" "+self.domuid+" time slice len 6"+ " "+str(now_time)+"\n")							
+
+
+
+
+
+
+			# print('domuid',self.domuid,'other_cur_bw', other_cur_bw,'cur_bw',cur_bw)
+
 		else:
+			# print('domuid',self.domuid,'other_cur_bw', other_cur_bw,'cur_bw',cur_bw)
+
 			self.shared_data['last_time_val'] = time.time()
 
 
@@ -365,7 +374,7 @@ class MonitorThread(threading.Thread):
 
 
 
-		if self.rtxen_or_credit==1:
+		if self.xen_sched==1:
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
 					vcpu['b']=other_cur_bw
@@ -373,9 +382,9 @@ class MonitorThread(threading.Thread):
 				if vcpu['pcpu']!=-1:
 					vcpu['b']=cur_bw
 			xen_interface.sched_rtds(self.domuid,self.timeslice_us,cur_bw,[])
-			xen_interface.sched_rtds(self.other_domuid,self.timeslice_us,self.timeslice_us-cur_bw,[])
+			xen_interface.sched_rtds(self.other_domuid,self.timeslice_us,other_cur_bw,[])
 
-		elif self.rtxen_or_credit==0:
+		elif self.xen_sched==0:
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
 					vcpu['w']=other_cur_bw
@@ -383,7 +392,7 @@ class MonitorThread(threading.Thread):
 				if vcpu['pcpu']!=-1:
 					vcpu['w']=cur_bw
 			xen_interface.sched_credit(self.domuid,cur_bw)
-			xen_interface.sched_credit(self.other_domuid,self.timeslice_us-cur_bw)
+			xen_interface.sched_credit(self.other_domuid,other_cur_bw)
 
 
 
@@ -475,9 +484,6 @@ if len(shared_data['xen'])>0:
 	rtxen_or_credit=1
 
 for domuid in c.domu_ids:
-	rtxen_or_credit = 1
-	if domuid == args["CreditdomUs"]:
-		rtxen_or_credit = 0
 	tmp_thread = MonitorThread(threadLock,shared_data,domuid,rtxen_or_credit,timeslice_us,min_heart_rate,max_heart_rate, monitoring_items)
 	tmp_thread.start()
 	threads.append(tmp_thread)
@@ -509,4 +515,4 @@ shared_data_clean_up = xen_interface.get_global_info()
 # for domuid in shared_data['xen']:
 # 	xen_interface.sched_credit(domuid,default_bw)
 print("Exiting the Monitor, total",threads_cnt,"monitoring threads")
-
+print("Restored RT-Xen, Credit to all domUs have equal cpu time sharing")
