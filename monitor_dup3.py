@@ -228,7 +228,6 @@ class MonitorThread(threading.Thread):
 			if cur_bw!=default_bw:
 				cur_bw=default_bw
 			cur_bw=int(cur_bw)#-int(cur_bw)%100
-
 		if self.algo==3:
 			# apid algo
 			output = self.pid.update(heart_rate)
@@ -278,13 +277,6 @@ class MonitorThread(threading.Thread):
 					cur_bw=self.timeslice_us-free
 			cur_bw=int(cur_bw)#-int(cur_bw)%100
 			# print("      ",cur_bw)
-
-
-
-
-
-
-
 		if self.algo==5:
 			beta=.9
 			free = self.timeslice_us-cur_bw		
@@ -295,7 +287,7 @@ class MonitorThread(threading.Thread):
 			if(heart_rate>self.max_heart_rate):
 				if cur_bw>minn:
 					cur_bw-=minn
-			if heart_rate > self.min_heart_rate:
+			if heart_rate > self.max_heart_rate:
 				self.target_reached_cnt+=1
 				if self.target_reached_cnt==16:
 					self.target_reached_cnt-=8
@@ -468,7 +460,7 @@ pp.pprint(shared_data)
 print('monitoring:',monitoring_domU)
 
 min_heart_rate = float(args["fps"])
-max_heart_rate = float(args["fps"])*1.5
+max_heart_rate = float(args["fps"])*1.25
 
 with open("minmax.txt", "w") as myfile:
 	myfile.write("min "+str(args["fps"])+"\n")

@@ -25,6 +25,8 @@ ap.add_argument("-C", "--CreditdomUs", help="domUs id,sperate by comma")
 ap.add_argument("-c", "--CreditdomUs-Dummy", help="domUs id,sperate by comma")
 ap.add_argument("-t", "--timeslice",type=int, default=10000, help="scheduling quantum(us)")
 ap.add_argument("-f", "--fps", type=float, default=30, help="target fps")
+ap.add_argument("-s", "--static-alloc", type=int, default=1000, help="static alloc")
+
 args = vars(ap.parse_args())
 
 
