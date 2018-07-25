@@ -141,8 +141,8 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 					if confidence > 0.5:
 						box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
 						(startX, startY, endX, endY) = box.astype("int")
-				if sum((startX, startY, endX, endY))>0:
-					every_n_frame = 2
+				if sum((startX, startY, endX, endY)) == 0 :
+					every_n_frame = 4
 				else:
 					every_n_frame = 2
 				c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
