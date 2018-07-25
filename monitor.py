@@ -17,7 +17,8 @@ import argparse
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", default="rollcar.3gp", help="path to the video file")
-ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
+ap.add_argument("-a", "--algo", type=int, default=4, help="algorithm")
+
 ap.add_argument("-R", "--RTdomUs", help="domUs id,sperate by comma")
 ap.add_argument("-r", "--RTdomUs-Dummy", help="domUs id,sperate by comma")
 ap.add_argument("-C", "--CreditdomUs", help="domUs id,sperate by comma")
@@ -57,7 +58,7 @@ class MonitorThread(threading.Thread):
 		self.threadLock=threadLock
 		self.shared_data=shared_data
 
-		self.algo = 5
+		self.algo = args["algo"]
 		# if self.domuid==monitoring_domU[1]:
 		# 	self.algo = 0
 		self.rtxen_or_credit = rtxen_or_credit # 1 is rtds, 0 is credit
