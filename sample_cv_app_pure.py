@@ -8,7 +8,7 @@ import time
 
 
 vs= FileVideoStream("rollcar.3gp").start()
-time.sleep()
+time.sleep(1)
 
 while vs.more():
 	frame = vs.read()
