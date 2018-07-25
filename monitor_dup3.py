@@ -22,6 +22,7 @@ ap.add_argument("-d", "--domUs", help="domUs id,sperate by comma")
 ap.add_argument("-t", "--timeslice",type=int, default=10000, help="sched quantum")
 ap.add_argument("-f", "--fps", type=float, default=30, help="target fps")
 ap.add_argument("-a", "--algo", type=int, default=4, help="algorithm")
+ap.add_argument("-s", "--static-alloc", type=int, default=1000, help="static alloc")
 args = vars(ap.parse_args())
 
 
@@ -281,7 +282,7 @@ class MonitorThread(threading.Thread):
 			default_bw=int(self.timeslice_us/2) #dummy
 			if cur_bw!=default_bw:
 				cur_bw=default_bw	
-			cur_bw = 2000/.5
+			cur_bw = args["static_alloc"]
 		if self.algo==5:
 			beta=.9
 			free = self.timeslice_us-cur_bw		
@@ -430,7 +431,7 @@ threads = []
 shared_data = xen_interface.get_global_info()
 
 for uid in monitoring_domU:
-	xen_interface.sched_rtds(int(uid),timeslice_us,2000/.5,[])
+	xen_interface.sched_rtds(int(uid),timeslice_us,args["static_alloc"],[])
 
 # if '1' in shared_data['rtxen']:
 # 	xen_interface.sched_rtds(1,timeslice_us,default_bw,[])
