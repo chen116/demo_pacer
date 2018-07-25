@@ -107,7 +107,7 @@ print(fps_val)
 
 
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
-	domu_ids=args["domUs"].split()
+	domu_ids=args["domUs"].split(',')
 	boxes = {}
 	keys=['frame_number_entry','box_entry']
 	if domu_ids==[]:
