@@ -20,7 +20,7 @@ ap.add_argument("-R", "--RTdomUs", help="domUs id,sperate by comma")
 ap.add_argument("-r", "--RTdomUs-Dummy", help="domUs id,sperate by comma")
 ap.add_argument("-C", "--CreditdomUs", help="domUs id,sperate by comma")
 ap.add_argument("-c", "--CreditdomUs-Dummy", help="domUs id,sperate by comma")
-ap.add_argument("-t", "--timeslice",type=int, default=10000, help="sched quantum")
+ap.add_argument("-t", "--timeslice",type=int, default=10000, help="scheduling quantum(us)")
 ap.add_argument("-f", "--fps", type=float, default=30, help="target fps")
 args = vars(ap.parse_args())
 
@@ -306,63 +306,10 @@ class MonitorThread(threading.Thread):
 
 
 
-		other_cur_bw = 0
+		other_cur_bw = self.timeslice_us - cur_bw
 		other_info = self.shared_data[self.other_domuid]
 		cur_bw = cur_bw
 		myinfo = self.shared_data[self.domuid]
-
-		if self.rtxen_or_credit==1:
-			for vcpu in other_info:
-				if vcpu['pcpu']!=-1:
-					other_cur_bw=vcpu['b']		
-
-		elif self.rtxen_or_credit==0:
-			for vcpu in other_info:
-				if vcpu['pcpu']!=-1:
-					other_cur_bw=vcpu['w']
-		# print('domuid',self.domuid,'other_cur_bw', other_cur_bw,'cur_bw',cur_bw)
-
-		if cur_bw+other_cur_bw>self.timeslice_us:
-
-			my_pass_val = self.shared_data['pass_val'][int(self.domuid)-int(monitoring_domU[0])]
-			other_pass_val = self.shared_data['pass_val'][int(self.other_domuid)-int(monitoring_domU[0])]
-			last_time = self.shared_data['last_time_val']
-			now_time = time.time()
-			if last_time==0:
-				last_time = now_time
-				self.shared_data['last_time_val'] = now_time
-			# print('domuid',self.domuid,'last_time', last_time,'now_time',now_time)
-
-			self.shared_data["contention_time_passed"]+=now_time-last_time
-			self.shared_data['last_time_val'] = now_time
-			# print(self.shared_data["contention_time_passed"])
-
-
-
-
-			if my_pass_val<=other_pass_val:
-				other_cur_bw=self.timeslice_us-cur_bw
-			else:
-				cur_bw=self.timeslice_us-other_cur_bw
-				self.pid.reset()
-
-			process_unit_time=2.5
-			if self.shared_data["contention_time_passed"]>=process_unit_time:# and int(self.shared_data["contention_time_passed"])%5==0:
-				self.shared_data["contention_time_passed"]=0
-				if my_pass_val<=other_pass_val:
-					self.shared_data['pass_val'][int(self.domuid)-int(monitoring_domU[0])]+=self.shared_data['stride_val'][int(self.domuid)-int(monitoring_domU[0])]
-				else:
-					self.shared_data['pass_val'][int(self.other_domuid)-int(monitoring_domU[0])]+=self.shared_data['stride_val'][int(self.other_domuid)-int(monitoring_domU[0])]
-
-				with open("info.txt", "a") as myfile:
-					myfile.write(self.domuid+" "+self.domuid+" time slice len 6"+ " "+str(now_time)+"\n")							
-		else:
-			self.shared_data['last_time_val'] = time.time()
-
-
-
-
-
 
 
 
@@ -375,7 +322,7 @@ class MonitorThread(threading.Thread):
 				if vcpu['pcpu']!=-1:
 					vcpu['b']=cur_bw
 			xen_interface.sched_rtds(self.domuid,self.timeslice_us,cur_bw,[])
-			xen_interface.sched_rtds(self.other_domuid,self.timeslice_us,self.timeslice_us-cur_bw,[])
+			xen_interface.sched_rtds(self.other_domuid,self.timeslice_us,other_cur_bw,[])
 
 		elif self.rtxen_or_credit==0:
 			for vcpu in other_info:
@@ -385,7 +332,7 @@ class MonitorThread(threading.Thread):
 				if vcpu['pcpu']!=-1:
 					vcpu['w']=cur_bw
 			xen_interface.sched_credit(self.domuid,cur_bw)
-			xen_interface.sched_credit(self.other_domuid,self.timeslice_us-cur_bw)
+			xen_interface.sched_credit(self.other_domuid,other_cur_bw)
 
 
 
@@ -394,7 +341,7 @@ class MonitorThread(threading.Thread):
 		time_now=str(time.time())
 		info = self.domuid+" "+str(heart_rate)+" hr "+time_now+"\n"
 		info += self.domuid + " " +str(cur_bw/self.timeslice_us) + " cpu1 cpu2 cpu3 cpu4 cpu5 "+time_now+"\n"
-		info += self.other_domuid+ " "+str(other_cur_bw/self.timeslice_us) + " other cpu2 cpu3 cpu4 cpu5 "+time_now
+		# info += self.other_domuid+ " "+str(other_cur_bw/self.timeslice_us) + " other cpu2 cpu3 cpu4 cpu5 "+time_now
 
 
 		# if self.shared_data['cnt']%buf!=0:
