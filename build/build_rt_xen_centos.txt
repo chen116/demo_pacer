@@ -76,6 +76,10 @@ nano ~/.vnc/xstartup.turbovnc
 
 /opt/TurboVNC/bin/vncserver  (for outside to vnc into dom0)
 
+after getting in, if you want window mamger:
+
+xfwm4 &
+
 
 # now from outside machine to are vnc viewing at dom0:
 openbox &
@@ -88,7 +92,7 @@ openbox &
 
 
 
-yum install -y epel-release && yum install -y python34 && yum install -y python34-setuptools && yum install -y python34-devel && easy_install-3.4 pip && pip3 install matplotlib && yum -y install python34-tkinter 
+yum install -y epel-release && yum install -y python34 && yum install -y python34-setuptools && yum install -y python34-devel && easy_install-3.4 pip && pip3 install matplotlib && yum -y install python34-tkinter && pip3 install imutils
 
 wget http://semanchuk.com/philip/sysv_ipc/sysv_ipc-1.0.0.tar.gz && tar -xzf sysv_ipc-1.0.0.tar.gz && cd sysv_ipc-1.0.0 && python3 setup.py install && cd /root/
 
@@ -102,4 +106,4 @@ python3 monitor.py 2 10 1,2 10000
 
 cp /root/demo_pacer/build/cv3_install_for_py3.sh /root/ && sh cv3_install_for_py3.sh
 
-pip3 install imutils
+
