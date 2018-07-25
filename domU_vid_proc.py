@@ -106,7 +106,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	domu_id = c.read("domid".encode())
 	key_path_hash_frame_number_entry=('/local/domain/'+domu_id.decode()+'/frame_number_entry').encode()
 	key_path_hash_box_entry=('/local/domain/'+domu_id.decode()+'/box_entry').encode()
-	print("Dom", domu_id, "waiting for dom0...")
+	print("Dom", domu_id.decode(), "waiting for dom0...")
 	while c.read(key_path_hash_frame_number_entry).decode() != "init":
 		continue
 	(startX, startY, endX, endY)=(0,0,0,0) 
@@ -119,7 +119,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	detect_car = 1
 	prev_detect_car = detect_car
 	prev_every_n_frame = every_n_frame
-	print("Dom", domu_id, "start...")
+	print("Dom", domu_id.decode(), "start...")
 	while frame_number_entry != "done":
 		frame_number_entry = c.read(key_path_hash_frame_number_entry).decode()
 		try:
@@ -180,8 +180,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 
 hb.heartbeat_finish()
 comm.write("heart_rate", "done")
-
-
+print("done")
 
 
 
