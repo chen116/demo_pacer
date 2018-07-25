@@ -156,11 +156,10 @@ def animate2(i):
         x_for_minmax.append(i)
         miny.append(min_max[0])
         maxy.append(min_max[1])
-    if time_start>0 and time_end>0 and len(miny)>1:
-        # ax1.plot([0,time_end-time_start],miny[0:2],'r')
-        # ax1.plot([0,time_end-time_start],[(miny[0]+maxy[0])/2,(miny[0]+maxy[0])/2],'pink')
-        # ax1.plot([0,time_end-time_start],maxy[0:2],'r',label= 'Target\nFPS')
-        ax1.plot([-5,48],maxy[0:2],'r',label= 'Target\nFPS')
+    # if time_start>0 and time_end>0 and len(miny)>1:
+    #     ax1.plot([0,time_end-time_start],miny[0:2],'r')
+    #     ax1.plot([0,time_end-time_start],[(miny[0]+maxy[0])/2,(miny[0]+maxy[0])/2],'pink')
+    #     ax1.plot([0,time_end-time_start],maxy[0:2],'r',label= 'Target\nFPS')
     fontP = FontProperties()
     fontP.set_size('small')
     ax1.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.,prop=fontP)
@@ -219,8 +218,9 @@ def animate2(i):
     ax2.set_ylabel('Assigned CPU Time (%)')
     # ax2.set_ylim( 45, 105 )  
     ax2.set_ylim( -5, 105 )  
-    ax1.set_xlim(-5,48)
-    ax2.set_xlim(-5,48)
+    ax1.plot([-1,48],maxy[0:2],'r',label= 'Target\nFPS')
+    ax1.set_xlim(-1,48)
+    ax2.set_xlim(-1,48)
     ax=[ax1, ax2]
     font = [{'family': 'serif',
             'color':  'dodgerblue',
