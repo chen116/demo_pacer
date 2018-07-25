@@ -98,7 +98,7 @@ net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt.txt", "MobileNetSSD
 
 import heartbeat
 import host_guest_comm
-window_size_hr=1
+window_size_hr=2
 hb = heartbeat.Heartbeat(1024,window_size_hr,100,"vic.log",10,100)
 monitoring_items = ["heart_rate","app_mode","frame_size","timeslice"]
 comm = host_guest_comm.DomU(monitoring_items)
@@ -152,7 +152,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				# 	prev_detect_car=detect_car
 				# 	comm.write("frame_size",every_n_frame)
 				if sum((startX, startY, endX, endY)) == 0 :
-					every_n_frame = 1
+					every_n_frame = 2
 				else:
 					every_n_frame = 1
 
@@ -167,13 +167,11 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			hb.heartbeat_beat()
 			print("get_window_heartrate:",hb.get_window_heartrate())
 			if self_cnt%window_size_hr==0 and self_cnt>window_size_hr:
-				comm.write("heart_rate", hb.get_instant_heartrate())
+				comm.write("heart_rate", hb.get_window_heartrate())
 			if prev_every_n_frame!=every_n_frame and self_cnt%window_size_hr==0 :
 				prev_every_n_frame=every_n_frame
 				comm.write("frame_size",every_n_frame)
-			if prev_every_n_frame!=every_n_frame and self_cnt%window_size_hr==0 :
-				prev_every_n_frame=every_n_frame
-				comm.write("frame_size",every_n_frame)
+
 
 
 hb.heartbeat_finish()
