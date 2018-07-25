@@ -151,21 +151,17 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 					else:
 						every_n_frame = window_size_hr
 					prev_detect_car=detect_car
+					print("detect car:" detect_car)
 					comm.write("frame_size",every_n_frame)
 				# if sum((startX, startY, endX, endY)) > 0 :
 				# 	every_n_frame = window_size_hr/2
 				# else:
 				# 	every_n_frame = window_size_hr
-
-
-
-
-
 				c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
 			prev_frame = frame_num
 
 			hb.heartbeat_beat()
-			print("get_window_heartrate:",hb.get_window_heartrate())
+			# print("get_window_heartrate:",hb.get_window_heartrate())
 			if self_cnt%window_size_hr==0 and self_cnt>window_size_hr:
 				comm.write("heart_rate", hb.get_window_heartrate())
 			# if prev_every_n_frame!=every_n_frame and self_cnt%window_size_hr==0 :
