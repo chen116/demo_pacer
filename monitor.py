@@ -25,6 +25,8 @@ ap.add_argument("-f", "--fps", type=float, default=30, help="target fps")
 args = vars(ap.parse_args())
 
 
+print(args["RTdomUs-Dummy"])
+
 monitoring_items = ["heart_rate","app_mode","frame_size","timeslice"]
 
 # c = heartbeat.Dom0(monitoring_items,['1','2','3','4'])
