@@ -33,7 +33,7 @@ args = vars(ap.parse_args())
 
 
 
-if args["domUs"]!="":
+if args["domUs"]!=None:
 	print(args["domUs"])
 exit()
 monitoring_items = ["heart_rate","app_mode","frame_size","timeslice"]
@@ -300,7 +300,7 @@ class MonitorThread(threading.Thread):
 				if vcpu['pcpu']!=-1:
 					vcpu['b']=cur_bw
 			xen_interface.sched_rtds(self.domuid,self.timeslice_us,cur_bw,[])
-			if args["RTdomUs_Dummy"]!="":
+			if args["RTdomUs_Dummy"]!=None:
 				xen_interface.sched_rtds(self.other_domuid,self.timeslice_us,other_cur_bw,[])
 
 		elif self.rtxen_or_credit==0:
@@ -311,7 +311,7 @@ class MonitorThread(threading.Thread):
 				if vcpu['pcpu']!=-1:
 					vcpu['w']=cur_bw
 			xen_interface.sched_credit(self.domuid,cur_bw)
-			if args["CreditdomUs_Dummy"]!="":
+			if args["CreditdomUs_Dummy"]!=None:
 				xen_interface.sched_credit(self.other_domuid,other_cur_bw)
 
 
