@@ -6,6 +6,7 @@ from imutils.video import FPS
 import numpy as np
 import time
 
+net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt.txt", "MobileNetSSD_deploy.caffemodel")
 
 vs= FileVideoStream("rollcar.3gp").start()
 time.sleep(1)
