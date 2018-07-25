@@ -25,13 +25,17 @@ ap.add_argument("-C", "--CreditdomUs", help="domUs id,sperate by comma")
 ap.add_argument("-c", "--CreditdomUs-Dummy", help="domUs id,sperate by comma")
 ap.add_argument("-t", "--timeslice",type=int, default=10000, help="scheduling quantum(us)")
 ap.add_argument("-f", "--fps", type=float, default=30, help="target fps")
-ap.add_argument("-s", "--static-alloc", type=int, default=1000, help="static alloc")
+ap.add_argument("-s", "--static-alloc", type=float, default=1000, help="static alloc")
+ap.add_argument("-d", "--domUs", help="domUs id,sperate by comma")
+
 
 args = vars(ap.parse_args())
 
 
 
-
+if args["domUs"]!="":
+	print("asdf")
+exit()
 monitoring_items = ["heart_rate","app_mode","frame_size","timeslice"]
 
 # c = heartbeat.Dom0(monitoring_items,['1','2','3','4'])
@@ -193,6 +197,36 @@ class MonitorThread(threading.Thread):
 				if vcpu['pcpu']!=-1:
 					cur_bw=int(vcpu['w'])
 
+		if self.algo==0:
+			# static 
+			default_bw=int(self.timeslice_us/2) #dummy
+			if cur_bw!=default_bw:
+				cur_bw=default_bw	
+			cur_bw = int(self.timeslice_us*args["static_alloc"]/100)
+		if self.algo==1:
+			# amid
+			alpha=1
+			beta=.9
+			free = self.timeslice_us-cur_bw
+
+			
+			if(heart_rate<self.mid):
+				if cur_bw<self.timeslice_us-minn:
+					free=free*beta
+					cur_bw=self.timeslice_us-free
+				else:
+					cur_bw=self.timeslice_us-minn
+			if(heart_rate>self.mid):
+				if cur_bw>minn:
+					free+=alpha*minn
+					cur_bw=self.timeslice_us-free
+			cur_bw=int(cur_bw)#-int(cur_bw)%100
+		if self.algo==2:
+			# 99%
+			default_bw=int(self.timeslice_us-minn) #dummy
+			if cur_bw!=default_bw:
+				cur_bw=default_bw
+			cur_bw=int(cur_bw)#-int(cur_bw)%100
 		if self.algo==3:
 			# apid algo
 			output = self.pid.update(heart_rate)
@@ -210,26 +244,11 @@ class MonitorThread(threading.Thread):
 
 		else:
 			self.pid.reset()
-
 		if self.algo==4:
-			# aimd algo
+			# aimd algo_range
 			alpha=3.5
 			beta=.9
 			free = self.timeslice_us-cur_bw
-
-
-			# if(heart_rate<self.mid):
-			# 	if cur_bw<self.timeslice_us-minn:
-			# 		free=free*beta
-			# 		cur_bw=self.timeslice_us-free
-			# 	else:
-			# 		cur_bw=self.timeslice_us-minn
-			# if(heart_rate>self.mid):
-			# 	if cur_bw>minn:
-			# 		free+=alpha*minn
-			# 		cur_bw=self.timeslice_us-free
-
-
 			if(heart_rate<self.min_heart_rate):
 				if cur_bw<self.timeslice_us-minn:
 					free=free*beta
@@ -241,55 +260,9 @@ class MonitorThread(threading.Thread):
 					free+=alpha*minn
 					cur_bw=self.timeslice_us-free
 			cur_bw=int(cur_bw)#-int(cur_bw)%100
-			print("      ",cur_bw)
-
-
-		if self.algo==1:
-
-			alpha=1
-			beta=.9
-			free = self.timeslice_us-cur_bw
-
-			
-			if(heart_rate<self.mid):
-				if cur_bw<self.timeslice_us-minn:
-					free=free*beta
-					cur_bw=self.timeslice_us-free
-				else:
-					cur_bw=self.timeslice_us-minn
-			if(heart_rate>self.mid):
-				if cur_bw>minn:
-					free+=alpha*minn
-					cur_bw=self.timeslice_us-free
-
-			# if(heart_rate<self.mid):
-			# 	if cur_bw<self.timeslice_us-2*minn: #dummy
-			# 		cur_bw+=minn
-			# if(heart_rate>self.mid):
-			# 	if cur_bw>minn:
-			# 		cur_bw-=minn
-
-			# if(heart_rate<self.min_heart_rate):
-			# 	if cur_bw<self.timeslice_us-2*minn: #dummy
-			# 		cur_bw+=minn
-			# if(heart_rate>self.max_heart_rate):
-			# 	if cur_bw>minn:
-			# 		cur_bw-=minn
-			cur_bw=int(cur_bw)#-int(cur_bw)%100
-
-		if self.algo==2:
-			default_bw=int(self.timeslice_us-minn) #dummy
-			if cur_bw!=default_bw:
-				cur_bw=default_bw
-			cur_bw=int(cur_bw)#-int(cur_bw)%100
-
-
-		if self.algo==0:
-			default_bw=int(self.timeslice_us/2) #dummy
-			if cur_bw!=default_bw:
-				cur_bw=default_bw	
-			cur_bw = 2000/2
+			# print("      ",cur_bw)
 		if self.algo==5:
+			# limd 
 			beta=.9
 			free = self.timeslice_us-cur_bw		
 			if(heart_rate<self.min_heart_rate):
@@ -299,7 +272,7 @@ class MonitorThread(threading.Thread):
 			if(heart_rate>self.max_heart_rate):
 				if cur_bw>minn:
 					cur_bw-=minn
-			if heart_rate > self.min_heart_rate:
+			if heart_rate > self.max_heart_rate:
 				self.target_reached_cnt+=1
 				if self.target_reached_cnt==16:
 					self.target_reached_cnt-=8
@@ -327,7 +300,8 @@ class MonitorThread(threading.Thread):
 				if vcpu['pcpu']!=-1:
 					vcpu['b']=cur_bw
 			xen_interface.sched_rtds(self.domuid,self.timeslice_us,cur_bw,[])
-			xen_interface.sched_rtds(self.other_domuid,self.timeslice_us,other_cur_bw,[])
+			if args["RTdomUs_Dummy"]!="":
+				xen_interface.sched_rtds(self.other_domuid,self.timeslice_us,other_cur_bw,[])
 
 		elif self.rtxen_or_credit==0:
 			for vcpu in other_info:
@@ -337,7 +311,8 @@ class MonitorThread(threading.Thread):
 				if vcpu['pcpu']!=-1:
 					vcpu['w']=cur_bw
 			xen_interface.sched_credit(self.domuid,cur_bw)
-			xen_interface.sched_credit(self.other_domuid,other_cur_bw)
+			if args["CreditdomUs_Dummy"]!="":
+				xen_interface.sched_credit(self.other_domuid,other_cur_bw)
 
 
 
@@ -346,15 +321,6 @@ class MonitorThread(threading.Thread):
 		time_now=str(time.time())
 		info = self.domuid+" "+str(heart_rate)+" hr "+time_now+"\n"
 		info += self.domuid + " " +str(cur_bw/self.timeslice_us) + " cpu1 cpu2 cpu3 cpu4 cpu5 "+time_now+"\n"
-		# info += self.other_domuid+ " "+str(other_cur_bw/self.timeslice_us) + " other cpu2 cpu3 cpu4 cpu5 "+time_now
-
-
-		# if self.shared_data['cnt']%buf!=0:
-		# 	with open("info.txt", "a") as myfile:
-		# 		myfile.write(info+"\n")
-		# else:
-		# 	with open("info.txt", "w") as myfile:
-		#		myfile.write(info+"\n")
 		with open("info.txt", "a") as myfile:
 			myfile.write(info+"\n")
 
@@ -374,10 +340,10 @@ threads = []
 shared_data = xen_interface.get_global_info()
 
 
-xen_interface.sched_credit(args["CreditdomUs"],timeslice_us*0.2)
-xen_interface.sched_credit(args["CreditdomUs_Dummy"],timeslice_us*(1-0.2))
-xen_interface.sched_rtds(args["RTdomUs"],timeslice_us,timeslice_us*0.2,[])
-xen_interface.sched_rtds(args["RTdomUs_Dummy"],timeslice_us,timeslice_us*(1-0.2),[])
+xen_interface.sched_credit(args["CreditdomUs"],timeslice_us*args["static_alloc"]/100)
+xen_interface.sched_credit(args["CreditdomUs_Dummy"],timeslice_us*(1-args["static_alloc"]/100))
+xen_interface.sched_rtds(args["RTdomUs"],timeslice_us,timeslice_us*args["static_alloc"]/100,[])
+xen_interface.sched_rtds(args["RTdomUs_Dummy"],timeslice_us,timeslice_us*(1-args["static_alloc"]/100),[])
 
 # if '1' in shared_data['rtxen']:
 # 	xen_interface.sched_rtds(1,timeslice_us,default_bw,[])
@@ -428,10 +394,6 @@ with open("minmax.txt", "w") as myfile:
 
 
 # 1 means rtxen
-rtxen_or_credit=1
-if len(shared_data['xen'])>0:
-	rtxen_or_credit=1
-
 for domuid in c.domu_ids:
 	rtxen_or_credit = 1
 	if domuid == args["CreditdomUs"]:

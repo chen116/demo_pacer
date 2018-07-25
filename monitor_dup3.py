@@ -42,7 +42,7 @@ default_bw=int(timeslice_us/len(monitoring_domU))
 
 
 class MonitorThread(threading.Thread):
-	def __init__(self, threadLock,shared_data,domuid,xen_sched,timeslice_us,min_heart_rate,max_heart_rate,keys=['test'],base_path='/local/domain'):
+	def __init__(self, threadLock,shared_data,domuid,rtxen_or_credit,timeslice_us,min_heart_rate,max_heart_rate,keys=['test'],base_path='/local/domain'):
 		threading.Thread.__init__(self)
 		self.domuid=(domuid)
 		self.other_domuid=monitoring_domU[0]
@@ -57,7 +57,7 @@ class MonitorThread(threading.Thread):
 		self.algo = args["algo"]
 		if self.domuid==monitoring_domU[1]:
 			self.algo = 0
-		self.xen_sched = xen_sched # 1 is rtds, 0 is credit
+		self.rtxen_or_credit = rtxen_or_credit # 1 is rtds, 0 is credit
 		self.target_reached_cnt = 0
 		self.min_heart_rate=min_heart_rate
 		self.max_heart_rate=max_heart_rate
@@ -100,7 +100,7 @@ class MonitorThread(threading.Thread):
 					self.pid.reset()
 					if msg.isdigit():
 						tmp_new_timeslice_us = int(msg)*1000
-						if self.xen_sched ==1:
+						if self.rtxen_or_credit ==1:
 							cur_bw = 0
 							myinfo = self.shared_data[self.domuid]
 							for vcpu in myinfo:
@@ -138,12 +138,12 @@ class MonitorThread(threading.Thread):
 						heart_rate=-1
 					if heart_rate>-1:
 						self.res_allocat(heart_rate)					
-						#self.res_allo(self.algo,self.xen_sched,float(msg),self.shared_data,self.domuid ,self.min_heart_rate,self.max_heart_rate)					
+						#self.res_allo(self.algo,self.rtxen_or_credit,float(msg),self.shared_data,self.domuid ,self.min_heart_rate,self.max_heart_rate)					
 
 				# try :
 				# 	if self.keys[0] in path.decode():
 				# 		self.res_allocat(float(msg))					
-				# 		#self.res_allo(self.algo,self.xen_sched,float(msg),self.shared_data,self.domuid ,self.min_heart_rate,self.max_heart_rate)					
+				# 		#self.res_allo(self.algo,self.rtxen_or_credit,float(msg),self.shared_data,self.domuid ,self.min_heart_rate,self.max_heart_rate)					
 				# except:
 				# 	#print("meow",int(self.domuid),token.decode(),msg)
 
@@ -178,11 +178,11 @@ class MonitorThread(threading.Thread):
 		cur_bw = 0
 		myinfo = self.shared_data[self.domuid]
 
-		if self.xen_sched==1:
+		if self.rtxen_or_credit==1:
 			for vcpu in myinfo:
 				if vcpu['pcpu']!=-1:
 					cur_bw=int(vcpu['b'])
-		elif self.xen_sched==0:
+		elif self.rtxen_or_credit==0:
 			for vcpu in myinfo:
 				if vcpu['pcpu']!=-1:
 					cur_bw=int(vcpu['w'])
@@ -304,12 +304,12 @@ class MonitorThread(threading.Thread):
 		cur_bw = cur_bw
 		myinfo = self.shared_data[self.domuid]
 
-		if self.xen_sched==1:
+		if self.rtxen_or_credit==1:
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
 					other_cur_bw=vcpu['b']		
 
-		elif self.xen_sched==0:
+		elif self.rtxen_or_credit==0:
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
 					other_cur_bw=vcpu['w']
@@ -370,7 +370,7 @@ class MonitorThread(threading.Thread):
 
 
 
-		if self.xen_sched==1:
+		if self.rtxen_or_credit==1:
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
 					vcpu['b']=other_cur_bw
@@ -380,7 +380,7 @@ class MonitorThread(threading.Thread):
 			xen_interface.sched_rtds(self.domuid,self.timeslice_us,cur_bw,[])
 			xen_interface.sched_rtds(self.other_domuid,self.timeslice_us,other_cur_bw,[])
 
-		elif self.xen_sched==0:
+		elif self.rtxen_or_credit==0:
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
 					vcpu['w']=other_cur_bw
@@ -477,9 +477,6 @@ with open("minmax.txt", "w") as myfile:
 
 # 1 means rtxen
 rtxen_or_credit=1
-if len(shared_data['xen'])>0:
-	rtxen_or_credit=1
-
 for domuid in c.domu_ids:
 	tmp_thread = MonitorThread(threadLock,shared_data,domuid,rtxen_or_credit,timeslice_us,min_heart_rate,max_heart_rate, monitoring_items)
 	tmp_thread.start()
