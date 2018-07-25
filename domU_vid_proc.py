@@ -114,7 +114,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	frame_number_entry = "init"
 	prev_frame = -1
 	self_cnt = 0
-	every_n_frame = 2
+	every_n_frame = 1
 	detect_car = 1
 	prev_detect_car = detect_car
 	prev_every_n_frame = every_n_frame
@@ -153,7 +153,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				# 	comm.write("frame_size",every_n_frame)
 				if sum((startX, startY, endX, endY)) == 0 :
 					every_n_frame = 1
-				else
+				else:
 					every_n_frame = 1
 
 
