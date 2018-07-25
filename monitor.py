@@ -25,7 +25,7 @@ ap.add_argument("-f", "--fps", type=float, default=30, help="target fps")
 args = vars(ap.parse_args())
 
 
-print(args["RTdomUs-Dummy"])
+
 
 monitoring_items = ["heart_rate","app_mode","frame_size","timeslice"]
 
@@ -46,9 +46,9 @@ class MonitorThread(threading.Thread):
 	def __init__(self, threadLock,shared_data,domuid,rtxen_or_credit,timeslice_us,min_heart_rate,max_heart_rate,keys=['test'],base_path='/local/domain'):
 		threading.Thread.__init__(self)
 		self.domuid=(domuid)
-		self.other_domuid=args["RTdomUs-Dummy"]
+		self.other_domuid=args["RTdomUs_Dummy"]
 		if self.domuid==args["CreditdomUs"]:
-			self.other_domuid=args["CreditdomUs-Dummy"]
+			self.other_domuid=args["CreditdomUs_Dummy"]
 		self.stride = int(10/int(domuid))
 		self.keys=keys
 		self.base_path=base_path
