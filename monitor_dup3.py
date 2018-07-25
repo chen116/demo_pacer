@@ -1,6 +1,6 @@
 # with fancy arg, foucsing on just managing 2 vm ( or more if no contention)
 
-# example usage : python3 monitor.py -d 23,24 -f 15
+# example usage :git pull &&  python3 monitor_dup3.py -d 23,24 -f 10
 import host_guest_comm
 import xen_interface
 import threading
@@ -17,10 +17,11 @@ import argparse
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", default="rollcar.3gp", help="path to the video file")
-ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
+
 ap.add_argument("-d", "--domUs", help="domUs id,sperate by comma")
 ap.add_argument("-t", "--timeslice",type=int, default=10000, help="sched quantum")
 ap.add_argument("-f", "--fps", type=float, default=30, help="target fps")
+ap.add_argument("-a", "--algo", type=int, default=4, help="algorithm")
 args = vars(ap.parse_args())
 
 
@@ -52,7 +53,7 @@ class MonitorThread(threading.Thread):
 		self.threadLock=threadLock
 		self.shared_data=shared_data
 
-		self.algo = 5
+		self.algo = args["algo"]
 		if self.domuid==monitoring_domU[1]:
 			self.algo = 0
 		self.xen_sched = xen_sched # 1 is rtds, 0 is credit

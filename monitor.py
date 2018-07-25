@@ -1,4 +1,6 @@
 # with fancy arg, foucsing on just managing 2 vm ( or more if no contention)
+
+# example usage: git pull && python3 monitor.py -R 23 -r 31 -C 24 -c 34 -f 10
 import host_guest_comm
 import xen_interface
 import threading
