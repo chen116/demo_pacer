@@ -159,7 +159,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				if sum((startX, startY, endX, endY)) > 0 :
 					every_n_frame = int(window_size_hr/2)
 				else:
-					every_n_frame = window_size_hr
+					every_n_frame = int(window_size_hr/2)
 					
 				c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
 			prev_frame = frame_num
