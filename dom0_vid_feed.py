@@ -16,6 +16,8 @@ ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", default="rollcar.3gp", help="path to the video file")
 ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
 ap.add_argument("-f", "--fps", type=int, default=30, help="minimum area size")
+ap.add_argument("-d", "--domUs", help="domUs id,sperate by comma")
+
 args = vars(ap.parse_args())
 
 if "mp4" in args["video"]:
@@ -105,7 +107,7 @@ print(fps_val)
 
 
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
-	domu_ids=[]
+	domu_ids=args["domUs"].split()
 	boxes = {}
 	keys=['frame_number_entry','box_entry']
 	if domu_ids==[]:
