@@ -15,7 +15,7 @@ import cv2
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", default="rollcar.3gp", help="path to the video file")
-ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
+ap.add_argument("-w", "--window", type=int, default=2, help="window size")
 args = vars(ap.parse_args())
 
 if "mp4" in args["video"]:
@@ -98,7 +98,7 @@ net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt.txt", "MobileNetSSD
 
 import heartbeat
 import host_guest_comm
-window_size_hr=4
+window_size_hr=args["window"]
 hb = heartbeat.Heartbeat(1024,window_size_hr,100,"vic.log",10,100)
 monitoring_items = ["heart_rate","app_mode","frame_size","timeslice"]
 comm = host_guest_comm.DomU(monitoring_items)
