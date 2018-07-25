@@ -152,7 +152,7 @@ class MonitorThread(threading.Thread):
 	def res_allocat(self,heart_rate):
 
 		minn=int(self.timeslice_us*0.01)
-		print(self.domuid, heart_rate, self.algo)
+		# print(self.domuid, heart_rate, self.algo)
 
 
 		# if int(self.domuid)>=3:
@@ -234,7 +234,7 @@ class MonitorThread(threading.Thread):
 					free+=alpha*minn
 					cur_bw=self.timeslice_us-free
 			cur_bw=int(cur_bw)#-int(cur_bw)%100
-			print("      ",cur_bw)
+			# print("      ",cur_bw)
 
 
 		if self.algo==1:
@@ -281,7 +281,7 @@ class MonitorThread(threading.Thread):
 			default_bw=int(self.timeslice_us/2) #dummy
 			if cur_bw!=default_bw:
 				cur_bw=default_bw	
-			cur_bw = 2000/2
+			cur_bw = 2000/.5
 		if self.algo==5:
 			beta=.9
 			free = self.timeslice_us-cur_bw		
@@ -430,7 +430,7 @@ threads = []
 shared_data = xen_interface.get_global_info()
 
 for uid in monitoring_domU:
-	xen_interface.sched_rtds(int(uid),timeslice_us,2000/2,[])
+	xen_interface.sched_rtds(int(uid),timeslice_us,2000/.5,[])
 
 # if '1' in shared_data['rtxen']:
 # 	xen_interface.sched_rtds(1,timeslice_us,default_bw,[])
