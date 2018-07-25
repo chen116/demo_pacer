@@ -368,8 +368,9 @@ threadLock = threading.Lock()
 threads = []
 shared_data = xen_interface.get_global_info()
 
-for uid in monitoring_domU:
-	xen_interface.sched_rtds(int(uid),timeslice_us,2000/2,[])
+
+xen_interface.sched_credit(args["CreditdomUs"],timeslice_us,2000/2)
+xen_interface.sched_rtds(args["RTdomUs"],timeslice_us,2000/2,[])
 
 # if '1' in shared_data['rtxen']:
 # 	xen_interface.sched_rtds(1,timeslice_us,default_bw,[])
