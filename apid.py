@@ -52,10 +52,8 @@ class AdapPID:
 		# 	self.output = self.p() + self.i()
 		# 	self.start=1
 		# else:
-		if self.delta_time==0:
-			self.output = self.p() + self.i() 
-		else:
-			self.output = self.p() + self.i() #+ self.d()
+
+		self.output = self.p() + self.i() + self.p()
 		self.last_time = current_time
 
 		return self.output
