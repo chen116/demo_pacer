@@ -137,6 +137,7 @@ class MonitorThread(threading.Thread):
 			for vcpu in myinfo:
 				if vcpu['pcpu']!=-1:
 					vcpu['w']=cur_bw
+			print(cur_bw,self.domuid,self.other_domuid)
 			xen_interface.sched_credit(self.domuid,cur_bw)
 			xen_interface.sched_credit(self.other_domuid,other_cur_bw)
 
