@@ -90,13 +90,13 @@ def get_global_info():
     out =  subprocess.check_output(['xl', 'sched-rtds','-v','all']).decode().split('\n')
     if out[0]!='':
         out=out[2:-1]
-        print(out)
         for lines in out:
             line = lines.split()
             if line[1]!='0' and line[1].isdigit():
                 shared_data['rtxen'].add(line[1])
-            shared_data[line[1]][int(line[2])]['p']=int(line[3])
-            shared_data[line[1]][int(line[2])]['b']=int(line[4])
+            if line[1].isdigit():
+                shared_data[line[1]][int(line[2])]['p']=int(line[3])
+                shared_data[line[1]][int(line[2])]['b']=int(line[4])
 
 
 
