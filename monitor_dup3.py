@@ -57,7 +57,7 @@ class MonitorThread(threading.Thread):
 
 		self.algo = args["algo"]
 		if self.domuid==monitoring_domU[1]:
-			self.algo =  0
+			self.algo =  4
 		self.rtxen_or_credit = rtxen_or_credit # 1 is rtds, 0 is credit
 		self.target_reached_cnt = 0
 		self.min_heart_rate=min_heart_rate
