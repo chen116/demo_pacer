@@ -75,10 +75,11 @@ class MonitorThread(threading.Thread):
 					heart_rate=-1
 					try :
 						heart_rate = float(msg)
+						self.res_allocat(heart_rate)	
 					except:
 						heart_rate=-1
-					if heart_rate>-1:
-						self.res_allocat(heart_rate)					
+					# if heart_rate>-1:
+					# 	self.res_allocat(heart_rate)					
 				self.threadLock.release()
 		return
 
