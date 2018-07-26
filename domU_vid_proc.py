@@ -98,7 +98,10 @@ net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt.txt", "MobileNetSSD
 
 import heartbeat
 import host_guest_comm
+
 window_size_hr=args["window"]
+if window_size_hr%2>0:
+	window_size_hr+=1
 hb = heartbeat.Heartbeat(1024,window_size_hr,100,"vic.log",10,100)
 monitoring_items = ["heart_rate","sampling_period"]
 comm = host_guest_comm.DomU(monitoring_items)
