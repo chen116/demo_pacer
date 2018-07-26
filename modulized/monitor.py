@@ -162,7 +162,6 @@ threadLock = threading.Lock()
 threads = []
 shared_data = xen_interface.get_global_info()
 
-rtxen_or_credit="rtxen"
 for domuid in domUs.domu_ids:
 	rtxen_or_credit="rtxen"
 	for domU_in_credit in shared_data['credit']:
@@ -181,11 +180,16 @@ shared_data['contention_time_passed']=0
 pp = pprint.PrettyPrinter(indent=2)
 pp.pprint(shared_data)
 
-print('monitoring:')
-for i in range(2):
 	vmstr = 'VM'+str(i+1)
 	print("		",rtxen_or_credit,vmstr,'with domU ID=',monitoring_domU[i])
 
+print('monitoring:')
+for i in range(2):
+	vmstr = 'VM'+str(i+1)
+	if monitoring_domU[i] in shared_data['rtxen']:
+		print("		rtxen",vmstr,'with domU ID=',monitoring_domU[i])
+	else:
+		print("		credit",vmstr,'with domU ID=',monitoring_domU[i])
 
 
 with open("misc.txt", "w") as myfile:
