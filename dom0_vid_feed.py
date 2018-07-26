@@ -23,7 +23,7 @@ blank = np.zeros((blank_len,hh,ww,3),dtype=np.uint8)
 rollback = np.zeros((rollback_len,hh,ww,3),dtype=np.uint8)
 
 
-vs= FileVideoStream(args["video"]).start()
+vs= FileVideoStream("rollcar.3gp").start()
 time.sleep(1.0)
 for i in range(250):#blank_len+car_len):
     frame = vs.read()
@@ -52,7 +52,6 @@ COLORS=[]
 
 misc = open("misc.txt","r").read()
 fps_val = float(misc.split('\n')[0].split()[1])*2
-print(fps_val)
 
 
 
@@ -66,6 +65,8 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 		name_path = ("/local/domain/"+x+"/name").encode()
 		if c[name_path].decode() == "VM1" or c[name_path].decode() == "VM2":
 			domu_ids.append(x)
+	print("domU's id:",domu_ids)
+
 	boxes = {}
 	keys=['frame_number_entry','box_entry']
 	# if domu_ids==[]:
