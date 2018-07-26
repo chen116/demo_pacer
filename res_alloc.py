@@ -33,11 +33,13 @@ class ResourceAllocation:
 				if vcpu['pcpu']!=-1:
 					other_cur_bw=vcpu['w']
 		# print('domuid',self.domuid,'other_cur_bw', other_cur_bw,'cur_bw',cur_bw)
-
+		base_val = 0
+		if self.domuid>self.other_domuid:
+			base_val = 1
 		if cur_bw+other_cur_bw>self.timeslice_us:
 
-			my_pass_val = self.shared_data['pass_val'][int(self.domuid)-int(monitoring_domU[0])]
-			other_pass_val = self.shared_data['pass_val'][int(self.other_domuid)-int(monitoring_domU[0])]
+			my_pass_val = self.shared_data['pass_val'][base_val]
+			other_pass_val = self.shared_data['pass_val'][(base_val+1)%2]
 			last_time = self.shared_data['last_time_val']
 			now_time = time.time()
 			if last_time==0:
@@ -61,9 +63,6 @@ class ResourceAllocation:
 			process_unit_time=2.5
 			if self.shared_data["contention_time_passed"]>=process_unit_time:# and int(self.shared_data["contention_time_passed"])%5==0:
 				self.shared_data["contention_time_passed"]=0
-				base_val = 0
-				if self.domuid>self.other_domuid:
-					base_val = 1
 				if my_pass_val<=other_pass_val:
 					self.shared_data['pass_val'][base_val]+=self.shared_data['stride_val'][base_val]
 				else:
