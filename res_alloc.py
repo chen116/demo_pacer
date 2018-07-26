@@ -133,6 +133,10 @@ class ResourceAllocation:
 					free+=alpha*self.minn
 					cur_bw=self.timeslice_us-free
 			cur_bw=int(cur_bw)
+			if cur_bw <=1 :
+				print("NOOOOOO")
+			if cur_bw >= self.timeslice_us:
+				print("shitttt")
 
 
 		elif self.algo==5:
@@ -156,10 +160,7 @@ class ResourceAllocation:
 				self.target_reached_cnt=0
 			cur_bw=int(cur_bw)
 
-		if cur_bw <=1 :
-			print("NOOOOOO")
-		if cur_bw >= self.timeslice_us:
-			print("shitttt")
+
 		return(int(cur_bw))
 
 
