@@ -34,15 +34,15 @@ monitoring_domU = ["VM1","VM2"]
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	domu_ids=[]
 	all_domuid_ids = []
-	for x in c.list('/local/domain'.encode()):
-		all_domuid_ids.append(x.decode())
+	for uid in c.list('/local/domain'.encode()):
+		all_domuid_ids.append(uid.decode())
 	all_domuid_ids.pop(0)
-	for x in all_domuid_ids:
-		name_path = ("/local/domain/"+x+"/name").encode()
+	for uid in all_domuid_ids:
+		name_path = ("/local/domain/"+uid+"/name").encode()
 		if c[name_path].decode() == "VM1":
-			monitoring_domU[0] = x
+			monitoring_domU[0] = uid
 		if c[name_path].decode() == "VM2":
-			monitoring_domU[1] = x
+			monitoring_domU[1] = uid
 
 
 
@@ -183,9 +183,9 @@ print('monitoring:')
 for i in range(2):
 	vmstr = 'VM'+str(i+1)
 	if monitoring_domU[i] in shared_data['rtxen']:
-		print("	rtxen",vmstr,'with domU ID=',monitoring_domU[i])
+		print("	rtxen",vmstr,'with domU ID:',monitoring_domU[i])
 	else:
-		print("	credit",vmstr,'with domU ID=',monitoring_domU[i])
+		print("	credit",vmstr,'with domU ID:',monitoring_domU[i])
 
 
 with open("misc.txt", "w") as myfile:
