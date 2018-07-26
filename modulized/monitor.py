@@ -171,12 +171,11 @@ with open("minmax.txt", "w") as myfile:
 
 
 for domuid in domUs.domu_ids:
+	rtxen_or_credit="rtxen"
 	for domU_in_credit in shared_data['credit']:
 		if domU_in_credit == domuid:
 			rtxen_or_credit="credit"
-	for domU_in_rtxen in shared_data['rtxen']:
-		if domU_in_rtxen == domuid:
-			rtxen_or_credit="rtxen"
+
 
 	tmp_thread = MonitorThread(threadLock,shared_data,domuid,rtxen_or_credit,timeslice_us,min_heart_rate,max_heart_rate, monitoring_items)
 	tmp_thread.start()
