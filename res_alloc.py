@@ -5,7 +5,7 @@ class ResourceAllocation:
 	def __init__(self,static_alloc, timeslice_us,min_heart_rate,max_heart_rate,algo):
 		self.static_alloc = static_alloc
 		self.timeslice_us = timeslice_us
-		self.target_heart_rate = target_heart_rate
+		# self.target_heart_rate = target_heart_rate
 		self.mid=(min_heart_rate+max_heart_rate)/2
 		self.min_heart_rate=min_heart_rate
 		self.max_heart_rate=max_heart_rate
