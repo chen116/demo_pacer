@@ -52,6 +52,7 @@ class MonitorThread(threading.Thread):
 		self.base_path=base_path
 		self.threadLock=threadLock
 		self.shared_data=shared_data
+		self.timeslice_us = timeslice_us
 		self.rtxen_or_credit = rtxen_or_credit # 1 is rtds, 0 is credit
 		self.allocMod = res_alloc.ResourceAllocation(args["static_alloc"],timeslice_us,min_heart_rate,max_heart_rate,self.algo,self.domuid,self.other_domuid,self.shared_data,rtxen_or_credit)
 
