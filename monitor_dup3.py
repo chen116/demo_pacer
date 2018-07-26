@@ -266,8 +266,8 @@ class MonitorThread(threading.Thread):
 
 
 
-
-
+		other_info = self.shared_data[self.other_domuid]
+		myinfo = self.shared_data[self.domuid]
 		if self.rtxen_or_credit==1:
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
