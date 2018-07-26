@@ -2,7 +2,7 @@
 
 # example usage :git pull &&  python3 monitor_dup3.py -d 23,24 -f 10
 import sys
-sys.path.insert(0, '../')
+sys.path.insert(0, '/root/demo_pacer/')
 
 import host_guest_comm
 import xen_interface
