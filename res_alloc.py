@@ -61,10 +61,13 @@ class ResourceAllocation:
 			process_unit_time=2.5
 			if self.shared_data["contention_time_passed"]>=process_unit_time:# and int(self.shared_data["contention_time_passed"])%5==0:
 				self.shared_data["contention_time_passed"]=0
+				base_val = 0
+				if self.domuid>self.other_domuid:
+					base_val = 1
 				if my_pass_val<=other_pass_val:
-					self.shared_data['pass_val'][int(self.domuid)-int(monitoring_domU[0])]+=self.shared_data['stride_val'][int(self.domuid)-int(monitoring_domU[0])]
+					self.shared_data['pass_val'][base_val]+=self.shared_data['stride_val'][base_val]
 				else:
-					self.shared_data['pass_val'][int(self.other_domuid)-int(monitoring_domU[0])]+=self.shared_data['stride_val'][int(self.other_domuid)-int(monitoring_domU[0])]
+					self.shared_data['pass_val'][(base_val+1)%2]+=self.shared_data['stride_val'][(base_val+1)%2]
 
 				with open("info.txt", "a") as myfile:
 					myfile.write(self.domuid+" "+self.domuid+" time slice len 6"+ " "+str(now_time)+"\n")							
