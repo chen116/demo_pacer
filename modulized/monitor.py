@@ -162,7 +162,7 @@ threadLock = threading.Lock()
 threads = []
 shared_data = xen_interface.get_global_info()
 
-
+rtxen_or_credit="rtxen"
 for domuid in domUs.domu_ids:
 	rtxen_or_credit="rtxen"
 	for domU_in_credit in shared_data['credit']:
@@ -182,7 +182,8 @@ pp = pprint.PrettyPrinter(indent=2)
 pp.pprint(shared_data)
 
 for i in range(2):
-	print('monitoring: VM',i+1,monitoring_domU[i])
+	vmstr = 'VM'+str(i+1)
+	print('monitoring: ',rtxen_or_credit," ",vmstr,', domU ID=',monitoring_domU[i])
 
 
 
