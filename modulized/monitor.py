@@ -23,7 +23,7 @@ ap.add_argument("-d", "--domUs", help="domUs id,sperate by comma")
 ap.add_argument("-t", "--timeslice",type=int, default=10000, help="sched quantum")
 ap.add_argument("-f", "--fps", type=float, default=30, help="target fps")
 ap.add_argument("-a", "--algo", type=int, default=4, help="algorithm")
-ap.add_argument("-s", "--static-alloc", type=int, default=10, help="static alloc")
+ap.add_argument("-s", "--static-alloc", type=int, default=10, help="static utilization percentage")
 args = vars(ap.parse_args())
 
 
@@ -34,7 +34,8 @@ monitoring_domU = (args["domUs"]).split(',')
 c = host_guest_comm.Dom0(monitoring_items,monitoring_domU)
 
 timeslice_us=args["timeslice"]
-
+min_heart_rate = float(args["fps"])
+max_heart_rate = float(args["fps"])*1.5
 
 
 class MonitorThread(threading.Thread):
@@ -44,27 +45,17 @@ class MonitorThread(threading.Thread):
 		self.other_domuid=monitoring_domU[0]
 		if self.domuid==monitoring_domU[0]:
 			self.other_domuid=monitoring_domU[1]
+		self.algo = args["algo"]
+		if self.domuid==monitoring_domU[1]:
+			self.algo =  4
 		self.keys=keys
 		self.base_path=base_path
 		self.threadLock=threadLock
 		self.shared_data=shared_data
-		self.algo = args["algo"]
-		if self.domuid==monitoring_domU[1]:
-			self.algo =  4
 		self.rtxen_or_credit = rtxen_or_credit # 1 is rtds, 0 is credit
-		self.min_heart_rate=min_heart_rate
-		self.max_heart_rate=max_heart_rate
-		self.timeslice_us = timeslice_us
 		self.allocMod = res_alloc.ResourceAllocation(args["static_alloc"],timeslice_us,min_heart_rate,max_heart_rate,self.algo,self.domuid,self.other_domuid,self.shared_data,rtxen_or_credit)
 
 	def run(self):
-		# Acquire lock to synchronize thread
-		# self.threadLock.acquire()
-		self.vmonitor()
-		# Release lock for the next thread
-		# self.threadLock.release()
-		#print("Exiting " , self.name)
-	def vmonitor(self):  # one monitor observe one domU at a time
 		with Client(unix_socket_path="/var/run/xenstored/socket_ro") as c:
 			m = c.monitor()
 			for key in self.keys:
@@ -97,11 +88,11 @@ class MonitorThread(threading.Thread):
 
 		cur_bw = 0
 		myinfo = self.shared_data[self.domuid]
-		if self.rtxen_or_credit==1:
+		if self.rtxen_or_credit=="rtxen":
 			for vcpu in myinfo:
 				if vcpu['pcpu']!=-1:
 					cur_bw=int(vcpu['b'])
-		elif self.rtxen_or_credit==0:
+		elif self.rtxen_or_credit=="credit":
 			for vcpu in myinfo:
 				if vcpu['pcpu']!=-1:
 					cur_bw=int(vcpu['w'])
@@ -116,7 +107,7 @@ class MonitorThread(threading.Thread):
 
 		other_info = self.shared_data[self.other_domuid]
 		myinfo = self.shared_data[self.domuid]
-		if self.rtxen_or_credit==1:
+		if self.rtxen_or_credit=="rtxen":
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
 					vcpu['b']=other_cur_bw
@@ -126,7 +117,7 @@ class MonitorThread(threading.Thread):
 			xen_interface.sched_rtds(self.domuid,self.timeslice_us,cur_bw,[])
 			xen_interface.sched_rtds(self.other_domuid,self.timeslice_us,other_cur_bw,[])
 
-		elif self.rtxen_or_credit==0:
+		elif self.rtxen_or_credit=="credit":
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
 					vcpu['w']=other_cur_bw
@@ -164,40 +155,16 @@ shared_data = xen_interface.get_global_info()
 for uid in monitoring_domU:
 	xen_interface.sched_rtds(int(uid),timeslice_us,timeslice_us*args["static_alloc"]/100,[])
 
-# if '1' in shared_data['rtxen']:
-# 	xen_interface.sched_rtds(1,timeslice_us,default_bw,[])
-# 	xen_interface.sched_rtds(2,timeslice_us,timeslice_us-default_bw,[])
-# if '1' in shared_data['xen']:
-# 	xen_interface.sched_credit(1,default_bw)
-# 	xen_interface.sched_credit(2,timeslice_us-default_bw)
-
-
-# for i,domuid in enumerate(shared_data['rtxen']):
-# 	xen_interface.sched_rtds(domuid,timeslice_us,default_bw,[])
-# 	xen_interface.sched_rtds(str(int(domuid)+2),timeslice_us,timeslice_us-default_bw,[])
-
-
-# for domuid in shared_data['xen']:
-# 	xen_interface.sched_credit(domuid,default_bw)
-# 	xen_interface.sched_credit(str(int(domuid)+2),timeslice_us-default_bw)
-
 shared_data = xen_interface.get_global_info()
 shared_data['pass_val']=[0.1,0.2]
 shared_data['stride_val']=[10,10]
 shared_data['last_time_val']=0
-
 shared_data['contention_time_passed']=0
-
-
-
 pp = pprint.PrettyPrinter(indent=2)
 pp.pprint(shared_data)
-
-
 print('monitoring:',monitoring_domU)
 
-min_heart_rate = float(args["fps"])
-max_heart_rate = float(args["fps"])*1.5
+
 
 with open("minmax.txt", "w") as myfile:
 	myfile.write("min "+str(args["fps"])+"\n")
@@ -207,13 +174,11 @@ with open("minmax.txt", "w") as myfile:
 
 
 
-	# https://xenbits.xen.org/docs/unstable/man/xl.1.html#SCHEDULER-SUBCOMMANDS
-	# cpupool, vcpupin, rtds-budget,period, extratime, vcpu-list
-# https://wiki.xenproject.org/wiki/Tuning_Xen_for_Performance
 
 
-# 1 means rtxen
-rtxen_or_credit=1
+rtxen_or_credit="rtxen"
+if len(shared_data['credit'])>0:
+	rtxen_or_credit="credit"
 for domuid in c.domu_ids:
 	tmp_thread = MonitorThread(threadLock,shared_data,domuid,rtxen_or_credit,timeslice_us,min_heart_rate,max_heart_rate, monitoring_items)
 	tmp_thread.start()
@@ -243,7 +208,7 @@ shared_data_clean_up = xen_interface.get_global_info()
 # for domuid in shared_data['rtxen']:
 # 	xen_interface.sched_rtds(domuid,timeslice_us,default_bw,[])
 # xen_interface.sched_credit_timeslice(timeslice_us/1000)
-# for domuid in shared_data['xen']:
+# for domuid in shared_data['credit']:
 # 	xen_interface.sched_credit(domuid,default_bw)
 print("Exiting the Monitor, total",threads_cnt,"monitoring threads")
 

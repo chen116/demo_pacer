@@ -19,12 +19,12 @@ class ResourceAllocation:
 	def exec_sharing(self,cur_bw):
 		other_info = self.shared_data[self.other_domuid]
 		myinfo = self.shared_data[self.domuid]
-		if self.rtxen_or_credit==1:
+		if self.rtxen_or_credit=="rtxen":
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
 					other_cur_bw=vcpu['b']		
 
-		elif self.rtxen_or_credit==0:
+		elif self.rtxen_or_credit=="credit":
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
 					other_cur_bw=vcpu['w']

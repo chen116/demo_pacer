@@ -22,7 +22,7 @@ def update_domu_info(shared_data, domuid):
         shared_data[domuid][cnt]=update_single_vcpu_info(line)
         cnt+=1
 
-    if domuid in shared_data['xen']:
+    if domuid in shared_data['credit']:
         out =  subprocess.check_output(['xl', 'sched-credit','-d',domuid]).decode().split('\n')
         out=out[2:-1]
         for lines in out:
@@ -60,7 +60,7 @@ def get_global_info():
 
     shared_data = {}
     shared_data['rtxen']=set()
-    shared_data['xen']=set()
+    shared_data['credit']=set()
     shared_data['cnt']=0
 
 
@@ -82,7 +82,7 @@ def get_global_info():
         out=out[2:-1]
         for lines in out:
             line = lines.split()
-            shared_data['xen'].add(line[1])
+            shared_data['credit'].add(line[1])
             for vcpu in shared_data[line[1]]:
                 vcpu['w']=int(line[2])
                 vcpu['c']=int(line[3])
