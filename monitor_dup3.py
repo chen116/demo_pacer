@@ -66,7 +66,7 @@ class MonitorThread(threading.Thread):
 		self.mid=(min_heart_rate+max_heart_rate)/2
 
 		self.pid = apid.AdapPID(self.mid,1,min_heart_rate,max_heart_rate)
-		self.alloc = res_alloc.ResourceAllocation(args["static_alloc"],timeslice_us,min_heart_rate,max_heart_rate,algo)
+		self.alloc = res_alloc.ResourceAllocation(args["static_alloc"],timeslice_us,min_heart_rate,max_heart_rate,self.algo)
 
 	def run(self):
 		# Acquire lock to synchronize thread
