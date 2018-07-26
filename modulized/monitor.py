@@ -83,8 +83,6 @@ class MonitorThread(threading.Thread):
 		return
 
 	def res_allocat(self,heart_rate):
-
-
 		cur_bw = 0
 		myinfo = self.shared_data[self.domuid]
 		if self.rtxen_or_credit=="rtxen":
@@ -96,27 +94,10 @@ class MonitorThread(threading.Thread):
 				if vcpu['pcpu']!=-1:
 					cur_bw=int(vcpu['w'])
 		
-
 		cur_bw = self.allocMod.exec_allocation(heart_rate,cur_bw)
-
+		(cur_bw,other_cur_bw)=self.allocMod.exec_sharing(cur_bw)
 
 		other_info = self.shared_data[self.other_domuid]
-		if self.rtxen_or_credit=="rtxen":
-			for vcpu in other_info:
-				if vcpu['pcpu']!=-1:
-					other_cur_bw=vcpu['b']		
-		elif self.rtxen_or_credit=="credit":
-			for vcpu in other_info:
-				if vcpu['pcpu']!=-1:
-					other_cur_bw=vcpu['w']
-		if cur_bw+other_cur_bw>self.timeslice_us:
-			(cur_bw,other_cur_bw)=self.allocMod.exec_sharing(cur_bw)
-
-
-
-
-
-
 		if self.rtxen_or_credit=="rtxen":
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
