@@ -44,7 +44,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 		if c[name_path].decode() == "VM2":
 			monitoring_domU[1] = x
 
-print('monitoring_domU:',monitoring_domU)
+
 
 
 domUs = host_guest_comm.Dom0(monitoring_items,monitoring_domU)
@@ -180,7 +180,9 @@ shared_data['last_time_val']=0
 shared_data['contention_time_passed']=0
 pp = pprint.PrettyPrinter(indent=2)
 pp.pprint(shared_data)
-print('monitoring:',monitoring_domU)
+
+for i in range(2):
+	print('monitoring: VM',i+1,monitoring_domU[i])
 
 
 
