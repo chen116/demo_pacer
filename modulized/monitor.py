@@ -72,12 +72,11 @@ class MonitorThread(threading.Thread):
 						with open("info.txt", "a") as myfile:
 							myfile.write(self.domuid+" "+(msg)+" sampling period"+ " "+str(time.time())+"\n")
 				if "heart_rate" in path.decode():
-					heart_rate=-1
 					try :
 						heart_rate = float(msg)
 						self.res_allocat(heart_rate)	
 					except:
-						heart_rate=-1
+						continue
 					# if heart_rate>-1:
 					# 	self.res_allocat(heart_rate)					
 				self.threadLock.release()
