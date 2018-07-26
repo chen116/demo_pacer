@@ -164,9 +164,8 @@ shared_data = xen_interface.get_global_info()
 
 for domuid in domUs.domu_ids:
 	rtxen_or_credit="rtxen"
-	for domU_in_credit in shared_data['credit']:
-		if domU_in_credit == domuid:
-			rtxen_or_credit="credit"
+	if domuid in shared_data['credit']:
+		rtxen_or_credit="credit"
 	if rtxen_or_credit == "credit":
 		xen_interface.sched_credit(domuid,timeslice_us*args["static_alloc"]/100)
 	else:	
@@ -184,9 +183,9 @@ print('monitoring:')
 for i in range(2):
 	vmstr = 'VM'+str(i+1)
 	if monitoring_domU[i] in shared_data['rtxen']:
-		print("		rtxen",vmstr,'with domU ID=',monitoring_domU[i])
+		print("	rtxen",vmstr,'with domU ID=',monitoring_domU[i])
 	else:
-		print("		credit",vmstr,'with domU ID=',monitoring_domU[i])
+		print("	credit",vmstr,'with domU ID=',monitoring_domU[i])
 
 
 with open("misc.txt", "w") as myfile:
@@ -202,10 +201,8 @@ with open("misc.txt", "w") as myfile:
 
 for domuid in domUs.domu_ids:
 	rtxen_or_credit="rtxen"
-	for domU_in_credit in shared_data['credit']:
-		if domU_in_credit == domuid:
-			rtxen_or_credit="credit"
-
+	if domuid in shared_data['credit']:
+		rtxen_or_credit="credit"
 
 	tmp_thread = MonitorThread(threadLock,shared_data,domuid,rtxen_or_credit,timeslice_us,min_heart_rate,max_heart_rate, monitoring_items)
 	tmp_thread.start()
