@@ -148,8 +148,8 @@ class MonitorThread(threading.Thread):
 		time_now=str(time.time())
 		info = self.domuid+" "+str(heart_rate)+" hr "+time_now+"\n"
 		place_holder_for_graph = " x x x x x "
-		info += self.domuid + " " +str(cur_bw/self.timeslice_us) + place_holder_for_graph+time_now+"\n"
-		info += self.other_domuid+ " "+str(other_cur_bw/self.timeslice_us) + place_holder_for_graph+time_now
+		info += self.domuid + " " +str(cur_bw/self.timeslice_us) + place_holder_for_graph+time_now
+		# info += self.other_domuid+ " "+str(other_cur_bw/self.timeslice_us) + place_holder_for_graph+time_now
 		with open("data.txt", "a") as myfile:
 			myfile.write(info+"\n")
 		return
