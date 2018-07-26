@@ -50,7 +50,7 @@ vidarray = np.concatenate((car,carbackword,car,carbackword,car,carbackword,car,c
 COLORS=[]
 
 
-misc = open("misc.txt","r").read()
+misc = open("./modulized/misc.txt","r").read()
 fps_val = float(misc.split('\n')[0].split()[1])*2
 
 
