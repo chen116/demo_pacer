@@ -43,8 +43,8 @@ def animate2(i):
 
     global last_ts,show_periods, show_anchors, show_dummies, ax_xen_txt,ax_rtxen_txt,show_ts
 
-    pullData = open("info.txt","r").read()
-    minmax = open("minmax.txt","r").read()
+    pullData = open("data.txt","r").read()
+    minmax = open("misc.txt","r").read()
     dataArray = pullData.split('\n')
     minmaxArray = minmax.split('\n')
     min_max=[]
@@ -312,7 +312,7 @@ plt.show()
 # ax2 = fig.add_subplot(2,1,2)
 # buf = 1000
 # def animate(i):
-#     pullData = open("info.txt","r").read()
+#     pullData = open("data.txt","r").read()
 #     dataArray = pullData.split('\n')
 #     x = []
 #     hrs = []

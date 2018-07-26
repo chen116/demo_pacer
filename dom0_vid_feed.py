@@ -5,65 +5,15 @@ from imutils.video import FileVideoStream
 from imutils.video import VideoStream
 from imutils.video import FPS
 import numpy as np
-import argparse
 import imutils
 import time
 import cv2
 
 
 
-ap = argparse.ArgumentParser()
-ap.add_argument("-v", "--video", default="rollcar.3gp", help="path to the video file")
-ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
-ap.add_argument("-f", "--fps", type=int, default=30, help="minimum area size")
-ap.add_argument("-d", "--domUs", help="domUs id,sperate by comma")
 
-args = vars(ap.parse_args())
-
-if "mp4" in args["video"]:
-    hh=360
-    ww=480
-
-else:
-    hh=144
-    ww=176
-
-
-# car_len = 75
-# blank_len = 25
-# rollback_len = 50
-# car = np.zeros((car_len,hh,ww,3),dtype=np.uint8)
-# blank = np.zeros((blank_len,hh,ww,3),dtype=np.uint8)
-# rollback = np.zeros((rollback_len,hh,ww,3),dtype=np.uint8)
-
-
-# vs= FileVideoStream(args["video"]).start()
-# time.sleep(1.0)
-# for i in range(250):#blank_len+car_len):
-#     frame = vs.read()
-#     if i<car_len:
-#         car[i,:,:,:]=frame
-#     elif i < blank_len+car_len:
-#         blank[i-car_len,:,:,:]=frame
-#     elif i >= 200:
-#         rollback[i-200,:,:,:]=frame
-
-
-# vs.stop()   
-
-# rollforward = np.copy(rollback)
-# rollforward = np.flipud(rollforward)
-# carbackword = np.copy(car)
-
-# carbackword = np.flipud(carbackword)
-# vidarray = np.concatenate((blank,blank,car,blank,rollback,car,blank,rollback,car,blank,rollback,car,blank,rollback,car,blank,rollback),axis=0)
-# vidarray = np.concatenate((car,carbackword,blank,blank,car,blank,rollback,rollforward,blank,blank,carbackword,blank,blank,car,blank),axis=0)
-# vidarray = np.concatenate((car,carbackword,blank,blank,car,carbackword,blank,blank,car,carbackword,blank,blank,car,carbackword,blank,blank),axis=0)
-# vidarray = np.concatenate((car,blank,blank,car,blank,blank,car,blank,blank,car,blank,blank),axis=0)
-
-
-
-
+hh=144
+ww=176
 
 car_len = 75
 blank_len = 25
@@ -100,22 +50,30 @@ vidarray = np.concatenate((car,carbackword,car,carbackword,car,carbackword,car,c
 COLORS=[]
 
 
-minmax = open("minmax.txt","r").read()
-fps_val = float(minmax.split('\n')[0].split()[1])*2
+misc = open("misc.txt","r").read()
+fps_val = float(misc.split('\n')[0].split()[1])*2
 print(fps_val)
 
 
 
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
-	domu_ids=args["domUs"].split(',')
+	domu_ids=[]
+	all_domuid_ids = []
+	for x in c.list('/local/domain'.encode()):
+		all_domuid_ids.append(x.decode())
+	all_domuid_ids.pop(0)
+	for x in all_domuid_ids:
+		name_path = ("/local/domain/"+x+"/name").encode()
+		if c[name_path].decode() == "VM1" or c[name_path].decode() == "VM2":
+			domu_ids.append(x)
 	boxes = {}
 	keys=['frame_number_entry','box_entry']
-	if domu_ids==[]:
-		for x in c.list('/local/domain'.encode()):
-			domu_ids.append(x.decode())
-			boxes[x.decode()]=tuple()
-		domu_ids.pop(0)
-		boxes.pop('0')
+	# if domu_ids==[]:
+	# 	for x in c.list('/local/domain'.encode()):
+	# 		domu_ids.append(x.decode())
+	# 		boxes[x.decode()]=tuple()
+	# 	domu_ids.pop(0)
+	# 	boxes.pop('0')
 	COLORS = np.random.uniform(100, 255, size=(len(domu_ids), 3))
 	# COLORS= np.array([[100,500,250],[200,50,250]])#np.vstack((np.array([[5,200,250]]),np.array([[100,500,250]])))
 	COLORS = [[ 120 , 240 , 120],[ 240 , 120,  240]] # green, pink 

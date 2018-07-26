@@ -12,12 +12,12 @@ import pprint
 import res_alloc
 from pyxs import Client
 
-with open("info.txt", "w") as myfile:
+with open("data.txt", "w") as myfile:
 	myfile.write("")
 
 import argparse
 ap = argparse.ArgumentParser()
-ap.add_argument("-d", "--domUs", help="domUs id,sperate by comma")
+# ap.add_argument("-d", "--domUs", help="domUs id,sperate by comma")
 ap.add_argument("-t", "--timeslice",type=int, default=10000, help="sched quantum")
 ap.add_argument("-f", "--fps", type=float, default=30, help="target fps")
 ap.add_argument("-a1", "--algo1", type=int, default=4, help="algorithm")
@@ -27,7 +27,24 @@ args = vars(ap.parse_args())
 
 
 monitoring_items = ["heart_rate","sampling_period"]
-monitoring_domU = (args["domUs"]).split(',')
+# monitoring_domU = (args["domUs"]).split(',')
+monitoring_domU = ["VM1","VM2"]
+
+
+with Client(xen_bus_path="/dev/xen/xenbus") as c:
+	domu_ids=[]
+	all_domuid_ids = []
+	for x in c.list('/local/domain'.encode()):
+		all_domuid_ids.append(x.decode())
+	all_domuid_ids.pop(0)
+	for x in all_domuid_ids:
+		name_path = ("/local/domain/"+x+"/name").encode()
+		if c[name_path].decode() == "VM1":
+			monitoring_domU[0] = x
+		if c[name_path].decode() == "VM2":
+			monitoring_domU[1] = x
+
+
 
 
 domUs = host_guest_comm.Dom0(monitoring_items,monitoring_domU)
@@ -71,7 +88,7 @@ class MonitorThread(threading.Thread):
 				if "sampling_period" in path.decode():
 					# self.allocMod.pid.reset()
 					if msg.isdigit():
-						with open("info.txt", "a") as myfile:
+						with open("data.txt", "a") as myfile:
 							myfile.write(self.domuid+" "+(msg)+" sampling period"+ " "+str(time.time())+"\n")
 				if "heart_rate" in path.decode():
 					heart_rate=-1
@@ -129,7 +146,7 @@ class MonitorThread(threading.Thread):
 		place_holder_for_graph = " x x x x x "
 		info += self.domuid + " " +str(cur_bw/self.timeslice_us) + place_holder_for_graph+time_now+"\n"
 		info += self.other_domuid+ " "+str(other_cur_bw/self.timeslice_us) + place_holder_for_graph+time_now
-		with open("info.txt", "a") as myfile:
+		with open("data.txt", "a") as myfile:
 			myfile.write(info+"\n")
 		return
 
@@ -159,7 +176,7 @@ print('monitoring:',monitoring_domU)
 
 
 
-with open("minmax.txt", "w") as myfile:
+with open("misc.txt", "w") as myfile:
 	myfile.write("min "+str(args["fps"])+"\n")
 	myfile.write("max "+str(args["fps"])+"\n")
 	myfile.write("timeslice_us "+str(timeslice_us/1000)+"\n")
