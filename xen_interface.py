@@ -93,7 +93,7 @@ def get_global_info():
         print(out)
         for lines in out:
             line = lines.split()
-            if line[1]!='0' and line[1]!='Cpupool':
+            if line[1]!='0' and line[1].isdigit():
                 shared_data['rtxen'].add(line[1])
             shared_data[line[1]][int(line[2])]['p']=int(line[3])
             shared_data[line[1]][int(line[2])]['b']=int(line[4])
