@@ -20,16 +20,17 @@ ap = argparse.ArgumentParser()
 # ap.add_argument("-d", "--domUs", help="domUs id,sperate by comma")
 ap.add_argument("-t", "--timeslice",type=int, default=10000, help="sched quantum")
 ap.add_argument("-f", "--fps", type=float, default=30, help="target fps")
-ap.add_argument("-a1", "--algo1", type=int, default=4, help="algorithm")
+ap.add_argument("-a1", "--algo1", type=int, default=4, help="algorithm for vm1")
+ap.add_argument("-a", "--algo", type=int, default=4, help="algorithm for both")
 ap.add_argument("-s", "--static-alloc", type=int, default=10, help="static utilization percentage")
-ap.add_argument("-a2", "--algo2", type=int, default=0, help="static utilization percentage")
+ap.add_argument("-a2", "--algo2", type=int, default=0, help="algorithm for vm2")
 args = vars(ap.parse_args())
 
 
 monitoring_items = ["heart_rate","sampling_period"]
 # monitoring_domU = (args["domUs"]).split(',')
 monitoring_domU = ["VM1","VM2"]
-
+dummy_domU = ["d1","d2"]
 
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	domu_ids=[]
@@ -43,7 +44,10 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			monitoring_domU[0] = uid
 		if c[name_path].decode() == "VM2":
 			monitoring_domU[1] = uid
-
+		if c[name_path].decode() == "d1":
+			dummy_domU[0] = uid
+		if c[name_path].decode() == "d2":
+			dummy_domU[1] = uid
 
 
 
@@ -58,13 +62,11 @@ class MonitorThread(threading.Thread):
 	def __init__(self, threadLock,shared_data,domuid,rtxen_or_credit,timeslice_us,min_heart_rate,max_heart_rate,keys=['test'],base_path='/local/domain'):
 		threading.Thread.__init__(self)
 		self.domuid=(domuid)
-		self.other_domuid=monitoring_domU[1]
+		self.other_domuid=dummy_domU[0]
 		if self.domuid==monitoring_domU[1]:
-			self.other_domuid=monitoring_domU[0]
+			self.other_domuid=dummy_domU[1]
 
-		self.algo = args["algo1"]
-		if self.domuid==monitoring_domU[1]:
-			self.algo = args["algo2"]
+		self.algo = args["algo"]
 		self.keys=keys
 		self.base_path=base_path
 		self.threadLock=threadLock
