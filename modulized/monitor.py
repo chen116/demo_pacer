@@ -180,7 +180,7 @@ with open("misc.txt", "w") as myfile:
 	myfile.write("min "+str(args["fps"])+"\n")
 	myfile.write("max "+str(args["fps"])+"\n")
 	myfile.write("timeslice_us "+str(timeslice_us/1000)+"\n")
-	myfile.write("VM1 "+monitoring_domU[0]+"\n")
+
 
 
 
