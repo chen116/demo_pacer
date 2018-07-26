@@ -21,7 +21,7 @@ ap.add_argument("-d", "--domUs", help="domUs id,sperate by comma")
 ap.add_argument("-t", "--timeslice",type=int, default=10000, help="sched quantum")
 ap.add_argument("-f", "--fps", type=float, default=30, help="target fps")
 ap.add_argument("-a", "--algo", type=int, default=4, help="algorithm")
-ap.add_argument("-s", "--static- ", type=int, default=10, help="static utilization percentage")
+ap.add_argument("-s", "--static-alloc", type=int, default=10, help="static utilization percentage")
 args = vars(ap.parse_args())
 
 
