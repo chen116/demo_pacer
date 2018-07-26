@@ -77,7 +77,7 @@ class MonitorThread(threading.Thread):
 				msg=c.read(path).decode()
 				self.threadLock.acquire()
 				if "sampling_period" in path.decode():
-					self.allocMod.reset()
+					# self.allocMod.pid.reset()
 					if msg.isdigit():
 						with open("info.txt", "a") as myfile:
 							myfile.write(self.domuid+" "+(msg)+" sampling period"+ " "+str(time.time())+"\n")
