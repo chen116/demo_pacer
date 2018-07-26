@@ -190,7 +190,7 @@ class MonitorThread(threading.Thread):
 					cur_bw=int(vcpu['w'])
 		
 
-		cur_bw = self.alloc.exec(heart_rate,cur_bw)
+		cur_bw = self.alloc.exec_allocation(heart_rate,cur_bw)
 
 		other_cur_bw = 0
 		other_info = self.shared_data[self.other_domuid]
