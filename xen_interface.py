@@ -90,6 +90,7 @@ def get_global_info():
     out =  subprocess.check_output(['xl', 'sched-rtds','-v','all']).decode().split('\n')
     if out[0]!='':
         out=out[2:-1]
+        print(out)
         for lines in out:
             line = lines.split()
             if line[1]!='0' and line[1]!='Cpupool':
