@@ -157,6 +157,8 @@ class ResourceAllocation:
 
 		if cur_bw <=1 :
 			print("NOOOOOO")
+		if cur_bw >= self.timeslice_us:
+			print("shitttt")
 		return(int(cur_bw))
 
 
