@@ -66,7 +66,7 @@ class MonitorThread(threading.Thread):
 		if self.domuid==monitoring_domU[1]:
 			self.other_domuid=dummy_domU[1]
 
-		self.algo = args["algo"]
+		self.algo = args["algo1"]
 		self.keys=keys
 		self.base_path=base_path
 		self.threadLock=threadLock
@@ -117,7 +117,8 @@ class MonitorThread(threading.Thread):
 					cur_bw=int(vcpu['w'])
 		
 		cur_bw = self.allocMod.exec_allocation(heart_rate,cur_bw)
-		(cur_bw,other_cur_bw)=self.allocMod.exec_sharing(cur_bw)
+		other_cur_bw = self.timeslice_us - cur_bw
+		# (cur_bw,other_cur_bw)=self.allocMod.exec_sharing(cur_bw)
 
 		other_info = self.shared_data[self.other_domuid]
 		if self.rtxen_or_credit=="rtxen":
