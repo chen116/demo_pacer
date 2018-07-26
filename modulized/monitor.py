@@ -16,11 +16,9 @@ from pyxs import Client
 import apid
 with open("info.txt", "w") as myfile:
 	myfile.write("")
+
 import argparse
-
 ap = argparse.ArgumentParser()
-ap.add_argument("-v", "--video", default="rollcar.3gp", help="path to the video file")
-
 ap.add_argument("-d", "--domUs", help="domUs id,sperate by comma")
 ap.add_argument("-t", "--timeslice",type=int, default=10000, help="sched quantum")
 ap.add_argument("-f", "--fps", type=float, default=30, help="target fps")
@@ -29,18 +27,13 @@ ap.add_argument("-s", "--static-alloc", type=int, default=10, help="static alloc
 args = vars(ap.parse_args())
 
 
-monitoring_items = ["heart_rate","app_mode","sampling_period","timeslice"]
-
-# c = heartbeat.Dom0(monitoring_items,['1','2','3','4'])
+monitoring_items = ["heart_rate","sampling_period"]
 monitoring_domU = (args["domUs"]).split(',')
 
 
 c = host_guest_comm.Dom0(monitoring_items,monitoring_domU)
 
 timeslice_us=args["timeslice"]
-
-minn=int(timeslice_us*0.01)
-
 
 
 
@@ -51,22 +44,17 @@ class MonitorThread(threading.Thread):
 		self.other_domuid=monitoring_domU[0]
 		if self.domuid==monitoring_domU[0]:
 			self.other_domuid=monitoring_domU[1]
-		self.stride = int(10/int(domuid))
 		self.keys=keys
 		self.base_path=base_path
 		self.threadLock=threadLock
 		self.shared_data=shared_data
-
 		self.algo = args["algo"]
 		if self.domuid==monitoring_domU[1]:
 			self.algo =  4
 		self.rtxen_or_credit = rtxen_or_credit # 1 is rtds, 0 is credit
-		self.target_reached_cnt = 0
 		self.min_heart_rate=min_heart_rate
 		self.max_heart_rate=max_heart_rate
 		self.timeslice_us = timeslice_us
-		self.mid=(min_heart_rate+max_heart_rate)/2
-		self.pid = apid.AdapPID(self.mid,1,min_heart_rate,max_heart_rate)
 		self.allocMod = res_alloc.ResourceAllocation(args["static_alloc"],timeslice_us,min_heart_rate,max_heart_rate,self.algo,self.domuid,self.other_domuid,self.shared_data,rtxen_or_credit)
 
 	def run(self):
@@ -83,57 +71,17 @@ class MonitorThread(threading.Thread):
 				tmp_key_path = (self.base_path+'/'+self.domuid+'/'+key).encode()
 				token = (key).encode()
 				m.watch(tmp_key_path,token)
-
 			msg=""
 			while msg!='done':
 				path,token=next(m.wait())
 				msg=c.read(path).decode()
 				self.threadLock.acquire()
-				if self.keys[1] in path.decode():
-					if msg.isdigit():
-						self.algo = int(msg)
-						with open("info.txt", "a") as myfile:
-							myfile.write(self.domuid+" "+(msg)+ " "+str(time.time())+"\n")
-				if self.keys[2] in path.decode():
-					self.pid.reset()
+				if "sampling_period" in path.decode():
+					self.allocMod.reset()
 					if msg.isdigit():
 						with open("info.txt", "a") as myfile:
 							myfile.write(self.domuid+" "+(msg)+" sampling period"+ " "+str(time.time())+"\n")
-				if self.keys[3] in path.decode():
-					self.pid.reset()
-					if msg.isdigit():
-						tmp_new_timeslice_us = int(msg)*1000
-						if self.rtxen_or_credit ==1:
-							cur_bw = 0
-							myinfo = self.shared_data[self.domuid]
-							for vcpu in myinfo:
-								if vcpu['pcpu']!=-1:
-									cur_bw=int(vcpu['b'])
-							xen_interface.sched_rtds(self.domuid,tmp_new_timeslice_us,cur_bw/self.timeslice_us*tmp_new_timeslice_us,[])
-							xen_interface.sched_rtds(str(int(self.domuid)+2),tmp_new_timeslice_us,(self.timeslice_us-cur_bw)/self.timeslice_us*tmp_new_timeslice_us,[])
-
-							for vcpu in myinfo:
-								if vcpu['pcpu']!=-1:
-									vcpu['b']=cur_bw/self.timeslice_us*tmp_new_timeslice_us
-									vcpu['p']=tmp_new_timeslice_us
-
-						else:
-							cur_bw = 0
-							myinfo = self.shared_data[self.domuid]
-							for vcpu in myinfo:
-								if vcpu['pcpu']!=-1:
-									cur_bw=int(vcpu['w'])
-							xen_interface.sched_credit(self.domuid,cur_bw/self.timeslice_us*tmp_new_timeslice_us)
-							xen_interface.sched_credit(str(int(self.domuid)+2),(self.timeslice_us-cur_bw)/self.timeslice_us*tmp_new_timeslice_us)
-							for vcpu in myinfo:
-								if vcpu['pcpu']!=-1:
-									vcpu['w']=cur_bw/self.timeslice_us*tmp_new_timeslice_us
-						xen_interface.sched_credit_timeslice(int(msg))
-						self.timeslice_us = tmp_new_timeslice_us
-						with open("info.txt", "a") as myfile:
-							myfile.write(self.domuid+" "+(msg)+" time slice len 6"+ " "+str(time.time())+"\n")							
-
-				if self.keys[0] in path.decode():
+				if "heart_rate" in path.decode():
 					heart_rate=-1
 					try :
 						heart_rate = float(msg)
@@ -141,46 +89,14 @@ class MonitorThread(threading.Thread):
 						heart_rate=-1
 					if heart_rate>-1:
 						self.res_allocat(heart_rate)					
-						#self.res_allo(self.algo,self.rtxen_or_credit,float(msg),self.shared_data,self.domuid ,self.min_heart_rate,self.max_heart_rate)					
-
-				# try :
-				# 	if self.keys[0] in path.decode():
-				# 		self.res_allocat(float(msg))					
-				# 		#self.res_allo(self.algo,self.rtxen_or_credit,float(msg),self.shared_data,self.domuid ,self.min_heart_rate,self.max_heart_rate)					
-				# except:
-				# 	#print("meow",int(self.domuid),token.decode(),msg)
-
 				self.threadLock.release()
+		return
 
-				# #print( token.decode(),':',msg)
 	def res_allocat(self,heart_rate):
 
 
-		# print(self.domuid, heart_rate, self.algo)
-
-
-		# if int(self.domuid)>=3:
-		# 	#print("dummy",int(self.domuid)-2,"heartrate:",heart_rate)
-		# 	buf=50
-		# 	self.shared_data['cnt'] = (self.shared_data['cnt']+1)%buf
-		# 	info = self.domuid+" "+str(heart_rate)+" dummy is here"
-		# 	if self.shared_data['cnt']%buf!=0:
-		# 		with open("info.txt", "a") as myfile:
-		# 			myfile.write(info+"\n")
-		# 	else:
-		# 		with open("info.txt", "w") as myfile:
-		# 			myfile.write(info+"\n")			
-
-		# 	return
-
-		# tab='               dom '+str(int(self.domuid))
-		# if int(self.domuid)<2:
-		# 	tab='dom '+str(int(self.domuid))
-		# print(tab,'heart_rate',heart_rate)
-
 		cur_bw = 0
 		myinfo = self.shared_data[self.domuid]
-
 		if self.rtxen_or_credit==1:
 			for vcpu in myinfo:
 				if vcpu['pcpu']!=-1:
@@ -192,77 +108,7 @@ class MonitorThread(threading.Thread):
 		
 
 		cur_bw = self.allocMod.exec_allocation(heart_rate,cur_bw)
-
 		(cur_bw,other_cur_bw)=self.allocMod.exec_sharing(cur_bw)
-
-		if False:
-			other_cur_bw = 0
-			other_info = self.shared_data[self.other_domuid]
-			myinfo = self.shared_data[self.domuid]
-
-
-
-			if self.rtxen_or_credit==1:
-				for vcpu in other_info:
-					if vcpu['pcpu']!=-1:
-						other_cur_bw=vcpu['b']		
-
-			elif self.rtxen_or_credit==0:
-				for vcpu in other_info:
-					if vcpu['pcpu']!=-1:
-						other_cur_bw=vcpu['w']
-
-
-
-
-			if cur_bw+other_cur_bw>self.timeslice_us:
-
-				my_pass_val = self.shared_data['pass_val'][int(self.domuid)-int(monitoring_domU[0])]
-				other_pass_val = self.shared_data['pass_val'][int(self.other_domuid)-int(monitoring_domU[0])]
-				last_time = self.shared_data['last_time_val']
-				now_time = time.time()
-				if last_time==0:
-					last_time = now_time
-					self.shared_data['last_time_val'] = now_time
-				# print('domuid',self.domuid,'last_time', last_time,'now_time',now_time)
-
-				self.shared_data["contention_time_passed"]+=now_time-last_time
-				self.shared_data['last_time_val'] = now_time
-				# print(self.shared_data["contention_time_passed"])
-
-
-
-
-				if my_pass_val<=other_pass_val:
-					other_cur_bw=self.timeslice_us-cur_bw
-				else:
-					cur_bw=self.timeslice_us-other_cur_bw
-					self.pid.reset()
-
-				process_unit_time=2.5
-				if self.shared_data["contention_time_passed"]>=process_unit_time:# and int(self.shared_data["contention_time_passed"])%5==0:
-					self.shared_data["contention_time_passed"]=0
-					if my_pass_val<=other_pass_val:
-						self.shared_data['pass_val'][int(self.domuid)-int(monitoring_domU[0])]+=self.shared_data['stride_val'][int(self.domuid)-int(monitoring_domU[0])]
-					else:
-						self.shared_data['pass_val'][int(self.other_domuid)-int(monitoring_domU[0])]+=self.shared_data['stride_val'][int(self.other_domuid)-int(monitoring_domU[0])]
-
-					with open("info.txt", "a") as myfile:
-						myfile.write(self.domuid+" "+self.domuid+" time slice len 6"+ " "+str(now_time)+"\n")							
-
-
-
-
-
-
-				# print('domuid',self.domuid,'other_cur_bw', other_cur_bw,'cur_bw',cur_bw)
-
-			else:
-				# print('domuid',self.domuid,'other_cur_bw', other_cur_bw,'cur_bw',cur_bw)
-
-				self.shared_data['last_time_val'] = time.time()
-
-
 
 
 
@@ -296,20 +142,11 @@ class MonitorThread(threading.Thread):
 		self.shared_data['cnt'] = (self.shared_data['cnt']+1)%buf
 		time_now=str(time.time())
 		info = self.domuid+" "+str(heart_rate)+" hr "+time_now+"\n"
-		info += self.domuid + " " +str(cur_bw/self.timeslice_us) + " cpu1 cpu2 cpu3 cpu4 cpu5 "+time_now+"\n"
-		info += self.other_domuid+ " "+str(other_cur_bw/self.timeslice_us) + " other cpu2 cpu3 cpu4 cpu5 "+time_now
-
-
-		# if self.shared_data['cnt']%buf!=0:
-		# 	with open("info.txt", "a") as myfile:
-		# 		myfile.write(info+"\n")
-		# else:
-		# 	with open("info.txt", "w") as myfile:
-		#		myfile.write(info+"\n")
+		place_holder_for_graph = " x x x x x "
+		info += self.domuid + " " +str(cur_bw/self.timeslice_us) + place_holder_for_graph+time_now+"\n"
+		info += self.other_domuid+ " "+str(other_cur_bw/self.timeslice_us) + place_holder_for_graph+time_now
 		with open("info.txt", "a") as myfile:
 			myfile.write(info+"\n")
-
-
 		return
 
 	# https://xenbits.xen.org/docs/unstable/man/xl.1.html#SCHEDULER-SUBCOMMANDS
@@ -409,4 +246,4 @@ shared_data_clean_up = xen_interface.get_global_info()
 # for domuid in shared_data['xen']:
 # 	xen_interface.sched_credit(domuid,default_bw)
 print("Exiting the Monitor, total",threads_cnt,"monitoring threads")
-print("Restored RT-Xen, Credit to all domUs have equal cpu time sharing")
+

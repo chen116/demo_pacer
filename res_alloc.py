@@ -5,7 +5,6 @@ class ResourceAllocation:
 	def __init__(self,static_alloc, timeslice_us,min_heart_rate,max_heart_rate,algo,domuid,other_domuid,shared_data,rtxen_or_credit):
 		self.static_alloc = static_alloc
 		self.timeslice_us = timeslice_us
-		# self.target_heart_rate = target_heart_rate
 		self.mid=(min_heart_rate+max_heart_rate)/2
 		self.min_heart_rate=min_heart_rate
 		self.max_heart_rate=max_heart_rate
@@ -17,12 +16,9 @@ class ResourceAllocation:
 		self.domuid = domuid
 		self.other_domuid = other_domuid
 		self.rtxen_or_credit = rtxen_or_credit
-# int allocate_resource(algo, static_alloc, timeslice_us, pid, target_heart_rate,target_reached_cnt)
 	def exec_sharing(self,cur_bw):
-		other_cur_bw = 0
 		other_info = self.shared_data[self.other_domuid]
 		myinfo = self.shared_data[self.domuid]
-
 		if self.rtxen_or_credit==1:
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
@@ -32,55 +28,34 @@ class ResourceAllocation:
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
 					other_cur_bw=vcpu['w']
-		# print('domuid',self.domuid,'other_cur_bw', other_cur_bw,'cur_bw',cur_bw)
-		base_val = 0
+		domu_index_in_pass_val = 0
 		if self.domuid>self.other_domuid:
-			base_val = 1
+			domu_index_in_pass_val = 1
 		if cur_bw+other_cur_bw>self.timeslice_us:
-
-			my_pass_val = self.shared_data['pass_val'][base_val]
-			other_pass_val = self.shared_data['pass_val'][(base_val+1)%2]
+			my_pass_val = self.shared_data['pass_val'][domu_index_in_pass_val]
+			other_pass_val = self.shared_data['pass_val'][(domu_index_in_pass_val+1)%2]
 			last_time = self.shared_data['last_time_val']
 			now_time = time.time()
 			if last_time==0:
 				last_time = now_time
 				self.shared_data['last_time_val'] = now_time
-			# print('domuid',self.domuid,'last_time', last_time,'now_time',now_time)
-
 			self.shared_data["contention_time_passed"]+=now_time-last_time
 			self.shared_data['last_time_val'] = now_time
-			# print(self.shared_data["contention_time_passed"])
-
-
-
-
 			if my_pass_val<=other_pass_val:
 				other_cur_bw=self.timeslice_us-cur_bw
 			else:
 				cur_bw=self.timeslice_us-other_cur_bw
 				self.pid.reset()
-
 			process_unit_time=2.5
 			if self.shared_data["contention_time_passed"]>=process_unit_time:# and int(self.shared_data["contention_time_passed"])%5==0:
 				self.shared_data["contention_time_passed"]=0
 				if my_pass_val<=other_pass_val:
-					self.shared_data['pass_val'][base_val]+=self.shared_data['stride_val'][base_val]
+					self.shared_data['pass_val'][domu_index_in_pass_val]+=self.shared_data['stride_val'][domu_index_in_pass_val]
 				else:
-					self.shared_data['pass_val'][(base_val+1)%2]+=self.shared_data['stride_val'][(base_val+1)%2]
-
+					self.shared_data['pass_val'][(domu_index_in_pass_val+1)%2]+=self.shared_data['stride_val'][(domu_index_in_pass_val+1)%2]
 				with open("info.txt", "a") as myfile:
 					myfile.write(self.domuid+" "+self.domuid+" time slice len 6"+ " "+str(now_time)+"\n")							
-
-
-
-
-
-
-			# print('domuid',self.domuid,'other_cur_bw', other_cur_bw,'cur_bw',cur_bw)
-
 		else:
-			# print('domuid',self.domuid,'other_cur_bw', other_cur_bw,'cur_bw',cur_bw)
-
 			self.shared_data['last_time_val'] = time.time()
 		return (cur_bw,other_cur_bw)
 

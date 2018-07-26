@@ -100,7 +100,7 @@ import heartbeat
 import host_guest_comm
 window_size_hr=args["window"]
 hb = heartbeat.Heartbeat(1024,window_size_hr,100,"vic.log",10,100)
-monitoring_items = ["heart_rate","app_mode","sampling_period","timeslice"]
+monitoring_items = ["heart_rate","sampling_period"]
 comm = host_guest_comm.DomU(monitoring_items)
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	domu_id = c.read("domid".encode())
