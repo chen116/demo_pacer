@@ -133,6 +133,7 @@ class ResourceAllocation:
 					cur_bw=self.timeslice_us-free
 			cur_bw=int(cur_bw)
 
+
 		elif self.algo==5:
 			# limd 
 			beta=.9
@@ -154,7 +155,8 @@ class ResourceAllocation:
 				self.target_reached_cnt=0
 			cur_bw=int(cur_bw)
 
-
+		if cur_bw <=1 :
+			print("NOOOOOO")
 		return(int(cur_bw))
 
 
