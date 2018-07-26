@@ -162,8 +162,16 @@ threadLock = threading.Lock()
 threads = []
 shared_data = xen_interface.get_global_info()
 
-for uid in monitoring_domU:
-	xen_interface.sched_rtds(int(uid),timeslice_us,timeslice_us*args["static_alloc"]/100,[])
+
+for domuid in domUs.domu_ids:
+	rtxen_or_credit="rtxen"
+	for domU_in_credit in shared_data['credit']:
+		if domU_in_credit == domuid:
+			rtxen_or_credit="credit"
+	if rtxen_or_credit == "credit":
+		xen_interface.sched_credit(domuid,timeslice_us*args["static_alloc"]/100)
+	else:	
+		xen_interface.sched_rtds(domuid,timeslice_us,timeslice_us*args["static_alloc"]/100,[])
 
 shared_data = xen_interface.get_global_info()
 shared_data['pass_val']=[0.1,0.2]
