@@ -12,7 +12,7 @@ fig = plt.figure(figsize=(10, 7))
 ax1 = fig.add_subplot(2,1,1)
 ax2 = fig.add_subplot(2,1,2)
 buf = 1000
-show_frames=1
+show_periods=1
 show_anchors=1
 show_dummies=0
 show_ts=1
@@ -41,7 +41,7 @@ last_ts=[15,15]
 def animate2(i):
     maxx=30000
 
-    global last_ts,show_frames, show_anchors, show_dummies, ax_xen_txt,ax_rtxen_txt,show_ts
+    global last_ts,show_periods, show_anchors, show_dummies, ax_xen_txt,ax_rtxen_txt,show_ts
 
     pullData = open("info.txt","r").read()
     minmax = open("minmax.txt","r").read()
@@ -61,8 +61,8 @@ def animate2(i):
     cpus = []
     anchor_xs = []
     anchors = []
-    frame_xs = []
-    frames = []
+    period_xs = []
+    periods = []
     dummy_x = []
     dummy_hrs = []
     ts_xs = []
@@ -76,8 +76,8 @@ def animate2(i):
         cpus.append([])
         anchor_xs.append([])
         anchors.append([])
-        frame_xs.append([])
-        frames.append([])
+        period_xs.append([])
+        periods.append([])
         dummy_x.append([])
         dummy_hrs.append([])        
         ts_xs.append([])
@@ -114,8 +114,8 @@ def animate2(i):
                 event_last_happened_at_cnt[index]=cnt
 
             if len(line)==4+1:
-                frame_xs[index].append(float(line[-1])-time_start)
-                frames[index].append(int(line[1]))
+                period_xs[index].append(float(line[-1])-time_start)
+                periods[index].append(int(line[1]))
                 event_last_happened_at_cnt[index]=cnt
 
             if len(line)==5+1:
@@ -223,7 +223,7 @@ def animate2(i):
     # ax1.set_title(r'$\frac{RT-Xen \quad FPS}{Credit \quad FPS }$ = %.2f %%'%(per)+"\n",loc='right',fontsize=18)
     # ax1.set_xlabel('Time\n \n')
     ax2.set_xlabel('Time')
-    ax1.set_ylabel('Moving Average FPS(frames/sec) \n (Window Size = 12)')
+    ax1.set_ylabel('Moving Average FPS(periods/sec) \n (Window Size = 12)')
     ax2.set_ylabel('Assigned CPU Time (%)')
     # ax2.set_ylim( 45, 105 )  
     ax2.set_ylim( -5, 105 )  
@@ -259,12 +259,12 @@ def animate2(i):
                     ax1.text(anchor_xs[i][j],ymax,"APID",rotation=45,fontdict=font[i])
                 elif anchors[i][j]==4:
                     ax1.text(anchor_xs[i][j],ymax,"AIMD",rotation=45,fontdict=font[i])
-    if show_frames:
-        for i in range(len(frame_xs)):
-            for j in range(len(frame_xs[i])):
-                ax1.axvline(x=frame_xs[i][j],color=colrs[i], linestyle='--')
-                ax2.axvline(x=frame_xs[i][j],color=colrs[i], linestyle='--')
-                ax2.text(frame_xs[i][j],-10,"period: "+str(frames[i][j]),rotation=45,fontdict=font[i],horizontalalignment='right',verticalalignment='top')
+    if show_periods:
+        for i in range(len(period_xs)):
+            for j in range(len(period_xs[i])):
+                ax1.axvline(x=period_xs[i][j],color=colrs[i], linestyle='--')
+                ax2.axvline(x=period_xs[i][j],color=colrs[i], linestyle='--')
+                ax2.text(period_xs[i][j],-10,"period: "+str(periods[i][j]),rotation=45,fontdict=font[i],horizontalalignment='right',verticalalignment='top')
     if show_ts:
         for i in range(len(ts_xs)):
             for j in range(len(ts_xs[i])):
@@ -280,16 +280,16 @@ ani = animation.FuncAnimation(fig, animate2, interval=1000)
 
 # rax = plt.axes([0.91, 0.01, 0.085, 0.2])
 # rax.axis('off')
-# check = CheckButtons(rax, ['Show\nFrames','Show\nAnchors','Show\nTimeslice' ], [True,True,True])
+# check = CheckButtons(rax, ['Show\nperiods','Show\nAnchors','Show\nTimeslice' ], [True,True,True])
 
-# # check_per = CheckButtons(rax_per, ['Show\nFrames'], [True])
+# # check_per = CheckButtons(rax_per, ['Show\nperiods'], [True])
 
 # def func(label):
-#     global show_frames, show_anchors,show_dummies,show_ts
+#     global show_periods, show_anchors,show_dummies,show_ts
 #     if 'Anchors' in label:
 #       show_anchors=(show_anchors+1)%2
-#     elif 'Frames' in label:
-#       show_frames=(show_frames+1)%2    
+#     elif 'periods' in label:
+#       show_periods=(show_periods+1)%2    
 #     elif 'Dummies' in label:
 #       show_dummies=(show_dummies+1)%2
 #     elif 'Timeslice' in label:

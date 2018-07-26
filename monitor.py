@@ -31,12 +31,11 @@ ap.add_argument("-d", "--domUs", help="domUs id,sperate by comma")
 
 args = vars(ap.parse_args())
 
-
-
-if args["domUs"]!=None:
-	print(args["domUs"])
-exit()
 monitoring_items = ["heart_rate","app_mode","frame_size","timeslice"]
+
+
+
+
 
 # c = heartbeat.Dom0(monitoring_items,['1','2','3','4'])
 monitoring_domU = [args["RTdomUs"],args["CreditdomUs"]]

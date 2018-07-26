@@ -115,10 +115,10 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	frame_number_entry = "init"
 	prev_frame = -1
 	self_cnt = 0
-	every_n_frame = int(window_size_hr/2)
+	sampling_period = int(window_size_hr/2)
 	detect_car = 1
 	prev_detect_car = detect_car
-	prev_every_n_frame = every_n_frame
+	prev_sampling_period = sampling_period
 	print("Dom", domu_id.decode(), "start...")
 	while frame_number_entry != "done":
 		frame_number_entry = c.read(key_path_hash_frame_number_entry).decode()
@@ -130,7 +130,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			frame = vidarray[frame_num]
 			frame = imutils.resize(frame, width=300)
 			(startX, startY, endX, endY)=(0,0,0,0) 
-			if self_cnt%every_n_frame==0:
+			if self_cnt%sampling_period==0:
 				(startX, startY, endX, endY)=(0,0,0,0) 
 				(h, w) = frame.shape[:2]
 				blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)),0.007843, (300, 300), 127.5)			
@@ -150,29 +150,29 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				# 	detect_car = 0
 				# if prev_detect_car!=detect_car and self_cnt%window_size_hr==0:
 				# 	if detect_car:
-				# 		every_n_frame = int(window_size_hr/2)
+				# 		sampling_period = int(window_size_hr/2)
 				# 	else:
-				# 		every_n_frame = window_size_hr
+				# 		sampling_period = window_size_hr
 				# 	prev_detect_car=detect_car
 				# 	print("detect car:" ,detect_car)
-				# 	comm.write("frame_size",every_n_frame)
+				# 	comm.write("frame_size",sampling_period)
 
 
 				if sum((startX, startY, endX, endY)) > 0 :
-					every_n_frame = int(window_size_hr/2)
+					sampling_period = int(window_size_hr/2)
 				else:
-					every_n_frame = int(window_size_hr/1)
+					sampling_period = int(window_size_hr/1)
 					
 				c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
 			prev_frame = frame_num
 
 			hb.heartbeat_beat()
 			# print("get_window_heartrate:",hb.get_window_heartrate())
-			if self_cnt%every_n_frame==0 and self_cnt>window_size_hr:
+			if self_cnt%sampling_period==0 and self_cnt>window_size_hr:
 				comm.write("heart_rate", hb.get_window_heartrate())
-			if prev_every_n_frame!=every_n_frame and self_cnt%every_n_frame==0 :
-				prev_every_n_frame=every_n_frame
-				comm.write("frame_size",every_n_frame)
+			if prev_sampling_period!=sampling_period and self_cnt%sampling_period==0 :
+				prev_sampling_period=sampling_period
+				comm.write("sampling_period",sampling_period)
 			self_cnt+=1
 
 

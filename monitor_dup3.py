@@ -7,6 +7,7 @@ import threading
 import time
 import pprint
 import sys
+import res_alloc
 
 from pyxs import Client
 
@@ -26,7 +27,7 @@ ap.add_argument("-s", "--static-alloc", type=int, default=1000, help="static all
 args = vars(ap.parse_args())
 
 
-monitoring_items = ["heart_rate","app_mode","frame_size","timeslice"]
+monitoring_items = ["heart_rate","app_mode","sampling_period","timeslice"]
 
 # c = heartbeat.Dom0(monitoring_items,['1','2','3','4'])
 monitoring_domU = (args["domUs"]).split(',')
@@ -65,6 +66,7 @@ class MonitorThread(threading.Thread):
 		self.mid=(min_heart_rate+max_heart_rate)/2
 
 		self.pid = apid.AdapPID(self.mid,1,min_heart_rate,max_heart_rate)
+		self.alloc = res_alloc.ResourceAllocation(args["static_alloc"],timeslice_us,min_heart_rate,max_heart_rate,algo)
 
 	def run(self):
 		# Acquire lock to synchronize thread
@@ -95,7 +97,7 @@ class MonitorThread(threading.Thread):
 					self.pid.reset()
 					if msg.isdigit():
 						with open("info.txt", "a") as myfile:
-							myfile.write(self.domuid+" "+(msg)+" frame freq"+ " "+str(time.time())+"\n")
+							myfile.write(self.domuid+" "+(msg)+" sampling period"+ " "+str(time.time())+"\n")
 				if self.keys[3] in path.decode():
 					self.pid.reset()
 					if msg.isdigit():
@@ -186,122 +188,12 @@ class MonitorThread(threading.Thread):
 			for vcpu in myinfo:
 				if vcpu['pcpu']!=-1:
 					cur_bw=int(vcpu['w'])
-		if self.algo==0:
-			default_bw=int(self.timeslice_us/2) #dummy
-			if cur_bw!=default_bw:
-				cur_bw=default_bw	
-			cur_bw = args["static_alloc"]
-		if self.algo==1:
+		
 
-			alpha=1
-			beta=.9
-			free = self.timeslice_us-cur_bw
-
-			
-			if(heart_rate<self.mid):
-				if cur_bw<self.timeslice_us-minn:
-					free=free*beta
-					cur_bw=self.timeslice_us-free
-				else:
-					cur_bw=self.timeslice_us-minn
-			if(heart_rate>self.mid):
-				if cur_bw>minn:
-					free+=alpha*minn
-					cur_bw=self.timeslice_us-free
-
-			# if(heart_rate<self.mid):
-			# 	if cur_bw<self.timeslice_us-2*minn: #dummy
-			# 		cur_bw+=minn
-			# if(heart_rate>self.mid):
-			# 	if cur_bw>minn:
-			# 		cur_bw-=minn
-
-			# if(heart_rate<self.min_heart_rate):
-			# 	if cur_bw<self.timeslice_us-2*minn: #dummy
-			# 		cur_bw+=minn
-			# if(heart_rate>self.max_heart_rate):
-			# 	if cur_bw>minn:
-			# 		cur_bw-=minn
-			cur_bw=int(cur_bw)#-int(cur_bw)%100
-		if self.algo==2:
-			default_bw=int(self.timeslice_us-minn) #dummy
-			if cur_bw!=default_bw:
-				cur_bw=default_bw
-			cur_bw=int(cur_bw)#-int(cur_bw)%100
-		if self.algo==3:
-			# apid algo
-			output = self.pid.update(heart_rate)
-			# output+=self.timeslice_us/2
-			if self.pid.start>0:
-				tmp_cur_bw = output+cur_bw #int(output*cur_bw+cur_bw)-int(output*cur_bw+cur_bw)%100
-				if tmp_cur_bw>=self.timeslice_us-minn: #dummy
-					cur_bw=self.timeslice_us-minn
-				elif tmp_cur_bw<=minn:#self.timeslice_us/3:
-					cur_bw=minn#int(self.timeslice_us/3)
-				else:
-					cur_bw=tmp_cur_bw
-
-			cur_bw=int(cur_bw)#-int(cur_bw)%100
-
-		else:
-			self.pid.reset()
-
-		if self.algo==4:
-			# aimd algo
-			alpha=3.5
-			beta=.9
-			free = self.timeslice_us-cur_bw
-
-
-			# if(heart_rate<self.mid):
-			# 	if cur_bw<self.timeslice_us-minn:
-			# 		free=free*beta
-			# 		cur_bw=self.timeslice_us-free
-			# 	else:
-			# 		cur_bw=self.timeslice_us-minn
-			# if(heart_rate>self.mid):
-			# 	if cur_bw>minn:
-			# 		free+=alpha*minn
-			# 		cur_bw=self.timeslice_us-free
-
-
-			if(heart_rate<self.min_heart_rate):
-				if cur_bw<self.timeslice_us-minn:
-					free=free*beta
-					cur_bw=self.timeslice_us-free
-				else:
-					cur_bw=self.timeslice_us-minn
-			if(heart_rate>self.max_heart_rate):
-				if cur_bw>minn:
-					free+=alpha*minn
-					cur_bw=self.timeslice_us-free
-			cur_bw=int(cur_bw)#-int(cur_bw)%100
-			# print("      ",cur_bw)
-		if self.algo==5:
-			beta=.9
-			free = self.timeslice_us-cur_bw		
-			if(heart_rate<self.min_heart_rate):
-				if cur_bw<self.timeslice_us-minn:
-					free=free*beta
-					cur_bw=self.timeslice_us-free
-			if(heart_rate>self.max_heart_rate):
-				if cur_bw>minn:
-					cur_bw-=minn
-			if heart_rate > self.max_heart_rate:
-				self.target_reached_cnt+=1
-				if self.target_reached_cnt==16:
-					self.target_reached_cnt-=8
-					if cur_bw>minn:
-						cur_bw-=minn
-			else:
-				self.target_reached_cnt=0
-
-
-
+		cur_bw = self.alloc.exec(heart_rate,cur_bw)
 
 		other_cur_bw = 0
 		other_info = self.shared_data[self.other_domuid]
-		cur_bw = cur_bw
 		myinfo = self.shared_data[self.domuid]
 
 		if self.rtxen_or_credit==1:
