@@ -190,7 +190,7 @@ class MonitorThread(threading.Thread):
 
 
 
-					
+
 		if self.algo==0:
 			default_bw=int(self.timeslice_us/2) #dummy
 			if cur_bw!=default_bw:

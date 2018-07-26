@@ -23,7 +23,7 @@ ap.add_argument("-d", "--domUs", help="domUs id,sperate by comma")
 ap.add_argument("-t", "--timeslice",type=int, default=10000, help="sched quantum")
 ap.add_argument("-f", "--fps", type=float, default=30, help="target fps")
 ap.add_argument("-a", "--algo", type=int, default=4, help="algorithm")
-ap.add_argument("-s", "--static-alloc", type=int, default=1000, help="static alloc")
+ap.add_argument("-s", "--static-alloc", type=int, default=10, help="static alloc")
 args = vars(ap.parse_args())
 
 
@@ -66,7 +66,7 @@ class MonitorThread(threading.Thread):
 		self.mid=(min_heart_rate+max_heart_rate)/2
 
 		self.pid = apid.AdapPID(self.mid,1,min_heart_rate,max_heart_rate)
-		self.alloc = res_alloc.ResourceAllocation(args["static_alloc"],timeslice_us,min_heart_rate,max_heart_rate, args["algo"])
+		self.alloc = res_alloc.ResourceAllocation(args["static_alloc"],timeslice_us,min_heart_rate,max_heart_rate, self.algo)
 
 	def run(self):
 		# Acquire lock to synchronize thread
