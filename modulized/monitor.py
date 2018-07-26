@@ -181,9 +181,10 @@ shared_data['contention_time_passed']=0
 pp = pprint.PrettyPrinter(indent=2)
 pp.pprint(shared_data)
 
+print('monitoring:')
 for i in range(2):
 	vmstr = 'VM'+str(i+1)
-	print('monitoring: ',rtxen_or_credit," ",vmstr,', domU ID=',monitoring_domU[i])
+	print("		",rtxen_or_credit,vmstr,'with domU ID=',monitoring_domU[i])
 
 
 
