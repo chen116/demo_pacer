@@ -16,6 +16,7 @@ class ResourceAllocation:
 		self.shared_data = shared_data
 		self.domuid = domuid
 		self.other_domuid = other_domuid
+		self.rtxen_or_credit = 1
 # int allocate_resource(algo, static_alloc, timeslice_us, pid, target_heart_rate,target_reached_cnt)
 	def exec_sharing(self,cur_bw):
 		other_cur_bw = 0
