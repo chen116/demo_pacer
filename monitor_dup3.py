@@ -64,9 +64,8 @@ class MonitorThread(threading.Thread):
 		self.max_heart_rate=max_heart_rate
 		self.timeslice_us = timeslice_us
 		self.mid=(min_heart_rate+max_heart_rate)/2
-
 		self.pid = apid.AdapPID(self.mid,1,min_heart_rate,max_heart_rate)
-		self.alloc = res_alloc.ResourceAllocation(args["static_alloc"],timeslice_us,min_heart_rate,max_heart_rate, self.algo)
+		self.allocMod = res_alloc.ResourceAllocation(args["static_alloc"],timeslice_us,min_heart_rate,max_heart_rate,self.algo,domuid,other_domuid,shared_data)
 
 	def run(self):
 		# Acquire lock to synchronize thread
@@ -190,71 +189,76 @@ class MonitorThread(threading.Thread):
 					cur_bw=int(vcpu['w'])
 		
 
-		cur_bw = self.alloc.exec_allocation(heart_rate,cur_bw)
+		cur_bw = self.allocMod.exec_allocation(heart_rate,cur_bw)
+
+		(cur_bw,other_cur_bw)=self.allocMod.exec_sharing(cur_bw)
+
+		if False:
+			other_cur_bw = 0
+			other_info = self.shared_data[self.other_domuid]
+			myinfo = self.shared_data[self.domuid]
 
 
 
-		other_cur_bw = 0
-		other_info = self.shared_data[self.other_domuid]
-		myinfo = self.shared_data[self.domuid]
+			if self.rtxen_or_credit==1:
+				for vcpu in other_info:
+					if vcpu['pcpu']!=-1:
+						other_cur_bw=vcpu['b']		
 
-		if self.rtxen_or_credit==1:
-			for vcpu in other_info:
-				if vcpu['pcpu']!=-1:
-					other_cur_bw=vcpu['b']		
+			elif self.rtxen_or_credit==0:
+				for vcpu in other_info:
+					if vcpu['pcpu']!=-1:
+						other_cur_bw=vcpu['w']
 
-		elif self.rtxen_or_credit==0:
-			for vcpu in other_info:
-				if vcpu['pcpu']!=-1:
-					other_cur_bw=vcpu['w']
-		# print('domuid',self.domuid,'other_cur_bw', other_cur_bw,'cur_bw',cur_bw)
 
-		if cur_bw+other_cur_bw>self.timeslice_us:
 
-			my_pass_val = self.shared_data['pass_val'][int(self.domuid)-int(monitoring_domU[0])]
-			other_pass_val = self.shared_data['pass_val'][int(self.other_domuid)-int(monitoring_domU[0])]
-			last_time = self.shared_data['last_time_val']
-			now_time = time.time()
-			if last_time==0:
-				last_time = now_time
+
+			if cur_bw+other_cur_bw>self.timeslice_us:
+
+				my_pass_val = self.shared_data['pass_val'][int(self.domuid)-int(monitoring_domU[0])]
+				other_pass_val = self.shared_data['pass_val'][int(self.other_domuid)-int(monitoring_domU[0])]
+				last_time = self.shared_data['last_time_val']
+				now_time = time.time()
+				if last_time==0:
+					last_time = now_time
+					self.shared_data['last_time_val'] = now_time
+				# print('domuid',self.domuid,'last_time', last_time,'now_time',now_time)
+
+				self.shared_data["contention_time_passed"]+=now_time-last_time
 				self.shared_data['last_time_val'] = now_time
-			# print('domuid',self.domuid,'last_time', last_time,'now_time',now_time)
-
-			self.shared_data["contention_time_passed"]+=now_time-last_time
-			self.shared_data['last_time_val'] = now_time
-			# print(self.shared_data["contention_time_passed"])
+				# print(self.shared_data["contention_time_passed"])
 
 
 
 
-			if my_pass_val<=other_pass_val:
-				other_cur_bw=self.timeslice_us-cur_bw
-			else:
-				cur_bw=self.timeslice_us-other_cur_bw
-				self.pid.reset()
-
-			process_unit_time=2.5
-			if self.shared_data["contention_time_passed"]>=process_unit_time:# and int(self.shared_data["contention_time_passed"])%5==0:
-				self.shared_data["contention_time_passed"]=0
 				if my_pass_val<=other_pass_val:
-					self.shared_data['pass_val'][int(self.domuid)-int(monitoring_domU[0])]+=self.shared_data['stride_val'][int(self.domuid)-int(monitoring_domU[0])]
+					other_cur_bw=self.timeslice_us-cur_bw
 				else:
-					self.shared_data['pass_val'][int(self.other_domuid)-int(monitoring_domU[0])]+=self.shared_data['stride_val'][int(self.other_domuid)-int(monitoring_domU[0])]
+					cur_bw=self.timeslice_us-other_cur_bw
+					self.pid.reset()
 
-				with open("info.txt", "a") as myfile:
-					myfile.write(self.domuid+" "+self.domuid+" time slice len 6"+ " "+str(now_time)+"\n")							
+				process_unit_time=2.5
+				if self.shared_data["contention_time_passed"]>=process_unit_time:# and int(self.shared_data["contention_time_passed"])%5==0:
+					self.shared_data["contention_time_passed"]=0
+					if my_pass_val<=other_pass_val:
+						self.shared_data['pass_val'][int(self.domuid)-int(monitoring_domU[0])]+=self.shared_data['stride_val'][int(self.domuid)-int(monitoring_domU[0])]
+					else:
+						self.shared_data['pass_val'][int(self.other_domuid)-int(monitoring_domU[0])]+=self.shared_data['stride_val'][int(self.other_domuid)-int(monitoring_domU[0])]
+
+					with open("info.txt", "a") as myfile:
+						myfile.write(self.domuid+" "+self.domuid+" time slice len 6"+ " "+str(now_time)+"\n")							
 
 
 
 
 
 
-			# print('domuid',self.domuid,'other_cur_bw', other_cur_bw,'cur_bw',cur_bw)
+				# print('domuid',self.domuid,'other_cur_bw', other_cur_bw,'cur_bw',cur_bw)
 
-		else:
-			# print('domuid',self.domuid,'other_cur_bw', other_cur_bw,'cur_bw',cur_bw)
+			else:
+				# print('domuid',self.domuid,'other_cur_bw', other_cur_bw,'cur_bw',cur_bw)
 
-			self.shared_data['last_time_val'] = time.time()
+				self.shared_data['last_time_val'] = time.time()
 
 
 

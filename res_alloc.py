@@ -2,7 +2,7 @@
 import apid
 
 class ResourceAllocation:
-	def __init__(self,static_alloc, timeslice_us,min_heart_rate,max_heart_rate,algo):
+	def __init__(self,static_alloc, timeslice_us,min_heart_rate,max_heart_rate,algo,domuid,other_domuid,shared_data):
 		self.static_alloc = static_alloc
 		self.timeslice_us = timeslice_us
 		# self.target_heart_rate = target_heart_rate
@@ -13,8 +13,11 @@ class ResourceAllocation:
 		self.algo = algo
 		self.target_reached_cnt = 0
 		self.minn = int(timeslice_us * 0.01)
+		self.shared_data = shared_data
+		self.domuid = domuid
+		self.other_domuid = other_domuid
 # int allocate_resource(algo, static_alloc, timeslice_us, pid, target_heart_rate,target_reached_cnt)
-	def exec_sharing(self,myinfo,other_info):
+	def exec_sharing(self,cur_bw):
 		other_cur_bw = 0
 		other_info = self.shared_data[self.other_domuid]
 		myinfo = self.shared_data[self.domuid]
