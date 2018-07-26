@@ -12,7 +12,7 @@ class ResourceAllocation:
 		self.pid = apid.AdapPID(self.mid,1,min_heart_rate,max_heart_rate)
 		self.algo = algo
 		self.target_reached_cnt = 0
-		self.minn = timeslice_us * 0.01
+		self.minn = int(timeslice_us * 0.01)
 # int allocate_resource(algo, static_alloc, timeslice_us, pid, target_heart_rate,target_reached_cnt)
 	def exec_sharing(self,myinfo,other_info):
 		other_cur_bw = 0
@@ -83,7 +83,6 @@ class ResourceAllocation:
 		if self.algo==0:
 			# static 
 			cur_bw = int(self.timeslice_us*self.static_alloc/100)
-			return(cur_bw)
 		elif self.algo==1:
 			# amid
 			alpha=1
@@ -100,7 +99,6 @@ class ResourceAllocation:
 					free+=alpha*self.minn
 					cur_bw=self.timeslice_us-free
 			cur_bw=int(cur_bw)
-			return(cur_bw)
 
 
 		elif self.algo==3:
@@ -116,7 +114,6 @@ class ResourceAllocation:
 				else:
 					cur_bw=tmp_cur_bw
 			cur_bw=int(cur_bw)
-			return(cur_bw)
 
 
 		elif self.algo==4:
@@ -135,7 +132,6 @@ class ResourceAllocation:
 					free+=alpha*self.minn
 					cur_bw=self.timeslice_us-free
 			cur_bw=int(cur_bw)
-			return(cur_bw)
 
 		elif self.algo==5:
 			# limd 
@@ -156,9 +152,9 @@ class ResourceAllocation:
 						cur_bw-=self.minn
 			else:
 				self.target_reached_cnt=0
-			return(cur_bw)
+			cur_bw=int(cur_bw)
 
-		else:
-			return(cur_bw)
+
+		return(int(cur_bw))
 
 
