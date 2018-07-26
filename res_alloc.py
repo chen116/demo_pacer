@@ -23,15 +23,15 @@ class ResourceAllocation:
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
 					other_cur_bw=vcpu['b']		
-
 		elif self.rtxen_or_credit=="credit":
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
 					other_cur_bw=vcpu['w']
-		domu_index_in_pass_val = 0
-		if self.domuid>self.other_domuid:
-			domu_index_in_pass_val = 1
+
 		if cur_bw+other_cur_bw>self.timeslice_us:
+			domu_index_in_pass_val = 0
+			if self.domuid>self.other_domuid:
+				domu_index_in_pass_val = 1
 			my_pass_val = self.shared_data['pass_val'][domu_index_in_pass_val]
 			other_pass_val = self.shared_data['pass_val'][(domu_index_in_pass_val+1)%2]
 			last_time = self.shared_data['last_time_val']

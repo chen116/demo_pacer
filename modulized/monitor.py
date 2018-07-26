@@ -10,10 +10,8 @@ import threading
 import time
 import pprint
 import res_alloc
-
 from pyxs import Client
 
-import apid
 with open("info.txt", "w") as myfile:
 	myfile.write("")
 
@@ -23,7 +21,7 @@ ap.add_argument("-d", "--domUs", help="domUs id,sperate by comma")
 ap.add_argument("-t", "--timeslice",type=int, default=10000, help="sched quantum")
 ap.add_argument("-f", "--fps", type=float, default=30, help="target fps")
 ap.add_argument("-a", "--algo", type=int, default=4, help="algorithm")
-ap.add_argument("-s", "--static-alloc", type=int, default=10, help="static utilization percentage")
+ap.add_argument("-s", "--static- ", type=int, default=10, help="static utilization percentage")
 args = vars(ap.parse_args())
 
 
@@ -100,14 +98,25 @@ class MonitorThread(threading.Thread):
 		
 
 		cur_bw = self.allocMod.exec_allocation(heart_rate,cur_bw)
-		(cur_bw,other_cur_bw)=self.allocMod.exec_sharing(cur_bw)
-
-
-
 
 
 		other_info = self.shared_data[self.other_domuid]
-		myinfo = self.shared_data[self.domuid]
+		if self.rtxen_or_credit=="rtxen":
+			for vcpu in other_info:
+				if vcpu['pcpu']!=-1:
+					other_cur_bw=vcpu['b']		
+		elif self.rtxen_or_credit=="credit":
+			for vcpu in other_info:
+				if vcpu['pcpu']!=-1:
+					other_cur_bw=vcpu['w']
+		if cur_bw+other_cur_bw>self.timeslice_us:
+			(cur_bw,other_cur_bw)=self.allocMod.exec_sharing(cur_bw)
+
+
+
+
+
+
 		if self.rtxen_or_credit=="rtxen":
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
@@ -117,7 +126,6 @@ class MonitorThread(threading.Thread):
 					vcpu['b']=cur_bw
 			xen_interface.sched_rtds(self.domuid,self.timeslice_us,cur_bw,[])
 			xen_interface.sched_rtds(self.other_domuid,self.timeslice_us,other_cur_bw,[])
-
 		elif self.rtxen_or_credit=="credit":
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
@@ -130,8 +138,8 @@ class MonitorThread(threading.Thread):
 
 
 
-		buf=10000
-		self.shared_data['cnt'] = (self.shared_data['cnt']+1)%buf
+		# buf=10000
+		# self.shared_data['cnt'] = (self.shared_data['cnt']+1)%buf
 		time_now=str(time.time())
 		info = self.domuid+" "+str(heart_rate)+" hr "+time_now+"\n"
 		place_holder_for_graph = " x x x x x "
