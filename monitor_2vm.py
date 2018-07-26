@@ -186,6 +186,11 @@ class MonitorThread(threading.Thread):
 			for vcpu in myinfo:
 				if vcpu['pcpu']!=-1:
 					cur_bw=int(vcpu['w'])
+
+
+
+
+					
 		if self.algo==0:
 			default_bw=int(self.timeslice_us/2) #dummy
 			if cur_bw!=default_bw:

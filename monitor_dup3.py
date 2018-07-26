@@ -66,7 +66,7 @@ class MonitorThread(threading.Thread):
 		self.mid=(min_heart_rate+max_heart_rate)/2
 
 		self.pid = apid.AdapPID(self.mid,1,min_heart_rate,max_heart_rate)
-		self.alloc = res_alloc.ResourceAllocation(args["static_alloc"],timeslice_us,min_heart_rate,max_heart_rate,self.algo)
+		self.alloc = res_alloc.ResourceAllocation(args["static_alloc"],timeslice_us,min_heart_rate,max_heart_rate, args["algo"])
 
 	def run(self):
 		# Acquire lock to synchronize thread
@@ -154,7 +154,7 @@ class MonitorThread(threading.Thread):
 				# #print( token.decode(),':',msg)
 	def res_allocat(self,heart_rate):
 
-		minn=int(self.timeslice_us*0.01)
+
 		# print(self.domuid, heart_rate, self.algo)
 
 
@@ -191,6 +191,8 @@ class MonitorThread(threading.Thread):
 		
 
 		cur_bw = self.alloc.exec_allocation(heart_rate,cur_bw)
+
+
 
 		other_cur_bw = 0
 		other_info = self.shared_data[self.other_domuid]
