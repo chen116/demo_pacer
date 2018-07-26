@@ -38,7 +38,7 @@ c = host_guest_comm.Dom0(monitoring_items,monitoring_domU)
 timeslice_us=args["timeslice"]
 
 minn=int(timeslice_us*0.01)
-default_bw=int(timeslice_us/len(monitoring_domU))
+
 
 
 
@@ -319,7 +319,7 @@ threads = []
 shared_data = xen_interface.get_global_info()
 
 for uid in monitoring_domU:
-	xen_interface.sched_rtds(int(uid),timeslice_us,args["static_alloc"],[])
+	xen_interface.sched_rtds(int(uid),timeslice_us,timeslice_us*args["static_alloc"]/100,[])
 
 # if '1' in shared_data['rtxen']:
 # 	xen_interface.sched_rtds(1,timeslice_us,default_bw,[])
