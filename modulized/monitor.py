@@ -44,7 +44,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 		if c[name_path].decode() == "VM2":
 			monitoring_domU[1] = x
 
-
+print('monitoring_domU:',monitoring_domU)
 
 
 domUs = host_guest_comm.Dom0(monitoring_items,monitoring_domU)
