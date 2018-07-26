@@ -30,7 +30,7 @@ monitoring_items = ["heart_rate","sampling_period"]
 monitoring_domU = (args["domUs"]).split(',')
 
 
-c = host_guest_comm.Dom0(monitoring_items,monitoring_domU)
+domUs = host_guest_comm.Dom0(monitoring_items,monitoring_domU)
 
 timeslice_us=args["timeslice"]
 min_heart_rate = float(args["fps"])
@@ -169,10 +169,15 @@ with open("minmax.txt", "w") as myfile:
 
 
 
-rtxen_or_credit="rtxen"
-if len(shared_data['credit'])>0:
-	rtxen_or_credit="credit"
-for domuid in c.domu_ids:
+
+for domuid in domUs.domu_ids:
+	for domU_in_credit in shared_data['credit']:
+		if domU_in_credit == domuid:
+			rtxen_or_credit="credit"
+	for domU_in_rtxen in shared_data['rtxen']:
+		if domU_in_rtxen == domuid:
+			rtxen_or_credit="rtxen"
+
 	tmp_thread = MonitorThread(threadLock,shared_data,domuid,rtxen_or_credit,timeslice_us,min_heart_rate,max_heart_rate, monitoring_items)
 	tmp_thread.start()
 	threads.append(tmp_thread)
