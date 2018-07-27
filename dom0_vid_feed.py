@@ -29,6 +29,7 @@ for i in range(200):#blank_len+car_len):
         blank[i-140,:,:,:]=frame
 vs.stop()   
 
+vidarray_binary = []
 car = np.concatenate((car, np.flipud(car)), axis=0)
 if args["video_sequence"] is None:
 	vidarray_binary = [1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1]
