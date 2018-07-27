@@ -119,8 +119,9 @@ for i in range(100):#blank_len+car_len):
         blank[i-70,:,:,:]=frame
 vs.stop()   
 
-# carbackword = np.copy(car)
-# carbackword = np.flipud(carbackword)
+carbackword = np.copy(car)
+carbackword = np.flipud(carbackword)
+
 # vidarray = np.concatenate((car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,
 # 	blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank
 # 	,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword
