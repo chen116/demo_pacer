@@ -107,6 +107,8 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
 			prev_frame_num = frame_num
 
+
+
 			hb.heartbeat_beat()
 			comm.write("heart_rate", hb.get_instant_heartrate())
 			if prev_frame_size != frame_size:
