@@ -186,7 +186,7 @@ for i in range(2):
 	if monitoring_domU[i] in shared_data['rtxen']:
 		print("	rtxen",vmstr,'with domU ID:',monitoring_domU[i],"dummy domU d1 with ID",dummy_domU[i])
 	else:
-		print("	credit",vmstr,'with domU ID:',monitoring_domU[i],"dummy domU d2 with ID ",dummy_domU[i])
+		print("	credit",vmstr,'with domU ID:',monitoring_domU[i],"dummy domU d2 with ID",dummy_domU[i])
 
 
 with open("misc.txt", "w") as myfile:
