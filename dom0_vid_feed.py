@@ -36,12 +36,13 @@ carbackword = np.flipud(carbackword)
 car = np.concatenate((car, carbackword), axis=0)
 
 vidarray_binary = [1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1]
-
+vidarray = np.copy(blank)
 for binary in vidarray_binary:
 	if binary:
 		vidarray = np.concatenate((vidarray,car),axis=0)
 	else:
 		vidarray = np.concatenate((vidarray,blank),axis=0)
+np.delete(vidarray, 1, 0)
 
 print(','.join(str(binary) for binary in vidarray_binary))
 
