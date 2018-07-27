@@ -33,7 +33,8 @@ car = np.concatenate((car, np.flipud(car)), axis=0)
 if args["video_sequence"] is None:
 	vidarray_binary = [1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1]
 else:
-	vidarray_binary = list(map(int, args["video_sequence"]))
+	for seq in args["video_sequence"]:
+		vidarray_binary.append(int(seq))
 
 vidarray = np.zeros((1,144,176,3),dtype=np.uint8)
 for binary in vidarray_binary:
