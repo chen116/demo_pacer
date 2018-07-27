@@ -10,6 +10,9 @@ import time
 import cv2
 
 
+ap.add_argument("-mf", "--heavy-workload-frame-size", type=int, default=300, help="heavy-workload-frame-size")
+ap.add_argument("-sf", "--low-workload-frame-size", type=int, default=150, help="low-workload-frame-size")
+ap.add_argument("-vs", "--video-sequence", help="low-workload-frame-size")
 
 
 vs= FileVideoStream("rollcar.3gp").start()
@@ -25,7 +28,11 @@ for i in range(200):#blank_len+car_len):
 vs.stop()   
 
 car = np.concatenate((car, np.flipud(car)), axis=0)
-vidarray_binary = [1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1]
+if args["video_sequence"] is None:
+	vidarray_binary = [1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1]
+else:
+	vidarray_binary = list(map(int, args["video_sequence"]))
+	
 vidarray = np.zeros((1,144,176,3),dtype=np.uint8)
 for binary in vidarray_binary:
 	if binary:
@@ -33,9 +40,10 @@ for binary in vidarray_binary:
 	else:
 		vidarray = np.concatenate((vidarray,blank),axis=0)
 vidarray = np.delete(vidarray, 0, 0)
-print(','.join(str(binary) for binary in vidarray_binary))
 
 
+video_data_string = str(args["heavy_workload_frame_size"])+" "+args["low_workload_frame_size"]+" "+','.join(str(binary) for binary in vidarray_binary)
+print(video_data_string)
 
 misc = open("./modulized/misc.txt","r").read()
 fps_val = float(misc.split('\n')[0].split()[1])*2
@@ -102,9 +110,9 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	for frame in vidarray:
 		tn = time.time()
 		if sum((startX, startY, endX, endY)) > 0:
-			frame = imutils.resize(frame, width=300)
+			frame = imutils.resize(frame, width=args["heavy_workload_frame_size"])
 		else:
-			frame = imutils.resize(frame, width=150)
+			frame = imutils.resize(frame, width=args["low_workload_frame_size"])
 		frame_cnt+=1
 		for domuid in domu_ids:
 			key_path_hash=('/local/domain/'+domuid+'/frame_number_entry').encode()
