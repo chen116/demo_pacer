@@ -132,7 +132,7 @@ carbackword = np.flipud(carbackword)
 
 car = np.concatenate((car, carbackword), axis=0)
 vidarray = np.concatenate((car,car,car,car,car,car,car,car,car,
-	blank,blank,blank,blank,blank,blank,blank,
+	blank,blank,blank,blank,blank,blank,blank
 	,car,car,car,car,car,car
 	),axis=0)
 
