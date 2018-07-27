@@ -61,7 +61,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	while c.read(key_path_hash_frame_number_entry).decode() != "init":
 		continue
 	init_video_data_string = ""
-	while len(init_video_data_string.split()) > 0 and init_video_data_string.split()[0] != "init":
+	while len(init_video_data_string.split()) == 0 or init_video_data_string.split()[0] != "init":
 		init_video_data_string = c.read(key_path_hash_frame_number_entry).decode()
 	init_video_data_list = init_video_data_string.split()
 	heavy_workload_frame_size = int(init_video_data_list[1])
