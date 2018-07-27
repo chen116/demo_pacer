@@ -26,6 +26,7 @@ vs.stop()
 
 carbackword = np.copy(car)
 carbackword = np.flipud(carbackword)
+car = np.concatenate((car, np.flipud(car)), axis=0)
 
 # vidarray = np.concatenate((car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,
 # 	blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank
@@ -33,9 +34,9 @@ carbackword = np.flipud(carbackword)
 # 	),axis=0)
 
 
-car = np.concatenate((car, carbackword), axis=0)
 
 vidarray_binary = [1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1]
+
 vidarray = np.zeros((1,144,176,3),dtype=np.uint8)
 for binary in vidarray_binary:
 	if binary:
