@@ -52,8 +52,8 @@ class ResourceAllocation:
 					self.shared_data['pass_val'][domu_index_in_pass_val]+=self.shared_data['stride_val'][domu_index_in_pass_val]
 				else:
 					self.shared_data['pass_val'][(domu_index_in_pass_val+1)%2]+=self.shared_data['stride_val'][(domu_index_in_pass_val+1)%2]
-				with open("info.txt", "a") as myfile:
-					myfile.write(self.domuid+" "+self.domuid+" time slice len 6"+ " "+str(now_time)+"\n")							
+				with open("data.txt", "a") as myfile:
+					myfile.write(self.domuid+" "+self.domuid+" stride turnover len 6"+ " "+str(now_time)+"\n")							
 		else:
 			self.shared_data['last_time_val'] = time.time()
 		return (cur_bw,other_cur_bw)
