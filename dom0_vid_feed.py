@@ -98,9 +98,13 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	# 	c.write(key_path_hash,domuid.encode())
 
 	frame_cnt=-1
+	(startX, startY, endX, endY) = (0,0,0,0)
 	for frame in vidarray:
 		tn = time.time()
-		frame = imutils.resize(frame, width=300)
+		if sum((startX, startY, endX, endY)) > 0:
+			frame = imutils.resize(frame, width=300)
+		else:
+			frame = imutils.resize(frame, width=150)
 		frame_cnt+=1
 		for domuid in domu_ids:
 			key_path_hash=('/local/domain/'+domuid+'/frame_number_entry').encode()
