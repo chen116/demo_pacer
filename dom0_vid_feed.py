@@ -15,6 +15,7 @@ vs= FileVideoStream("rollcar.3gp").start()
 time.sleep(1.0)
 car = np.zeros((30,144,176,3),dtype=np.uint8)
 blank = np.zeros((30,144,176,3),dtype=np.uint8)
+
 for i in range(100):#blank_len+car_len):
     frame = vs.read()
     if i >= 20 and i < 50:
@@ -23,14 +24,19 @@ for i in range(100):#blank_len+car_len):
         blank[i-70,:,:,:]=frame
 vs.stop()   
 
-carbackword = np.copy(car)
-carbackword = np.flipud(carbackword)
-vidarray = np.concatenate((car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,
+# carbackword = np.copy(car)
+# carbackword = np.flipud(carbackword)
+# vidarray = np.concatenate((car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,
+# 	blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank
+# 	,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword
+# 	),axis=0)
+
+
+car = np.concatenate((car, carbackword), axis=0)
+vidarray = np.concatenate((car,car,car,car,car,car,car,car,car,
 	blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank
-	,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword
+	,car,car,car,car,car,car
 	),axis=0)
-
-
 
 # hh=144
 # ww=176

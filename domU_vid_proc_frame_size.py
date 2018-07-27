@@ -119,13 +119,19 @@ for i in range(100):#blank_len+car_len):
         blank[i-70,:,:,:]=frame
 vs.stop()   
 
-carbackword = np.copy(car)
-carbackword = np.flipud(carbackword)
-vidarray = np.concatenate((car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,
-	blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank
-	,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword
-	),axis=0)
+# carbackword = np.copy(car)
+# carbackword = np.flipud(carbackword)
+# vidarray = np.concatenate((car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,
+# 	blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank
+# 	,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword
+# 	),axis=0)
 
+
+car = np.concatenate((car, carbackword), axis=0)
+vidarray = np.concatenate((car,car,car,car,car,car,car,car,car,
+	blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank
+	,car,car,car,car,car,car
+	),axis=0)
 
 
 net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt.txt", "MobileNetSSD_deploy.caffemodel")
