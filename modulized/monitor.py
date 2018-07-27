@@ -127,9 +127,9 @@ class MonitorThread(threading.Thread):
 			xen_interface.sched_rtds(self.domuid,self.timeslice_us,cur_bw,[])
 			xen_interface.sched_rtds(self.other_domuid,self.timeslice_us,other_cur_bw,[])
 		elif self.rtxen_or_credit=="credit":
-			if cur_bw < self.timeslice_us/2 and other_cur_bw < self.timeslice_us/2:
-				other_cur_bw = self.timeslice_us/2 
-				cur_bw = self.timeslice_us/2 
+			# if cur_bw < self.timeslice_us/2 and other_cur_bw < self.timeslice_us/2:
+			# 	other_cur_bw = self.timeslice_us/2 
+			# 	cur_bw = self.timeslice_us/2 
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
 					vcpu['w']=other_cur_bw
