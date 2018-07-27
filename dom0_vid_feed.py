@@ -46,12 +46,14 @@ for binary in vidarray_binary:
 vidarray = np.delete(vidarray, 0, 0)
 
 
-video_data_string = str(args["heavy_workload_frame_size"])+" "+str(args["low_workload_frame_size"])+" "+','.join(str(binary) for binary in vidarray_binary)
-print(video_data_string)
+init_video_data_string = "init"+" "+str(args["heavy_workload_frame_size"])+" "+str(args["low_workload_frame_size"])+" "+','.join(str(binary) for binary in vidarray_binary)
+print(init_video_data_string)
 
 misc = open("./modulized/misc.txt","r").read()
 fps_val = float(misc.split('\n')[0].split()[1])*2
 
+
+COLORS = [ [255,144,30],[ 120 , 240 , 120] ] # blue # green
 
 
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
@@ -68,18 +70,6 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 
 	boxes = {}
 	keys=['frame_number_entry','box_entry']
-	# if domu_ids==[]:
-	# 	for x in c.list('/local/domain'.encode()):
-	# 		domu_ids.append(x.decode())
-	# 		boxes[x.decode()]=tuple()
-	# 	domu_ids.pop(0)
-	# 	boxes.pop('0')
-	COLORS = np.random.uniform(100, 255, size=(len(domu_ids), 3))
-	# COLORS= np.array([[100,500,250],[200,50,250]])#np.vstack((np.array([[5,200,250]]),np.array([[100,500,250]])))
-	COLORS = [[ 120 , 240 , 120],[ 240 , 120,  240]] # green, pink 
-	COLORS = [ [255,144,30],[ 120 , 240 , 120],] # blue # green
-
-
 	not_ready_domUs = copy.deepcopy(domu_ids)
 	for domuid in domu_ids:
 		permissions = []
@@ -87,7 +77,11 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 		permissions.append(('b'+domuid).encode())
 		for key in keys:
 			tmp_key_path = ('/local/domain'+'/'+domuid+'/'+key).encode()
-			tmp_val = ('init').encode()
+			tmp_val = ""
+			if key == "frame_number_entry":
+				tmp_val = ('init').encode()
+			if key == "box_entry":
+				tmp_val = init_video_data_string.encode()
 			c.write(tmp_key_path,tmp_val)
 			c.set_perms(tmp_key_path,permissions)
 			print('created',key,'for dom',domuid)

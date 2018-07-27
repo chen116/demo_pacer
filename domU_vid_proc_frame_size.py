@@ -31,14 +31,14 @@ for i in range(200):#blank_len+car_len):
 vs.stop()   
 
 car = np.concatenate((car, np.flipud(car)), axis=0)
-vidarray_binary = [1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1]
-vidarray = np.zeros((1,144,176,3),dtype=np.uint8)
-for binary in vidarray_binary:
-	if binary:
-		vidarray = np.concatenate((vidarray,car),axis=0)
-	else:
-		vidarray = np.concatenate((vidarray,blank),axis=0)
-vidarray = np.delete(vidarray, 0, 0)
+# vidarray_binary = [1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1]
+# vidarray = np.zeros((1,144,176,3),dtype=np.uint8)
+# for binary in vidarray_binary:
+# 	if binary:
+# 		vidarray = np.concatenate((vidarray,car),axis=0)
+# 	else:
+# 		vidarray = np.concatenate((vidarray,blank),axis=0)
+# vidarray = np.delete(vidarray, 0, 0)
 
 net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt.txt", "MobileNetSSD_deploy.caffemodel")
 
@@ -50,6 +50,9 @@ window_size_hr=5#
 hb = heartbeat.Heartbeat(1024,window_size_hr,100,"vic.log",10,100)
 monitoring_items = ["heart_rate","sampling_period"]
 comm = host_guest_comm.DomU(monitoring_items)
+
+heavy_workload_frame_size = 300
+heavy_workload_frame_size = 0
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	domu_id = c.read("domid".encode())
 	key_path_hash_frame_number_entry=('/local/domain/'+domu_id.decode()+'/frame_number_entry').encode()
@@ -57,6 +60,23 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	print("Dom", domu_id.decode(), "waiting for dom0...")
 	while c.read(key_path_hash_frame_number_entry).decode() != "init":
 		continue
+	init_video_data_string = ""
+	while len(init_video_data_string.split()) > 0 and init_video_data_string.split()[0] != "init":
+		init_video_data_string = c.read(key_path_hash_frame_number_entry).decode()
+	init_video_data_list = init_video_data_string.split()
+	heavy_workload_frame_size = int(init_video_data_list[1])
+	heavy_workload_frame_size = int(init_video_data_list[2])
+	vidarray_binary = list(map(int, init_video_data_list[3].split(',')))
+	vidarray = np.zeros((1,144,176,3),dtype=np.uint8)
+	for binary in vidarray_binary:
+		if binary:
+			vidarray = np.concatenate((vidarray,car),axis=0)
+		else:
+			vidarray = np.concatenate((vidarray,blank),axis=0)
+	vidarray = np.delete(vidarray, 0, 0)
+
+
+
 	(startX, startY, endX, endY)=(0,0,0,0) 
 	c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
 	c.write(key_path_hash_frame_number_entry,('ready').encode())
