@@ -116,6 +116,7 @@ class MonitorThread(threading.Thread):
 		
 		cur_bw = self.allocMod.exec_allocation(heart_rate,cur_bw)
 		(cur_bw,other_cur_bw)=self.allocMod.exec_sharing(cur_bw)
+		if cur_bw < self.timeslice_us/2 and other_cur_bw < self.timeslice_us/2:
 
 		other_info = self.shared_data[self.other_domuid]
 		if self.rtxen_or_credit=="rtxen":
@@ -128,6 +129,9 @@ class MonitorThread(threading.Thread):
 			xen_interface.sched_rtds(self.domuid,self.timeslice_us,cur_bw,[])
 			xen_interface.sched_rtds(self.other_domuid,self.timeslice_us,other_cur_bw,[])
 		elif self.rtxen_or_credit=="credit":
+			if cur_bw < self.timeslice_us/2 and other_cur_bw < self.timeslice_us/2:
+				other_cur_bw = self.timeslice_us/2 
+				cur_bw = self.timeslice_us/2 
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
 					vcpu['w']=other_cur_bw
@@ -167,7 +171,7 @@ for domuid in domUs.domu_ids:
 	if domuid in shared_data['credit']:
 		rtxen_or_credit="credit"
 	if rtxen_or_credit == "credit":
-		xen_interface.sched_credit(domuid,timeslice_us*args["static_alloc"]/100)
+		xen_interface.sched_credit(domuid,timeslice_us*50/100)
 	else:	
 		xen_interface.sched_rtds(domuid,timeslice_us,timeslice_us*args["static_alloc"]/100,[])
 
