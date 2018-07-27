@@ -14,6 +14,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument("-mf", "--heavy-workload-frame-size", type=int, default=300, help="heavy-workload-frame-size")
 ap.add_argument("-sf", "--low-workload-frame-size", type=int, default=150, help="low-workload-frame-size")
 ap.add_argument("-vs", "--video-sequence", help="low-workload-frame-size")
+args = vars(ap.parse_args())
 
 
 vs= FileVideoStream("rollcar.3gp").start()
