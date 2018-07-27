@@ -22,12 +22,12 @@ vs= FileVideoStream("rollcar.3gp").start()
 time.sleep(1.0)
 car = np.zeros((30,144,176,3),dtype=np.uint8)
 blank = np.zeros((60,144,176,3),dtype=np.uint8)
-for i in range(130):#blank_len+car_len):
+for i in range(200):#blank_len+car_len):
     frame = vs.read()
     if i >= 20 and i < 50:
     	car[i-20,:,:,:]=frame
-    elif i >= 70:
-        blank[i-70,:,:,:]=frame
+    elif i >= 130:
+        blank[i-130,:,:,:]=frame
 vs.stop()   
 
 car = np.concatenate((car, np.flipud(car)), axis=0)
