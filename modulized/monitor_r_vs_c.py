@@ -20,10 +20,8 @@ ap = argparse.ArgumentParser()
 # ap.add_argument("-d", "--domUs", help="domUs id,sperate by comma")
 ap.add_argument("-t", "--timeslice",type=int, default=10000, help="sched quantum")
 ap.add_argument("-f", "--fps", type=float, default=30, help="target fps")
-ap.add_argument("-a1", "--algo1", type=int, default=4, help="algorithm for vm1")
 ap.add_argument("-a", "--algo", type=int, default=4, help="algorithm for both")
 ap.add_argument("-s", "--static-alloc", type=int, default=10, help="static utilization percentage")
-ap.add_argument("-a2", "--algo2", type=int, default=0, help="algorithm for vm2")
 args = vars(ap.parse_args())
 
 
@@ -66,7 +64,7 @@ class MonitorThread(threading.Thread):
 		if self.domuid==monitoring_domU[1]:
 			self.other_domuid=dummy_domU[1]
 
-		self.algo = args["algo1"]
+		self.algo = args["algo"]
 		self.keys=keys
 		self.base_path=base_path
 		self.threadLock=threadLock
