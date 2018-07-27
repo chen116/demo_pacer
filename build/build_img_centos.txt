@@ -71,7 +71,9 @@ yum -y install python34-tkinter
 cp /root/demo_pacer/build/cv3_install_for_py3.sh /root/ && sh cv3_install_for_py3.sh
 
 
+# skinny install:
 
+pip3 install opencv-python-headless
 
 
 
