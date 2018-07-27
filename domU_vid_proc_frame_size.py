@@ -166,7 +166,9 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 
 				if sum((startX, startY, endX, endY)) > 0 :
 					sampling_period = int(window_size_hr/2)
+					detect_car = 1
 				else:
+					detect_car = 0
 					sampling_period = int(window_size_hr/2)
 					
 				c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
