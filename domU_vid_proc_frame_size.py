@@ -116,7 +116,7 @@ for i in range(100):#blank_len+car_len):
     if i >= 20 and i < 50:
     	car[i-20,:,:,:]=frame
     elif i >= 70 and i < 100:
-        blank[i-car_len,:,:,:]=frame
+        blank[i-70,:,:,:]=frame
 vs.stop()   
 
 carbackword = np.copy(car)
