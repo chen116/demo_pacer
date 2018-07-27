@@ -14,13 +14,13 @@ import cv2
 vs= FileVideoStream("rollcar.3gp").start()
 time.sleep(1.0)
 car = np.zeros((30,144,176,3),dtype=np.uint8)
-blank = np.zeros((30,144,176,3),dtype=np.uint8)
+blank = np.zeros((60,144,176,3),dtype=np.uint8)
 
-for i in range(100):#blank_len+car_len):
+for i in range(130):#blank_len+car_len):
     frame = vs.read()
     if i >= 20 and i < 50:
     	car[i-20,:,:,:]=frame
-    elif i >= 70 and i < 100:
+    elif i >= 70:
         blank[i-70,:,:,:]=frame
 vs.stop()   
 
@@ -35,7 +35,7 @@ carbackword = np.flipud(carbackword)
 
 car = np.concatenate((car, carbackword), axis=0)
 vidarray = np.concatenate((car,car,car,car,car,car,car,car,car,
-	blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank
+	blank,blank,blank,blank,blank,blank,blank,
 	,car,car,car,car,car,car
 	),axis=0)
 
