@@ -14,128 +14,31 @@ import cv2
 
 
 ap = argparse.ArgumentParser()
-ap.add_argument("-v", "--video", default="rollcar.3gp", help="path to the video file")
 ap.add_argument("-w", "--window", type=int, default=2, help="window size")
 args = vars(ap.parse_args())
-
-if "mp4" in args["video"]:
-    hh=360
-    ww=480
-
-else:
-    hh=144
-    ww=176
-
-# car_len = 75
-# blank_len = 25
-# rollback_len = 50
-# car = np.zeros((car_len,hh,ww,3),dtype=np.uint8)
-# blank = np.zeros((blank_len,hh,ww,3),dtype=np.uint8)
-# rollback = np.zeros((rollback_len,hh,ww,3),dtype=np.uint8)
-
-
-# vs= FileVideoStream(args["video"]).start()
-# time.sleep(1.0)
-# for i in range(250):#blank_len+car_len):
-#     frame = vs.read()
-#     if i<car_len:
-#         car[i,:,:,:]=frame
-#     elif i < blank_len+car_len:
-#         blank[i-car_len,:,:,:]=frame
-#     elif i >= 200:
-#         rollback[i-200,:,:,:]=frame
-
-
-# vs.stop()   
-
-# rollforward = np.copy(rollback)
-# rollforward = np.flipud(rollforward)
-# carbackword = np.copy(car)
-
-# carbackword = np.flipud(carbackword)
-# vidarray = np.concatenate((blank,blank,car,blank,rollback,car,blank,rollback,car,blank,rollback,car,blank,rollback,car,blank,rollback),axis=0)
-# vidarray = np.concatenate((car,carbackword,blank,blank,car,blank,rollback,rollforward,blank,blank,carbackword,blank,blank,car,blank),axis=0)
-# vidarray = np.concatenate((car,carbackword,blank,blank,car,carbackword,blank,blank,car,carbackword,blank,blank,car,carbackword,blank,blank),axis=0)
-# vidarray = np.concatenate((car,blank,blank,car,blank,blank,car,blank,blank,car,blank,blank),axis=0)
-
-
-
-
-# car_len = 75
-# blank_len = 25
-# rollback_len = 50
-# car = np.zeros((30,hh,ww,3),dtype=np.uint8)
-# blank = np.zeros((blank_len,hh,ww,3),dtype=np.uint8)
-# rollback = np.zeros((rollback_len,hh,ww,3),dtype=np.uint8)
-
-
-# vs= FileVideoStream(args["video"]).start()
-# time.sleep(1.0)
-# # for i in range(250):#blank_len+car_len):
-# #     frame = vs.read()
-# #     if i<car_len and i <50 and i>=20:
-# #         car[i-20,:,:,:]=frame
-# #     elif i < blank_len+car_len and i >=20:
-# #         blank[i-car_len,:,:,:]=frame
-# #     elif i >= 200:
-# #         rollback[i-200,:,:,:]=frame
-# for i in range(100):#blank_len+car_len):
-#     frame = vs.read()
-#     if i >= 20 and i < 50:
-#     	car[i-20,:,:,:]=frame
-#     elif i >= 70 and i < 100:
-#         blank[i-car_len,:,:,:]=frame
-#     elif i >= 200:
-#         rollback[i-200,:,:,:]=frame
-
-
-
-
-# vs.stop()   
-
-# rollforward = np.copy(rollback)
-# rollforward = np.flipud(rollforward)
-# carbackword = np.copy(car)
-# carbackword = np.flipud(carbackword)
-
-# vidarray = np.concatenate((car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,
-# 	blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank
-# 	,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword
-# 	#car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword
-# 	),axis=0)
-
-
-
 
 
 vs= FileVideoStream("rollcar.3gp").start()
 time.sleep(1.0)
 car = np.zeros((30,144,176,3),dtype=np.uint8)
 blank = np.zeros((60,144,176,3),dtype=np.uint8)
-
 for i in range(130):#blank_len+car_len):
     frame = vs.read()
     if i >= 20 and i < 50:
     	car[i-20,:,:,:]=frame
     elif i >= 70:
         blank[i-70,:,:,:]=frame
-vs.stop()  
+vs.stop()   
 
-carbackword = np.copy(car)
-carbackword = np.flipud(carbackword)
-
-# vidarray = np.concatenate((car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,
-# 	blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank
-# 	,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword,car,carbackword
-# 	),axis=0)
-
-
-car = np.concatenate((car, carbackword), axis=0)
-vidarray = np.concatenate((car,car,car,car,car,car,car,car,car,
-	blank,blank,blank,blank,blank,blank,blank
-	,car,car,car,car,car,car
-	),axis=0)
-
+car = np.concatenate((car, np.flipud(car)), axis=0)
+vidarray_binary = [1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1]
+vidarray = np.zeros((1,144,176,3),dtype=np.uint8)
+for binary in vidarray_binary:
+	if binary:
+		vidarray = np.concatenate((vidarray,car),axis=0)
+	else:
+		vidarray = np.concatenate((vidarray,blank),axis=0)
+vidarray = np.delete(vidarray, 0, 0)
 
 net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt.txt", "MobileNetSSD_deploy.caffemodel")
 
