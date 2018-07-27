@@ -26,8 +26,8 @@ for i in range(200):#blank_len+car_len):
     frame = vs.read()
     if i >= 20 and i < 50:
     	car[i-20,:,:,:]=frame
-    elif i >= 130:
-        blank[i-130,:,:,:]=frame
+    elif i >= 140:
+        blank[i-140,:,:,:]=frame
 vs.stop()   
 
 car = np.concatenate((car, np.flipud(car)), axis=0)
