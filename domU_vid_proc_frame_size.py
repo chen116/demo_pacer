@@ -132,7 +132,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			if detect_car == 1:
 				frame_size = 300
 			else:
-				frame_size = 400
+				frame_size = 300/2
 			frame = imutils.resize(frame, width=frame_size)
 
 			(startX, startY, endX, endY)=(0,0,0,0) 
