@@ -62,11 +62,13 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 		continue
 	init_video_data_string = ""
 	while len(init_video_data_string.split()) == 0 or init_video_data_string.split()[0] != "init":
-		init_video_data_string = c.read(key_path_hash_frame_number_entry).decode()
+		init_video_data_string = c.read(key_path_hash_box_entry).decode()
 	init_video_data_list = init_video_data_string.split()
 	heavy_workload_frame_size = int(init_video_data_list[1])
 	heavy_workload_frame_size = int(init_video_data_list[2])
 	vidarray_binary = list(map(int, init_video_data_list[3].split(',')))
+
+	
 	vidarray = np.zeros((1,144,176,3),dtype=np.uint8)
 	for binary in vidarray_binary:
 		if binary:
