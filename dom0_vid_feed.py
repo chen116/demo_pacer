@@ -11,8 +11,8 @@ import cv2
 
 import argparse
 ap = argparse.ArgumentParser()
-ap.add_argument("-h", "--heavy-workload-frame-size", type=int, default=300, help="heavy-workload-frame-size")
-ap.add_argument("-l", "--low-workload-frame-size", type=int, default=150, help="low-workload-frame-size")
+ap.add_argument("-hw", "--heavy-workload-frame-size", type=int, default=300, help="heavy-workload-frame-size")
+ap.add_argument("-lw", "--low-workload-frame-size", type=int, default=150, help="low-workload-frame-size")
 ap.add_argument("-v", "--video-sequence", help="low-workload-frame-size")
 args = vars(ap.parse_args())
 
