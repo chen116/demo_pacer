@@ -9,7 +9,8 @@ import imutils
 import time
 import cv2
 
-
+import argparse
+ap = argparse.ArgumentParser()
 ap.add_argument("-mf", "--heavy-workload-frame-size", type=int, default=300, help="heavy-workload-frame-size")
 ap.add_argument("-sf", "--low-workload-frame-size", type=int, default=150, help="low-workload-frame-size")
 ap.add_argument("-vs", "--video-sequence", help="low-workload-frame-size")
