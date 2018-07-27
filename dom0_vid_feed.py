@@ -34,7 +34,7 @@ if args["video_sequence"] is None:
 	vidarray_binary = [1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1]
 else:
 	vidarray_binary = list(map(int, args["video_sequence"]))
-	
+
 vidarray = np.zeros((1,144,176,3),dtype=np.uint8)
 for binary in vidarray_binary:
 	if binary:
@@ -44,7 +44,7 @@ for binary in vidarray_binary:
 vidarray = np.delete(vidarray, 0, 0)
 
 
-video_data_string = str(args["heavy_workload_frame_size"])+" "+args["low_workload_frame_size"]+" "+','.join(str(binary) for binary in vidarray_binary)
+video_data_string = str(args["heavy_workload_frame_size"])+" "+str(args["low_workload_frame_size"])+" "+','.join(str(binary) for binary in vidarray_binary)
 print(video_data_string)
 
 misc = open("./modulized/misc.txt","r").read()
