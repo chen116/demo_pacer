@@ -13,11 +13,6 @@ import cv2
 
 
 
-ap = argparse.ArgumentParser()
-ap.add_argument("-w", "--window", type=int, default=2, help="window size")
-args = vars(ap.parse_args())
-
-
 vs= FileVideoStream("rollcar.3gp").start()
 time.sleep(1.0)
 car = np.zeros((30,144,176,3),dtype=np.uint8)
@@ -29,26 +24,16 @@ for i in range(200):#blank_len+car_len):
     elif i >= 140:
         blank[i-140,:,:,:]=frame
 vs.stop()   
-
 car = np.concatenate((car, np.flipud(car)), axis=0)
-# vidarray_binary = [1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1]
-# vidarray = np.zeros((1,144,176,3),dtype=np.uint8)
-# for binary in vidarray_binary:
-# 	if binary:
-# 		vidarray = np.concatenate((vidarray,car),axis=0)
-# 	else:
-# 		vidarray = np.concatenate((vidarray,blank),axis=0)
-# vidarray = np.delete(vidarray, 0, 0)
 
 net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt.txt", "MobileNetSSD_deploy.caffemodel")
-
 
 import heartbeat
 import host_guest_comm
 
 window_size_hr=5#
 hb = heartbeat.Heartbeat(1024,window_size_hr,100,"vic.log",10,100)
-monitoring_items = ["heart_rate","sampling_period"]
+monitoring_items = ["heart_rate","frame_size"]
 comm = host_guest_comm.DomU(monitoring_items)
 
 heavy_workload_frame_size = 300
@@ -68,7 +53,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	heavy_workload_frame_size = int(init_video_data_list[2])
 	vidarray_binary = list(map(int, init_video_data_list[3].split(',')))
 
-	
+
 	vidarray = np.zeros((1,144,176,3),dtype=np.uint8)
 	for binary in vidarray_binary:
 		if binary:
@@ -83,12 +68,11 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
 	c.write(key_path_hash_frame_number_entry,('ready').encode())
 	frame_number_entry = "init"
-	prev_frame = -1
+	prev_frame_num = -1
 	self_cnt = 0
-	sampling_period = int(window_size_hr/2)
-	detect_car = 1
-	prev_detect_car = detect_car
-	prev_sampling_period = sampling_period
+	frame_size = vidarray_binary[0]
+	detect_car = vidarray_binary[0]
+	prev_frame_size = frame_size
 	print("Dom", domu_id.decode(), "start...")
 	while frame_number_entry != "done":
 		frame_number_entry = c.read(key_path_hash_frame_number_entry).decode()
@@ -96,7 +80,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			frame_num = int(frame_number_entry)
 		except:
 			frame_num = -1
-		if frame_num > -1 and frame_num>prev_frame:
+		if frame_num > -1 and frame_num>prev_frame_num:
 			frame = vidarray[frame_num]
 			if detect_car == 1:
 				frame_size = 300
@@ -116,39 +100,18 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 					if confidence > 0.5:
 						box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
 						(startX, startY, endX, endY) = box.astype("int")
-
-
-
-				# if sum((startX, startY, endX, endY)) > 0 :
-				# 	detect_car = 1
-				# else:
-				# 	detect_car = 0
-				# if prev_detect_car!=detect_car and self_cnt%window_size_hr==0:
-				# 	if detect_car:
-				# 		sampling_period = int(window_size_hr/2)
-				# 	else:
-				# 		sampling_period = window_size_hr
-				# 	prev_detect_car=detect_car
-				# 	print("detect car:" ,detect_car)
-				# 	comm.write("frame_size",sampling_period)
-
-
 				if sum((startX, startY, endX, endY)) > 0 :
-					sampling_period = int(window_size_hr/2)
 					detect_car = 1
 				else:
 					detect_car = 0
-					sampling_period = int(window_size_hr/2)
-					
 				c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
-			prev_frame = frame_num
+			prev_frame_num = frame_num
 
 			hb.heartbeat_beat()
-			# if self_cnt%sampling_period==0 and self_cnt>window_size_hr:
 			comm.write("heart_rate", hb.get_instant_heartrate())
-			if prev_sampling_period!=sampling_period and self_cnt%sampling_period==0 :
-				prev_sampling_period=sampling_period
-				comm.write("sampling_period",sampling_period)
+			if prev_frame_size != frame_size:
+				prev_frame_size = frame_size
+				comm.write("frame_size",frame_size)
 			self_cnt+=1
 
 
