@@ -2,42 +2,42 @@ import pprint
 import subprocess
 
 
-def update_domu_info(shared_data, domuid):
-    def update_single_vcpu_info(line):
-        single_cpu_info={}
-        pcpu = line[3]
-        if pcpu.isdigit():
-            single_cpu_info['pcpu']=int(pcpu)
-        else:
-            single_cpu_info['pcpu']=-1
-        pcpu_pin = line[6]
-        single_cpu_info['pcpu_pin']=pcpu_pin   
-        return single_cpu_info
+# def update_domu_info(shared_data, domuid):
+#     def update_single_vcpu_info(line):
+#         single_cpu_info={}
+#         pcpu = line[3]
+#         if pcpu.isdigit():
+#             single_cpu_info['pcpu']=int(pcpu)
+#         else:
+#             single_cpu_info['pcpu']=-1
+#         pcpu_pin = line[6]
+#         single_cpu_info['pcpu_pin']=pcpu_pin   
+#         return single_cpu_info
 
-    out =  subprocess.check_output(['xl', 'vcpu-list',domuid]).decode().split('\n')
-    out=out[1:-1]
-    cnt=0
-    for lines in out:
-        line = lines.split()
-        shared_data[domuid][cnt]=update_single_vcpu_info(line)
-        cnt+=1
+#     out =  subprocess.check_output(['xl', 'vcpu-list',domuid]).decode().split('\n')
+#     out=out[1:-1]
+#     cnt=0
+#     for lines in out:
+#         line = lines.split()
+#         shared_data[domuid][cnt]=update_single_vcpu_info(line)
+#         cnt+=1
 
-    if domuid in shared_data['credit']:
-        out =  subprocess.check_output(['xl', 'sched-credit','-d',domuid]).decode().split('\n')
-        out=out[2:-1]
-        for lines in out:
-            line = lines.split()
-            for vcpu in shared_data[domuid]:
-                vcpu['w']=int(line[2])
-                vcpu['c']=int(line[3])
-    else:
-        out =  subprocess.check_output(['xl', 'sched-rtds','-d',domuid,'all']).decode().split('\n')
-        out=out[1:-1]
+#     if domuid in shared_data['credit']:
+#         out =  subprocess.check_output(['xl', 'sched-credit','-d',domuid]).decode().split('\n')
+#         out=out[2:-1]
+#         for lines in out:
+#             line = lines.split()
+#             for vcpu in shared_data[domuid]:
+#                 vcpu['w']=int(line[2])
+#                 vcpu['c']=int(line[3])
+#     else:
+#         out =  subprocess.check_output(['xl', 'sched-rtds','-d',domuid,'all']).decode().split('\n')
+#         out=out[1:-1]
 
-        for lines in out:
-            line = lines.split()
-            shared_data[domuid][int(line[2])]['p']=int(line[3])
-            shared_data[domuid][int(line[2])]['b']=int(line[4])   
+#         for lines in out:
+#             line = lines.split()
+#             shared_data[domuid][int(line[2])]['p']=int(line[3])
+#             shared_data[domuid][int(line[2])]['b']=int(line[4])   
 
 
 
@@ -106,91 +106,91 @@ def get_global_info():
     pp.pprint(shared_data)
     return shared_data
 
-def set_vcpu(domuid,num_vcpus):
-    proc = subprocess.Popen(['xl','vcpu-set',str(domuid),str(num_vcpus)])
+# def set_vcpu(domuid,num_vcpus):
+#     proc = subprocess.Popen(['xl','vcpu-set',str(domuid),str(num_vcpus)])
 
-def set_sched(domuids,sched):
-    if sched==0: # switching to credit
-        for domuid in domuids:
-            tmp_cmd=['xl','vcpu-pin',domuid,'all','all','all']
-            proc = subprocess.call(tmp_cmd)
+# def set_sched(domuids,sched):
+#     if sched==0: # switching to credit
+#         for domuid in domuids:
+#             tmp_cmd=['xl','vcpu-pin',domuid,'all','all','all']
+#             proc = subprocess.call(tmp_cmd)
             
-        tmp_cmd = ['xl', 'cpupool-cpu-remove', 'Pool-0', '6-15']
-        proc = subprocess.call(tmp_cmd)
+#         tmp_cmd = ['xl', 'cpupool-cpu-remove', 'Pool-0', '6-15']
+#         proc = subprocess.call(tmp_cmd)
         
-        tmp_cmd = ['xl', 'cpupool-cpu-add', 'credit', '6-15']
-        proc = subprocess.call(tmp_cmd)
+#         tmp_cmd = ['xl', 'cpupool-cpu-add', 'credit', '6-15']
+#         proc = subprocess.call(tmp_cmd)
                 
-        for domuid in domuids:
-            tmp_cmd=['xl','cpupool-migrate',domuid,'credit']
-            proc = subprocess.call(tmp_cmd)
+#         for domuid in domuids:
+#             tmp_cmd=['xl','cpupool-migrate',domuid,'credit']
+#             proc = subprocess.call(tmp_cmd)
                
-        for domuid in domuids:
-            tmp_cmd=['xl','vcpu-pin',domuid,'all','6-15','6-15']
-            proc = subprocess.call(tmp_cmd)
+#         for domuid in domuids:
+#             tmp_cmd=['xl','vcpu-pin',domuid,'all','6-15','6-15']
+#             proc = subprocess.call(tmp_cmd)
                
-        # cmd=[]
-        # for domuid in domuids:
-        #     tmp_cmd=['xl','vcpu-pin',domuid,'all','all','all','&&']
-        #     for tmp in tmp_cmd:
-        #         cmd.append(tmp)
-        # tmp_cmd = ['xl', 'cpupool-cpu-remove', 'Pool-0', '6-15','&&']
-        # for tmp in tmp_cmd:
-        #     cmd.append(tmp)
-        # tmp_cmd = ['xl', 'cpupool-cpu-add', 'credit', '6-15','&&']
-        # for tmp in tmp_cmd:
-        #     cmd.append(tmp)
-        # for domuid in domuids:
-        #     tmp_cmd=['xl','cpupool-migrate',domuid,'credit','&&']
-        #     for tmp in tmp_cmd:
-        #         cmd.append(tmp)
-        # for domuid in domuids:
-        #     tmp_cmd=['xl','vcpu-pin',domuid,'all','6-15','6-15','&&']
-        #     for tmp in tmp_cmd:
-        #         cmd.append(tmp)
-        # cmd=cmd[:-1]
-        # print(cmd)
-        # proc = subprocess.Popen(cmd, shell=True)
-    else:
-        for domuid in domuids:
-            tmp_cmd=['xl','vcpu-pin',domuid,'all','all','all']
-            proc = subprocess.call(tmp_cmd)
+#         # cmd=[]
+#         # for domuid in domuids:
+#         #     tmp_cmd=['xl','vcpu-pin',domuid,'all','all','all','&&']
+#         #     for tmp in tmp_cmd:
+#         #         cmd.append(tmp)
+#         # tmp_cmd = ['xl', 'cpupool-cpu-remove', 'Pool-0', '6-15','&&']
+#         # for tmp in tmp_cmd:
+#         #     cmd.append(tmp)
+#         # tmp_cmd = ['xl', 'cpupool-cpu-add', 'credit', '6-15','&&']
+#         # for tmp in tmp_cmd:
+#         #     cmd.append(tmp)
+#         # for domuid in domuids:
+#         #     tmp_cmd=['xl','cpupool-migrate',domuid,'credit','&&']
+#         #     for tmp in tmp_cmd:
+#         #         cmd.append(tmp)
+#         # for domuid in domuids:
+#         #     tmp_cmd=['xl','vcpu-pin',domuid,'all','6-15','6-15','&&']
+#         #     for tmp in tmp_cmd:
+#         #         cmd.append(tmp)
+#         # cmd=cmd[:-1]
+#         # print(cmd)
+#         # proc = subprocess.Popen(cmd, shell=True)
+#     else:
+#         for domuid in domuids:
+#             tmp_cmd=['xl','vcpu-pin',domuid,'all','all','all']
+#             proc = subprocess.call(tmp_cmd)
             
-        for domuid in domuids:
-            tmp_cmd=['xl','cpupool-migrate',domuid,'Pool-0']
-            proc = subprocess.call(tmp_cmd)
+#         for domuid in domuids:
+#             tmp_cmd=['xl','cpupool-migrate',domuid,'Pool-0']
+#             proc = subprocess.call(tmp_cmd)
             
-        tmp_cmd = ['xl', 'cpupool-cpu-remove', 'credit', '6-15']
-        proc = subprocess.call(tmp_cmd)
+#         tmp_cmd = ['xl', 'cpupool-cpu-remove', 'credit', '6-15']
+#         proc = subprocess.call(tmp_cmd)
         
-        tmp_cmd = ['xl', 'cpupool-cpu-add', 'Pool-0', '6-15']
-        proc = subprocess.call(tmp_cmd)
+#         tmp_cmd = ['xl', 'cpupool-cpu-add', 'Pool-0', '6-15']
+#         proc = subprocess.call(tmp_cmd)
         
-        for domuid in domuids:
-            tmp_cmd=['xl','vcpu-pin',domuid,'all','6-15','6-15']
-            proc = subprocess.call(tmp_cmd)
+#         for domuid in domuids:
+#             tmp_cmd=['xl','vcpu-pin',domuid,'all','6-15','6-15']
+#             proc = subprocess.call(tmp_cmd)
             
-        # cmd=[]
-        # for domuid in domuids:
-        #     tmp_cmd=['xl','vcpu-pin',domuid,'all','all','all','&&']
-        #     for tmp in tmp_cmd:
-        #         cmd.append(tmp)
-        # for domuid in domuids:
-        #     tmp_cmd=['xl','cpupool-migrate',domuid,'Pool-0','&&']
-        #     for tmp in tmp_cmd:
-        #         cmd.append(tmp)
-        # tmp_cmd = ['xl', 'cpupool-cpu-remove', 'credit', '6-15','&&']
-        # for tmp in tmp_cmd:
-        #     cmd.append(tmp)
-        # tmp_cmd = ['xl', 'cpupool-cpu-add', 'Pool-0', '6-15','&&']
-        # for tmp in tmp_cmd:
-        #     cmd.append(tmp)
-        # for domuid in domuids:
-        #     tmp_cmd=['xl','vcpu-pin',domuid,'all','6-15','6-15','&&']
-        #     for tmp in tmp_cmd:
-        #         cmd.append(tmp)
-        # cmd=cmd[:-1]
-        # proc = subprocess.Popen(cmd, shell=True)
+#         # cmd=[]
+#         # for domuid in domuids:
+#         #     tmp_cmd=['xl','vcpu-pin',domuid,'all','all','all','&&']
+#         #     for tmp in tmp_cmd:
+#         #         cmd.append(tmp)
+#         # for domuid in domuids:
+#         #     tmp_cmd=['xl','cpupool-migrate',domuid,'Pool-0','&&']
+#         #     for tmp in tmp_cmd:
+#         #         cmd.append(tmp)
+#         # tmp_cmd = ['xl', 'cpupool-cpu-remove', 'credit', '6-15','&&']
+#         # for tmp in tmp_cmd:
+#         #     cmd.append(tmp)
+#         # tmp_cmd = ['xl', 'cpupool-cpu-add', 'Pool-0', '6-15','&&']
+#         # for tmp in tmp_cmd:
+#         #     cmd.append(tmp)
+#         # for domuid in domuids:
+#         #     tmp_cmd=['xl','vcpu-pin',domuid,'all','6-15','6-15','&&']
+#         #     for tmp in tmp_cmd:
+#         #         cmd.append(tmp)
+#         # cmd=cmd[:-1]
+#         # proc = subprocess.Popen(cmd, shell=True)
 
 
 
