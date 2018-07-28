@@ -21,7 +21,7 @@ ap = argparse.ArgumentParser()
 # ap.add_argument("-t", "--timeslice",type=int, default=10000, help="sched quantum")
 ap.add_argument("-f", "--fps", type=float, default=10, help="target fps")
 ap.add_argument("-a1", "--algo1", type=int, default=4, help="algorithm for VM1")
-ap.add_argument("-s", "--static-alloc", type=int, default=10, help="static utilization percentage")
+ap.add_argument("-s", "--static-alloc", type=int, default=20, help="static utilization percentage(%)")
 ap.add_argument("-a2", "--algo2", type=int, default=0, help="algorithm for VM2")
 args = vars(ap.parse_args())
 
@@ -168,7 +168,7 @@ for domuid in domUs.domu_ids:
 	if domuid in shared_data['credit']:
 		xen_interface.sched_credit(domuid,timeslice_us/2)
 	else:	
-		xen_interface.sched_rtds(domuid,timeslice_us,timeslice_us/2,[])
+		xen_interface.sched_rtds(domuid,timeslice_us,timeslice_us*args["static_alloc"]/100,[])
 
 
 
