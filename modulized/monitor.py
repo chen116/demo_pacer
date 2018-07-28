@@ -165,13 +165,12 @@ threads = []
 shared_data = xen_interface.get_global_info()
 
 for domuid in domUs.domu_ids:
-	rtxen_or_credit="rtxen"
 	if domuid in shared_data['credit']:
-		rtxen_or_credit="credit"
-	if rtxen_or_credit == "credit":
-		xen_interface.sched_credit(domuid,timeslice_us*50/100)
+		xen_interface.sched_credit(domuid,timeslice_us/2)
 	else:	
 		xen_interface.sched_rtds(domuid,timeslice_us,timeslice_us/2,[])
+
+
 
 shared_data = xen_interface.get_global_info()
 shared_data['pass_val']=[0.1,0.2]

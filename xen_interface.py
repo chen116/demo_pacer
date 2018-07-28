@@ -65,8 +65,8 @@ def get_global_info():
 
 
 
-    pp = pprint.PrettyPrinter(indent=2)
-    pp.pprint(shared_data)
+    # pp = pprint.PrettyPrinter(indent=2)
+    # pp.pprint(shared_data)
     return shared_data
 
 
