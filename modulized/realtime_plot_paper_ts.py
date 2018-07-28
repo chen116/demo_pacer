@@ -47,11 +47,11 @@ def animate2(i):
     minmax = open("misc.txt","r").read()
     dataArray = pullData.split('\n')
     minmaxArray = minmax.split('\n')
-    min_max=[]
+    VMs_id=[]
     for eachLine in minmaxArray:
         if len(eachLine)>1:
             line = eachLine.split()
-            min_max.append(float(line[1]))
+            VMs_id.append(float(line[1]))
     time_start=0
     time_end=0
 
@@ -100,7 +100,7 @@ def animate2(i):
             time_end = float(line[-1])
 
             index=1
-            if int(line[0])==min_max[-1]:
+            if int(line[0])==VMs_id[-1]:
                 index = 0
             # index=int(line[0])-23
             if len(line)==3+1:
