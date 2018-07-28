@@ -21,7 +21,7 @@ ap = argparse.ArgumentParser()
 # ap.add_argument("-t", "--timeslice",type=int, default=10000, help="sched quantum")
 ap.add_argument("-f", "--fps", type=float, default=10, help="target fps")
 ap.add_argument("-a", "--algo", type=int, default=4, help="algorithm for both")
-ap.add_argument("-s", "--static-alloc", type=int, default=50, help="static utilization percentage")
+ap.add_argument("-s", "--static-alloc", type=int, default=20, help="static utilization percentage")
 args = vars(ap.parse_args())
 
 
