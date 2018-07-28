@@ -18,8 +18,8 @@ with open("data.txt", "w") as myfile:
 import argparse
 ap = argparse.ArgumentParser()
 # ap.add_argument("-d", "--domUs", help="domUs id,sperate by comma")
-ap.add_argument("-t", "--timeslice",type=int, default=10000, help="sched quantum")
-ap.add_argument("-f", "--fps", type=float, default=30, help="target fps")
+# ap.add_argument("-t", "--timeslice",type=int, default=10000, help="sched quantum")
+ap.add_argument("-f", "--fps", type=float, default=10, help="target fps")
 ap.add_argument("-a", "--algo", type=int, default=4, help="algorithm for both")
 ap.add_argument("-s", "--static-alloc", type=int, default=10, help="static utilization percentage")
 args = vars(ap.parse_args())
@@ -51,7 +51,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 
 domUs = host_guest_comm.Dom0(monitoring_items,monitoring_domU)
 
-timeslice_us=args["timeslice"]
+timeslice_us=10000#args["timeslice"]
 min_heart_rate = float(args["fps"])
 max_heart_rate = float(args["fps"])*1.5
 
@@ -193,6 +193,8 @@ with open("misc.txt", "w") as myfile:
 	myfile.write("min "+str(args["fps"])+"\n")
 	myfile.write("max "+str(args["fps"])+"\n")
 	myfile.write("timeslice_us "+str(timeslice_us/1000)+"\n")
+	myfile.write("VM1 "+str(monitoring_domU[0])+"\n")
+
 
 
 
