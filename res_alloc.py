@@ -99,7 +99,7 @@ class ResourceAllocation:
 		elif self.algo==4:
 			# aimd_range
 			alpha=3.5
-			beta=.9
+			beta=.95
 			free = self.timeslice_us-cur_bw
 			if(heart_rate<self.min_heart_rate):
 				if cur_bw<self.timeslice_us-self.minn:
