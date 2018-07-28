@@ -179,7 +179,7 @@ shared_data['last_time_val']=0
 shared_data['contention_time_passed']=0
 pp = pprint.PrettyPrinter(indent=2)
 pp.pprint(shared_data)
-
+print('')
 print('Experiment 2: Pacer vs Static')
 print('monitoring:')
 for i in range(2):
