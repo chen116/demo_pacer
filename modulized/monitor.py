@@ -180,6 +180,7 @@ shared_data['contention_time_passed']=0
 pp = pprint.PrettyPrinter(indent=2)
 pp.pprint(shared_data)
 
+print('Experiment 2: Pacer vs Static')
 print('monitoring:')
 for i in range(2):
 	vmstr = 'VM'+str(i+1)
@@ -237,4 +238,5 @@ shared_data_clean_up = xen_interface.get_global_info()
 # for domuid in shared_data['credit']:
 # 	xen_interface.sched_credit(domuid,default_bw)
 print("Exiting the Monitor, total",threads_cnt,"monitoring threads")
+print('Exiting Experiment 2: Pacer vs Static')
 
