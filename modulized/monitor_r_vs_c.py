@@ -168,9 +168,9 @@ for domuid in domUs.domu_ids:
 	if domuid in shared_data['credit']:
 		rtxen_or_credit="credit"
 	if rtxen_or_credit == "credit":
-		xen_interface.sched_credit(domuid,timeslice_us*args["static_alloc"]/100)
+		xen_interface.sched_credit(domuid,timeslice_us/2)
 	else:	
-		xen_interface.sched_rtds(domuid,timeslice_us,timeslice_us*args["static_alloc"]/100,[])
+		xen_interface.sched_rtds(domuid,timeslice_us,timeslice_us/2,[])
 
 shared_data = xen_interface.get_global_info()
 shared_data['pass_val']=[0.1,0.2]
@@ -184,9 +184,9 @@ print('monitoring:')
 for i in range(2):
 	vmstr = 'VM'+str(i+1)
 	if monitoring_domU[i] in shared_data['rtxen']:
-		print("	rtxen",vmstr,'with domU ID:',monitoring_domU[i],"dummy domU d1 with ID",dummy_domU[i])
+		print("	rtxen",vmstr,'with domU ID:',monitoring_domU[i],"and dummy domU d1 with ID",dummy_domU[i])
 	else:
-		print("	credit",vmstr,'with domU ID:',monitoring_domU[i],"dummy domU d2 with ID",dummy_domU[i])
+		print("	credit",vmstr,'with domU ID:',monitoring_domU[i],"and dummy domU d2 with ID",dummy_domU[i])
 
 
 with open("misc.txt", "w") as myfile:
