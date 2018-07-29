@@ -75,13 +75,15 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	(startX, startY, endX, endY)=(0,0,0,0) 
 	c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
 	c.write(key_path_hash_frame_number_entry,('ready').encode())
+	print("Dom", domu_id.decode(), "synched with Dom0...")
 
+	
 	frame_number_entry = "init"
 	prev_frame_num = -1
 	frame_size = vidarray_binary[0]
 	detect_car = vidarray_binary[0]
 	prev_frame_size = 0
-	print("Dom", domu_id.decode(), "synched with Dom0...")
+	
 
 	# get frame numbers from dom0 to run object detection
 	while frame_number_entry != "done":

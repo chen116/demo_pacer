@@ -120,6 +120,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 		while time.time()- tn < 1/fps_val:
 			continue
 		font_size=-1
+		# get boxes from domUs if any, and draw the boxes on the frame 
 		for domuid in domu_ids:
 			key_path_hash=('/local/domain/'+domuid+'/box_entry').encode()
 			try:
@@ -137,7 +138,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 		cv2.imshow("Frame", frame)
 		key = cv2.waitKey(1) & 0xFF
 
-
+	# telling DomUs application is done
 	for domuid in domu_ids:
 		key_path_hash=('/local/domain/'+domuid+'/frame_number_entry').encode()
 		c.write(key_path_hash,"done".encode()) # write in frame number	
