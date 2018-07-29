@@ -45,15 +45,7 @@ class AdapPID:
 			self.start=1
 		else:
 			self.delta_time = current_time - self.last_time
-
-
-
-		# if self.start==0:
-		# 	self.output = self.p() + self.i()
-		# 	self.start=1
-		# else:
-
-		self.output = self.p() + self.i() + self.d()
+		self.output = self.p() + self.i() 
 		self.last_time = current_time
 
 		return self.output
@@ -71,13 +63,7 @@ class AdapPID:
 		self.isn1sn1+=i*self.delta_time
 		# print(self.isn1sn1*y2)
 		return self.isn1sn1*y2
-	def d(self):
-		self.ds1=self.err/self.delta_time
-		y3 = self.ds1
-		d = self.gamma * self.err * y3 
-		self.dsn1 += d*self.delta_time
-		# print(self.dsn1*y3)
-		return self.dsn1*y3
+
 
 
 
