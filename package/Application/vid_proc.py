@@ -10,11 +10,10 @@ import imutils
 import time
 import cv2
 import sys
-sys.path.insert(0, '../Pacer')
 
 
 
-
+# load video and create video 
 vs= FileVideoStream("rollcar.3gp").start()
 time.sleep(1.0)
 car = np.zeros((30,144,176,3),dtype=np.uint8)
@@ -28,6 +27,7 @@ for i in range(200):
 vs.stop()   
 car = np.concatenate((car, np.flipud(car)), axis=0)
 
+# prepare object detation neural network
 net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt.txt", "MobileNetSSD_deploy.caffemodel")
 
 import heartbeat
