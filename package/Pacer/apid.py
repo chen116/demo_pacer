@@ -53,7 +53,7 @@ class AdapPID:
 		# 	self.start=1
 		# else:
 
-		self.output = self.p() + self.i() + self.p()
+		self.output = self.p() + self.i() + self.d()
 		self.last_time = current_time
 
 		return self.output
