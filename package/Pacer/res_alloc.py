@@ -22,43 +22,9 @@ class ResourceAllocation:
 		if self.algo==0:
 			# static allocation
 			cur_bw = int(self.timeslice_us*self.static_alloc/100)
-		elif self.algo==1:
-			# amid - target to stay at single value
-			alpha=1
-			beta=.9
-			free = self.timeslice_us-cur_bw
-			if(heart_rate<self.mid_heart_rate):
-				if cur_bw<self.timeslice_us-self.step_size:
-					free=free*beta
-					cur_bw=self.timeslice_us-free
-				else:
-					cur_bw=self.timeslice_us-self.step_size
-			if(heart_rate>self.mid_heart_rate):
-				if cur_bw>self.step_size:
-					free+=alpha*self.step_size
-					cur_bw=self.timeslice_us-free
-			cur_bw=int(cur_bw)
+
 
 		elif self.algo==1:
-			# amid_range - target to stay at a range
-			alpha=3.5
-			beta=.95
-			free = self.timeslice_us-cur_bw
-			if(heart_rate<self.min_heart_rate):
-				if cur_bw<self.timeslice_us-self.step_size:
-					free=free*beta
-					cur_bw=self.timeslice_us-free
-				else:
-					cur_bw=self.timeslice_us-self.step_size
-			if(heart_rate>self.max_heart_rate):
-				if cur_bw>self.step_size:
-					free+=alpha*self.step_size
-					cur_bw=self.timeslice_us-free
-			cur_bw=int(cur_bw)
-
-
-
-		elif self.algo==2:
 			# linear -- slowly decrease to target value once hearbeat is abover min_heart_rate
 			if(heart_rate<self.min_heart_rate):
 				if cur_bw<self.timeslice_us-self.step_size:
@@ -76,7 +42,43 @@ class ResourceAllocation:
 				self.target_reached_cnt=0
 			cur_bw=int(cur_bw)
 
+
+		elif self.algo==2:
+			# amid - target to stay at single value
+			alpha=1
+			beta=.9
+			free = self.timeslice_us-cur_bw
+			if(heart_rate<self.mid_heart_rate):
+				if cur_bw<self.timeslice_us-self.step_size:
+					free=free*beta
+					cur_bw=self.timeslice_us-free
+				else:
+					cur_bw=self.timeslice_us-self.step_size
+			if(heart_rate>self.mid_heart_rate):
+				if cur_bw>self.step_size:
+					free+=alpha*self.step_size
+					cur_bw=self.timeslice_us-free
+			cur_bw=int(cur_bw)
+
 		elif self.algo==3:
+			# amid_range - target to stay at a range
+			alpha=3.5
+			beta=.95
+			free = self.timeslice_us-cur_bw
+			if(heart_rate<self.min_heart_rate):
+				if cur_bw<self.timeslice_us-self.step_size:
+					free=free*beta
+					cur_bw=self.timeslice_us-free
+				else:
+					cur_bw=self.timeslice_us-self.step_size
+			if(heart_rate>self.max_heart_rate):
+				if cur_bw>self.step_size:
+					free+=alpha*self.step_size
+					cur_bw=self.timeslice_us-free
+			cur_bw=int(cur_bw)
+
+
+		elif self.algo==4:
 			# apid algo
 			output = self.pid.update(heart_rate)
 			# output+=self.timeslice_us/2
