@@ -47,7 +47,7 @@ vidarray = np.delete(vidarray, 0, 0)
 init_video_data_string = "init"+" "+str(args["heavy_workload_frame_size"])+" "+str(args["light_workload_frame_size"])+" "+','.join(str(binary) for binary in vidarray_binary)
 print(init_video_data_string)
 
-misc = open("./Pacer/misc.txt","r").read()
+misc = open("../Pacer/misc.txt","r").read()
 fps_val = float(misc.split('\n')[0].split()[1])*2
 
 
