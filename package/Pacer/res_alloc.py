@@ -16,47 +16,6 @@ class ResourceAllocation:
 		self.domuid = domuid
 		self.other_domuid = other_domuid
 		self.rtxen_or_credit = rtxen_or_credit
-	def exec_sharing(self,cur_bw):
-		other_info = self.shared_data[self.other_domuid]
-		if self.rtxen_or_credit=="rtxen":
-			for vcpu in other_info:
-				if vcpu['pcpu']!=-1:
-					other_cur_bw=vcpu['b']		
-		elif self.rtxen_or_credit=="credit":
-			for vcpu in other_info:
-				if vcpu['pcpu']!=-1:
-					other_cur_bw=vcpu['w']
-
-		if cur_bw+other_cur_bw>self.timeslice_us:
-			domu_index_in_pass_val = 0
-			if self.domuid>self.other_domuid:
-				domu_index_in_pass_val = 1
-			my_pass_val = self.shared_data['pass_val'][domu_index_in_pass_val]
-			other_pass_val = self.shared_data['pass_val'][(domu_index_in_pass_val+1)%2]
-			last_time = self.shared_data['last_time_val']
-			now_time = time.time()
-			if last_time==0:
-				last_time = now_time
-				self.shared_data['last_time_val'] = now_time
-			self.shared_data["contention_time_passed"]+=now_time-last_time
-			self.shared_data['last_time_val'] = now_time
-			if my_pass_val<=other_pass_val:
-				other_cur_bw=self.timeslice_us-cur_bw
-			else:
-				cur_bw=self.timeslice_us-other_cur_bw
-				self.pid.reset()
-			process_unit_time=2.5
-			if self.shared_data["contention_time_passed"]>=process_unit_time:# and int(self.shared_data["contention_time_passed"])%5==0:
-				self.shared_data["contention_time_passed"]=0
-				if my_pass_val<=other_pass_val:
-					self.shared_data['pass_val'][domu_index_in_pass_val]+=self.shared_data['stride_val'][domu_index_in_pass_val]
-				else:
-					self.shared_data['pass_val'][(domu_index_in_pass_val+1)%2]+=self.shared_data['stride_val'][(domu_index_in_pass_val+1)%2]
-				with open("data.txt", "a") as myfile:
-					myfile.write(self.domuid+" "+self.domuid+" stride turnover len 6"+ " "+str(now_time)+"\n")							
-		else:
-			self.shared_data['last_time_val'] = time.time()
-		return (cur_bw,other_cur_bw)
 
 	def exec_allocation(self,heart_rate,cur_bw):
 
@@ -139,4 +98,45 @@ class ResourceAllocation:
 			cur_bw = self.timeslice_us-self.step_size
 		return(int(cur_bw))
 
+	def exec_sharing(self,cur_bw):
+		other_info = self.shared_data[self.other_domuid]
+		if self.rtxen_or_credit=="rtxen":
+			for vcpu in other_info:
+				if vcpu['pcpu']!=-1:
+					other_cur_bw=vcpu['b']		
+		elif self.rtxen_or_credit=="credit":
+			for vcpu in other_info:
+				if vcpu['pcpu']!=-1:
+					other_cur_bw=vcpu['w']
+
+		if cur_bw+other_cur_bw>self.timeslice_us:
+			domu_index_in_pass_val = 0
+			if self.domuid>self.other_domuid:
+				domu_index_in_pass_val = 1
+			my_pass_val = self.shared_data['pass_val'][domu_index_in_pass_val]
+			other_pass_val = self.shared_data['pass_val'][(domu_index_in_pass_val+1)%2]
+			last_time = self.shared_data['last_time_val']
+			now_time = time.time()
+			if last_time==0:
+				last_time = now_time
+				self.shared_data['last_time_val'] = now_time
+			self.shared_data["contention_time_passed"]+=now_time-last_time
+			self.shared_data['last_time_val'] = now_time
+			if my_pass_val<=other_pass_val:
+				other_cur_bw=self.timeslice_us-cur_bw
+			else:
+				cur_bw=self.timeslice_us-other_cur_bw
+				self.pid.reset()
+			process_unit_time=5
+			if self.shared_data["contention_time_passed"]>=process_unit_time:# and int(self.shared_data["contention_time_passed"])%5==0:
+				self.shared_data["contention_time_passed"]=0
+				if my_pass_val<=other_pass_val:
+					self.shared_data['pass_val'][domu_index_in_pass_val]+=self.shared_data['stride_val'][domu_index_in_pass_val]
+				else:
+					self.shared_data['pass_val'][(domu_index_in_pass_val+1)%2]+=self.shared_data['stride_val'][(domu_index_in_pass_val+1)%2]
+				with open("data.txt", "a") as myfile:
+					myfile.write(self.domuid+" "+self.domuid+" stride turnover len 6"+ " "+str(now_time)+"\n")							
+		else:
+			self.shared_data['last_time_val'] = time.time()
+		return (cur_bw,other_cur_bw)
 
