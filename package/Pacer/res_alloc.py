@@ -116,7 +116,7 @@ class ResourceAllocation:
 			my_pass_val = self.shared_data['pass_val'][domu_index_in_pass_val]
 			other_pass_val = self.shared_data['pass_val'][(domu_index_in_pass_val+1)%2]
 			last_time = self.shared_data['last_time_val']
-			now_time = time.time()
+			now_time = time.clock()
 			if last_time==0:
 				last_time = now_time
 				self.shared_data['last_time_val'] = now_time
