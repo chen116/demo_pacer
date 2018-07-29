@@ -44,7 +44,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	domu_id = c.read("domid".encode())
 	key_path_hash_frame_number_entry=('/local/domain/'+domu_id.decode()+'/frame_number_entry').encode()
 	key_path_hash_box_entry=('/local/domain/'+domu_id.decode()+'/box_entry').encode()
-	print("Dom", domu_id.decode(), "waiting for dom0...")
+	print("Dom", domu_id.decode(), "waiting for Dom0...")
 	while c.read(key_path_hash_frame_number_entry).decode() != "init":
 		continue
 	init_video_data_string = ""

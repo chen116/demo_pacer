@@ -179,7 +179,10 @@ shared_data['contention_time_passed']=0
 pp = pprint.PrettyPrinter(indent=2)
 pp.pprint(shared_data)
 print('')
-print('Experiment 2: Pacer vs Static')
+if (args["algo2"]==0 and args["algo1"]>0) or (args["algo1"]==0 and args["algo2"]>0):
+	print('Experiment 2: Pacer vs Static')
+elif args["algo2"] * args["algo1"] > 0:
+	print('Experiment 3: Pacer under Resoruce Contention')
 print('monitoring:')
 
 for i in range(len(monitoring_domU)):
