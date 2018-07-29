@@ -134,9 +134,9 @@ class ResourceAllocation:
 			cur_bw=int(cur_bw)
 
 		if cur_bw <= self.step_size :
-			cur_bw=self.step_size
+			cur_bw = self.step_size
 		if cur_bw >= self.timeslice_us-self.step_size:
-			cur_bw= self.timeslice_us-self.step_size
+			cur_bw = self.timeslice_us-self.step_size
 		return(int(cur_bw))
 
 
