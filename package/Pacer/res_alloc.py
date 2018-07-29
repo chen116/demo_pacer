@@ -139,6 +139,6 @@ class ResourceAllocation:
 			else:
 				print(self.shared_data["contention_time_passed"])				
 		else:
-			self.shared_data['last_time_val'] = time.time()
+			self.shared_data['last_time_val'] = time.clock()
 		return (cur_bw,other_cur_bw)
 
