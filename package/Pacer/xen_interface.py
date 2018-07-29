@@ -1,7 +1,7 @@
 import pprint
 import subprocess
 
-
+# functions to interactive with xl
 
 
 def get_global_info():

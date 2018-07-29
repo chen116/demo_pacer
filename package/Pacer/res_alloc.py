@@ -17,6 +17,7 @@ class ResourceAllocation:
 		self.other_domuid = other_domuid
 		self.rtxen_or_credit = rtxen_or_credit
 
+	# calcute the cpu resource needed base on current heartbeat
 	def exec_allocation(self,heart_rate,cur_bw):
 
 		if self.algo==0:
@@ -95,7 +96,7 @@ class ResourceAllocation:
 
 
 
-		# force boudary if violate
+		# force boudary if violated
 		if cur_bw <= self.step_size :
 			cur_bw = self.step_size
 		if cur_bw >= self.timeslice_us-self.step_size:
@@ -103,6 +104,7 @@ class ResourceAllocation:
 
 		return(int(cur_bw))
 
+	# force sharing of limited CPU resource between 2VMs
 	def exec_stride_sharing(self,cur_bw,now_time):
 		allowed_processing_time_per_contention=3
 

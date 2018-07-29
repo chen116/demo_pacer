@@ -4,6 +4,9 @@ import time
 
 import numpy as np
 
+
+# PID controller helper for resource allocation
+
 class AdapPID:
 	def __init__(self,goal,init_gamma,min_heart_rate,max_heart_rate):
 		self.goal=goal

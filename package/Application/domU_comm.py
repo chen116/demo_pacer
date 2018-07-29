@@ -1,5 +1,7 @@
 from pyxs import Client
 
+
+# create a object for DomU to send data to Dom0
 class DomU:
 	def __init__(self,keys=['test'],base_path='/local/domain'):
 		self.domu_id=""
@@ -13,7 +15,6 @@ class DomU:
 	def write(self,key='test',val='0'):
 		with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			msg=str(val).encode()
-			# c.write(self.key_path_hash[key],msg)
 			success = False
 			while not success:
 				c.transaction()

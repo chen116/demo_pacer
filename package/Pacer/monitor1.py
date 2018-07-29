@@ -1,9 +1,4 @@
-# with fancy arg, foucsing on just managing 2 vm ( or more if no contention)
-
-# example usage :git pull &&  python3 monitor_dup3.py -d 23,24 -f 10
 import sys
-
-
 import dom0_comm
 import xen_interface
 import threading
@@ -17,8 +12,6 @@ with open("data.txt", "w") as myfile:
 
 import argparse
 ap = argparse.ArgumentParser()
-# ap.add_argument("-d", "--domUs", help="domUs id,sperate by comma")
-# ap.add_argument("-t", "--timeslice",type=int, default=10000, help="sched quantum")
 ap.add_argument("-f", "--fps", type=float, default=10, help="target fps")
 ap.add_argument("-a", "--algo", type=int, default=3, help="algorithm for both")
 ap.add_argument("-s", "--static-alloc", type=int, default=20, help="static utilization percentage")
@@ -30,6 +23,7 @@ monitoring_items = ["heart_rate","frame_size"]
 monitoring_domU = ["VM1_id_placeholder","VM2_id_placeholder"]
 dummy_domU = ["d1_id_placeholder","d2_id_placeholder"]
 
+# find correct domUs id
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	domu_ids=[]
 	all_domuid_ids = []
@@ -48,7 +42,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			dummy_domU[1] = uid
 
 
-
+# create xenstore entry for DomU to write data
 domUs = dom0_comm.Dom0(monitoring_items,monitoring_domU)
 
 timeslice_us=10000#args["timeslice"]
@@ -56,6 +50,7 @@ min_heart_rate = float(args["fps"])
 max_heart_rate = float(args["fps"])*1.5
 
 
+# each thread monitor a VM
 class MonitorThread(threading.Thread):
 	def __init__(self, threadLock,shared_data,domuid,rtxen_or_credit,timeslice_us,min_heart_rate,max_heart_rate,keys=['test'],base_path='/local/domain'):
 		threading.Thread.__init__(self)
@@ -70,11 +65,12 @@ class MonitorThread(threading.Thread):
 		self.threadLock=threadLock
 		self.shared_data=shared_data
 		self.timeslice_us = timeslice_us
-		self.rtxen_or_credit = rtxen_or_credit # 1 is rtds, 0 is credit
+		self.rtxen_or_credit = rtxen_or_credit 
 		self.allocMod = res_alloc.ResourceAllocation(args["static_alloc"],timeslice_us,min_heart_rate,max_heart_rate,self.algo,self.domuid,self.other_domuid,self.shared_data,rtxen_or_credit)
 
 	def run(self):
 		with Client(unix_socket_path="/var/run/xenstored/socket_ro") as c:
+			# watch the xenstore entries and perform different functions accodingly 
 			m = c.monitor()
 			for key in self.keys:
 				tmp_key_path = (self.base_path+'/'+self.domuid+'/'+key).encode()
@@ -86,7 +82,6 @@ class MonitorThread(threading.Thread):
 				msg=c.read(path).decode()
 				self.threadLock.acquire()
 				if "frame_size" in path.decode():
-					# self.allocMod.pid.reset()
 					if msg.isdigit():
 						with open("data.txt", "a") as myfile:
 							myfile.write(self.domuid+" "+(msg)+" frame size"+ " "+str(time.time())+"\n")
@@ -96,13 +91,13 @@ class MonitorThread(threading.Thread):
 						heart_rate = float(msg)
 						self.res_allocat(heart_rate)	
 					except:
-						heart_rate=-1
-					# if heart_rate>-1:
-					# 	self.res_allocat(heart_rate)					
+						heart_rate=-1				
 				self.threadLock.release()
 		return
 
 	def res_allocat(self,heart_rate):
+
+		# get current cpu resource
 		cur_bw = 0
 		myinfo = self.shared_data[self.domuid]
 		if self.rtxen_or_credit=="rtxen":
@@ -114,9 +109,11 @@ class MonitorThread(threading.Thread):
 				if vcpu['pcpu']!=-1:
 					cur_bw=int(vcpu['w'])
 		
+		# calculate next cpu resource assignment
 		cur_bw = self.allocMod.exec_allocation(heart_rate,cur_bw)
 		other_cur_bw = self.timeslice_us - cur_bw
 
+		# assign the new cpu resource to VM
 		other_info = self.shared_data[self.other_domuid]
 		if self.rtxen_or_credit=="rtxen":
 			for vcpu in other_info:
@@ -137,35 +134,23 @@ class MonitorThread(threading.Thread):
 			xen_interface.sched_credit(self.domuid,cur_bw)
 			xen_interface.sched_credit(self.other_domuid,other_cur_bw)
 
-
-
-		# buf=10000
-		# self.shared_data['cnt'] = (self.shared_data['cnt']+1)%buf
+		# write data to data.txt for realtime_plot.py for visulization
 		time_now=str(time.time())
 		info = self.domuid+" "+str(heart_rate)+" hr "+time_now+"\n"
 		place_holder_for_graph = " x x x x x "
 		info += self.domuid + " " +str(cur_bw/self.timeslice_us) + place_holder_for_graph+time_now
-		# info += self.other_domuid+ " "+str(other_cur_bw/self.timeslice_us) + place_holder_for_graph+time_now
 		with open("data.txt", "a") as myfile:
 			myfile.write(info+"\n")
 		return
 
-	# https://xenbits.xen.org/docs/unstable/man/xl.1.html#SCHEDULER-SUBCOMMANDS
-	# cpupool, vcpupin, rtds-budget,period, extratime, vcpu-list
 
 
 
 
-
-
+# initializing data and setup inital cpu assignment
 threadLock = threading.Lock()
 threads = []
 shared_data = xen_interface.get_global_info()
-
-
-
-
-
 for i in range(len(monitoring_domU)):
 	if monitoring_domU[i] in shared_data['rtxen']:
 		xen_interface.sched_rtds(monitoring_domU[i],timeslice_us,timeslice_us/2,[])
@@ -175,7 +160,7 @@ for i in range(len(monitoring_domU)):
 		xen_interface.sched_credit(dummy_domU[i],timeslice_us/2)
 
 
-
+# stdout ready status to inform user
 shared_data = xen_interface.get_global_info()
 pp = pprint.PrettyPrinter(indent=2)
 pp.pprint(shared_data)
@@ -189,7 +174,7 @@ for i in range(2):
 	else:
 		print("	credit",vmstr,'with domU ID=',monitoring_domU[i],", dummy domU d2 with ID=",dummy_domU[i])
 
-
+# write out some init data for realtime_plot.py for visulization and vid_feed.py for fps
 with open("misc.txt", "w") as myfile:
 	myfile.write("minHeartRate "+str(args["fps"])+"\n")
 	myfile.write("maxHeartRate "+str(args["fps"])+"\n")
@@ -202,12 +187,11 @@ with open("misc.txt", "w") as myfile:
 
 
 
-
+# start monitoring thread for each VM
 for domuid in monitoring_domU:
 	rtxen_or_credit="rtxen"
 	if domuid in shared_data['credit']:
 		rtxen_or_credit="credit"
-
 	tmp_thread = MonitorThread(threadLock,shared_data,domuid,rtxen_or_credit,timeslice_us,min_heart_rate,max_heart_rate, monitoring_items)
 	tmp_thread.start()
 	threads.append(tmp_thread)
@@ -220,24 +204,7 @@ threads_cnt=0
 for t in threads:
 	t.join()
 	threads_cnt+=1
-#print('FINAL COUNT:',shared_data['cnt'])
-pp = pprint.PrettyPrinter(indent=2)
 print('Final domUs info:')
-shared_data_clean_up = xen_interface.get_global_info()
-# default_bw=int(timeslice_us/(len(monitoring_domU)))
-
-# for uid in monitoring_domU:
-# 	xen_interface.sched_rtds(int(uid),timeslice_us,default_bw,[])
-
-
-
-
-
-# for domuid in shared_data['rtxen']:
-# 	xen_interface.sched_rtds(domuid,timeslice_us,default_bw,[])
-# xen_interface.sched_credit_timeslice(timeslice_us/1000)
-# for domuid in shared_data['credit']:
-# 	xen_interface.sched_credit(domuid,default_bw)
 print("Exiting the Monitor, total",threads_cnt,"monitoring threads")
 print('Exiting Experiment 1: RT-Xen vs Credit')
 

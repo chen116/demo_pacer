@@ -1,5 +1,5 @@
 from pyxs import Client
-
+# create xenstore entry for DomU to write data
 class Dom0:
 	def __init__(self,keys=['heart_rate'],domu_ids=[],base_path='/local/domain'):
 		self.domu_ids = domu_ids
