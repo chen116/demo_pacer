@@ -99,6 +99,7 @@ class ResourceAllocation:
 		return(int(cur_bw))
 
 	def exec_sharing(self,cur_bw,now_time):
+		allowed_processing_time_per_contention=3
 		other_info = self.shared_data[self.other_domuid]
 		if self.rtxen_or_credit=="rtxen":
 			for vcpu in other_info:
@@ -127,8 +128,7 @@ class ResourceAllocation:
 			else:
 				cur_bw=self.timeslice_us-other_cur_bw
 				self.pid.reset()
-			process_unit_time=3
-			if self.shared_data["contention_time_passed"]>=process_unit_time:# and int(self.shared_data["contention_time_passed"])%5==0:
+			if self.shared_data["contention_time_passed"]>=allowed_processing_time_per_contention:
 				self.shared_data["contention_time_passed"]=0
 				if my_pass_val<=other_pass_val:
 					self.shared_data['pass_val'][domu_index_in_pass_val]+=self.shared_data['stride_val'][domu_index_in_pass_val]
