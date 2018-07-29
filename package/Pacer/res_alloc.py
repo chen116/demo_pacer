@@ -20,10 +20,10 @@ class ResourceAllocation:
 	def exec_allocation(self,heart_rate,cur_bw):
 
 		if self.algo==0:
-			# static 
+			# static allocation
 			cur_bw = int(self.timeslice_us*self.static_alloc/100)
 		elif self.algo==1:
-			# amid_heart_rate
+			# amid - target to stay at single value
 			alpha=1
 			beta=.9
 			free = self.timeslice_us-cur_bw
@@ -56,7 +56,7 @@ class ResourceAllocation:
 
 
 		elif self.algo==4:
-			# aimd
+			# amid - target to stay at a range
 			alpha=3.5
 			beta=.95
 			free = self.timeslice_us-cur_bw
@@ -75,13 +75,13 @@ class ResourceAllocation:
 
 
 		elif self.algo==5:
-			# linear
+			# linear -- slowly decrease to target value once hearbeat is abover min_heart_rate
 			if(heart_rate<self.min_heart_rate):
 				if cur_bw<self.timeslice_us-self.step_size:
 					cur_bw+=self.step_size
-			if(heart_rate>self.max_heart_rate):
-				if cur_bw>self.step_size:
-					cur_bw-=self.step_size
+			# if(heart_rate>self.max_heart_rate):
+			# 	if cur_bw>self.step_size:
+			# 		cur_bw-=self.step_size
 			if heart_rate > self.min_heart_rate:
 				self.target_reached_cnt+=1
 				if self.target_reached_cnt==20:
