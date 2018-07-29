@@ -34,10 +34,6 @@ class AdapPID:
 	def update(self,feedback):
 
 		self.err = self.goal-feedback
-		# if self.err>0:
-		# 	self.err=self.err*1
-		# if abs(self.err)>(self.max_heart_rate-self.min_heart_rate)/2 and self.err<0:
-		# 	self.err=self.err*1.2
 		self.gamma = np.log(abs(self.err)+1)/np.log(self.goal)
 		current_time = time.time()
 		if self.start==0:
@@ -65,20 +61,3 @@ class AdapPID:
 		return self.isn1sn1*y2
 
 
-
-
-# pid = AdapPID(1,0.06)
-# time.sleep(0.02)
-# feedback = 10
-
-# output = 0
-
-# for i in range(1,1000):
-# 	output = pid.update(feedback)
-# 	if i<10:
-# 		feedback = output
-# 	else:
-# 		feedback = output
-# 	print(feedback)
-# 	print(' ')
-# 	time.sleep(0.02)

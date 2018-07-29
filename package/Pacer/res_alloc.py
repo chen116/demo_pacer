@@ -39,24 +39,8 @@ class ResourceAllocation:
 					cur_bw=self.timeslice_us-free
 			cur_bw=int(cur_bw)
 
-
-		elif self.algo==3:
-			# apid algo
-			output = self.pid.update(heart_rate)
-			# output+=self.timeslice_us/2
-			if self.pid.start>0:
-				tmp_cur_bw = output+cur_bw #int(output*cur_bw+cur_bw)-int(output*cur_bw+cur_bw)%100
-				if tmp_cur_bw>=self.timeslice_us-self.step_size: #dummy
-					cur_bw=self.timeslice_us-self.step_size
-				elif tmp_cur_bw<=self.step_size:#self.timeslice_us/3:
-					cur_bw=self.step_size#int(self.timeslice_us/3)
-				else:
-					cur_bw=tmp_cur_bw
-			cur_bw=int(cur_bw)
-
-
-		elif self.algo==4:
-			# amid - target to stay at a range
+		elif self.algo==1:
+			# amid_range - target to stay at a range
 			alpha=3.5
 			beta=.95
 			free = self.timeslice_us-cur_bw
@@ -74,7 +58,7 @@ class ResourceAllocation:
 
 
 
-		elif self.algo==5:
+		elif self.algo==2:
 			# linear -- slowly decrease to target value once hearbeat is abover min_heart_rate
 			if(heart_rate<self.min_heart_rate):
 				if cur_bw<self.timeslice_us-self.step_size:
@@ -91,6 +75,23 @@ class ResourceAllocation:
 			else:
 				self.target_reached_cnt=0
 			cur_bw=int(cur_bw)
+
+		elif self.algo==3:
+			# apid algo
+			output = self.pid.update(heart_rate)
+			# output+=self.timeslice_us/2
+			if self.pid.start>0:
+				tmp_cur_bw = output+cur_bw #int(output*cur_bw+cur_bw)-int(output*cur_bw+cur_bw)%100
+				if tmp_cur_bw>=self.timeslice_us-self.step_size: #dummy
+					cur_bw=self.timeslice_us-self.step_size
+				elif tmp_cur_bw<=self.step_size:#self.timeslice_us/3:
+					cur_bw=self.step_size#int(self.timeslice_us/3)
+				else:
+					cur_bw=tmp_cur_bw
+			cur_bw=int(cur_bw)
+
+
+
 
 		# force boudary if violate
 		if cur_bw <= self.step_size :
