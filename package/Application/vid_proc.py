@@ -75,7 +75,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	frame_size = vidarray_binary[0]
 	detect_car = vidarray_binary[0]
 	prev_frame_size = frame_size
-	print("Dom", domu_id.decode(), "start...")
+	print("Dom", domu_id.decode(), "synched with Dom0...")
 	while frame_number_entry != "done":
 		frame_number_entry = c.read(key_path_hash_frame_number_entry).decode()
 		try:
