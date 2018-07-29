@@ -1,7 +1,7 @@
 import pprint
 import subprocess
 
-# functions to interactive with xl
+# functions to interactive with xl to get VM info or assign cpu resource
 
 
 def get_global_info():

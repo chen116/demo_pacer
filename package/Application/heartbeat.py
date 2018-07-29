@@ -2,6 +2,7 @@ from ctypes import cdll
 import ctypes
 import sysv_ipc
 
+# heartbeat helper class to interact with hearbeat modules 
 class Heartbeat:
 	def __init__(self,shm_key, win_size,buf_depth,log_file,min_target,max_target):
 		self.win_size = win_size

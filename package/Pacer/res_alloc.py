@@ -1,6 +1,7 @@
 
 import apid
 import time
+# Resouce allocation helper for Pacer monitor thread
 class ResourceAllocation:
 	def __init__(self,static_alloc, timeslice_us,min_heart_rate,max_heart_rate,algo,domuid,other_domuid,shared_data,rtxen_or_credit):
 		self.static_alloc = static_alloc

@@ -1,3 +1,4 @@
+// heartbeat modules
 #include <stdio.h>
 #include <heartbeats/heartbeat.h>
 #include <sys/ipc.h>
@@ -7,7 +8,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <time.h>
-
 static void hb_flush_buffer(heartbeat_t volatile * );
 static float hb_window_average(heartbeat_t volatile * ,int64_t );
 _heartbeat_record_t* HB_alloc_log(int , int64_t );

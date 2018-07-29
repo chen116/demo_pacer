@@ -4,3 +4,4 @@ for (( c=1; c<=$num_cpus; c++))
 do
 	yes > /dev/null &
 done
+# use yes > /dev/null  to make each CPU busy

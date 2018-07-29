@@ -39,7 +39,6 @@ ax_xen.axis('off')
 last_ts=[15,15]
 
 def animate2(i):
-    maxx=30000
 
     global last_ts,show_frames, show_anchors, show_dummies, ax_xen_txt,ax_rtxen_txt,show_ts
 
