@@ -44,7 +44,7 @@ for binary in vidarray_binary:
 vidarray = np.delete(vidarray, 0, 0)
 
 
-init_video_data_string = "init"+" "+str(args["heavy_workload_frame_size"])+" "+str(args["low_workload_frame_size"])+" "+','.join(str(binary) for binary in vidarray_binary)
+init_video_data_string = "init"+" "+str(args["heavy_workload_frame_size"])+" "+str(args["light_workload_frame_size"])+" "+','.join(str(binary) for binary in vidarray_binary)
 print(init_video_data_string)
 
 misc = open("./modulized/misc.txt","r").read()
@@ -108,7 +108,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 		if sum((startX, startY, endX, endY)) > 0:
 			frame = imutils.resize(frame, width=args["heavy_workload_frame_size"])
 		else:
-			frame = imutils.resize(frame, width=args["low_workload_frame_size"])
+			frame = imutils.resize(frame, width=args["light_workload_frame_size"])
 		frame_cnt+=1
 		for domuid in domu_ids:
 			key_path_hash=('/local/domain/'+domuid+'/frame_number_entry').encode()
