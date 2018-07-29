@@ -5,11 +5,11 @@ import time
 import numpy as np
 
 class AdapPID:
-	def __init__(self,goal,gamma,min_heart_rate,max_heart_rate):
+	def __init__(self,goal,init_gamma,min_heart_rate,max_heart_rate):
 		self.goal=goal
 		self.output = 0
 		self.gamma = 10
-		self.init_gamma = gamma
+		self.init_gamma = init_gamma
 		self.last_time = 0
 		self.psn1=0
 		self.isn1=0

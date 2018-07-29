@@ -79,9 +79,9 @@ class ResourceAllocation:
 			if(heart_rate<self.min_heart_rate):
 				if cur_bw<self.timeslice_us-self.step_size:
 					cur_bw+=self.step_size
-			# if(heart_rate>self.max_heart_rate):
-			# 	if cur_bw>self.step_size:
-			# 		cur_bw-=self.step_size
+			if(heart_rate>self.max_heart_rate):
+				if cur_bw>self.step_size:
+					cur_bw-=self.step_size
 			if heart_rate > self.min_heart_rate:
 				self.target_reached_cnt+=1
 				if self.target_reached_cnt==20:
