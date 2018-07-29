@@ -238,5 +238,9 @@ shared_data_clean_up = xen_interface.get_global_info()
 # for domuid in shared_data['credit']:
 # 	xen_interface.sched_credit(domuid,default_bw)
 print("Exiting the Monitor, total",threads_cnt,"monitoring threads")
-print('Exiting Experiment 2: Pacer vs Static')
+if (args["algo2"]==0 and args["algo1"]>0) or (args["algo1"]==0 and args["algo2"]>0):
+	print('Exiting Experiment 2: Pacer vs Static')
+elif args["algo2"] * args["algo1"] > 0:
+	print('Exiting Experiment 3: Pacer under Resoruce Contention')
+
 
