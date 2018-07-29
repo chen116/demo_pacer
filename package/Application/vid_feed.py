@@ -119,20 +119,20 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			c.write(key_path_hash,str(frame_cnt).encode()) # write in frame number
 		while time.time()- tn < 1/fps_val:
 			continue
-		idx=-1
+		font_size=-1
 		for domuid in domu_ids:
 			key_path_hash=('/local/domain/'+domuid+'/box_entry').encode()
 			try:
 				boxes[domuid]=tuple(map(int, c.read(key_path_hash).decode().split(' ')))#(startX, startY, endX, endY)	
 			except:
 				boxes[domuid]=(0,0,0,0)
-			idx+=1
+			font_size+=1
 			(startX, startY, endX, endY) = boxes[domuid]
 			if sum((startX, startY, endX, endY))>0:
 				label = "domU: {}".format(domuid)
-				cv2.rectangle(frame, (startX, startY), (endX, endY),box_color[idx], 2-idx)  
+				cv2.rectangle(frame, (startX, startY), (endX, endY),box_color[domuid], 2-font_size)  
 				y = startY - 15 if startY - 15 > 15 else startY + 15
-				cv2.putText(frame, label, (startX, y),cv2.FONT_HERSHEY_SIMPLEX, 0.5, box_color[idx], 2-idx)
+				cv2.putText(frame, label, (startX, y),cv2.FONT_HERSHEY_SIMPLEX, 0.5, box_color[domuid], 2-font_size)
 
 		cv2.imshow("Frame", frame)
 		key = cv2.waitKey(1) & 0xFF
