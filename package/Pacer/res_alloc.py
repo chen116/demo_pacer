@@ -25,7 +25,7 @@ class ResourceAllocation:
 
 
 		elif self.algo==1:
-			# linear -- slowly decrease to target value once hearbeat is abover min_heart_rate
+			# linear -- slowly decrease to target value once hear rate is abover min_heart_rate
 			if(heart_rate<self.min_heart_rate):
 				if cur_bw<self.timeslice_us-self.step_size:
 					cur_bw+=self.step_size
@@ -44,7 +44,7 @@ class ResourceAllocation:
 
 
 		elif self.algo==2:
-			# amid - target to stay at single value
+			# amid - target to stay at single value(mid_heart_rate)
 			alpha=1
 			beta=.9
 			free = self.timeslice_us-cur_bw
@@ -61,7 +61,7 @@ class ResourceAllocation:
 			cur_bw=int(cur_bw)
 
 		elif self.algo==3:
-			# amid_range - target to stay at a range
+			# amid_range - target to stay at a range [min_heart_rate,max_heart_rate]
 			alpha=3.5
 			beta=.95
 			free = self.timeslice_us-cur_bw
@@ -79,7 +79,7 @@ class ResourceAllocation:
 
 
 		elif self.algo==4:
-			# apid algo
+			# apid algo - - target to stay at single value(mid_heart_rate)
 			output = self.pid.update(heart_rate)
 			# output+=self.timeslice_us/2
 			if self.pid.start>0:
