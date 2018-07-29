@@ -127,7 +127,7 @@ class ResourceAllocation:
 			else:
 				cur_bw=self.timeslice_us-other_cur_bw
 				self.pid.reset()
-			process_unit_time=5
+			process_unit_time=3
 			if self.shared_data["contention_time_passed"]>=process_unit_time:# and int(self.shared_data["contention_time_passed"])%5==0:
 				self.shared_data["contention_time_passed"]=0
 				if my_pass_val<=other_pass_val:
@@ -135,7 +135,9 @@ class ResourceAllocation:
 				else:
 					self.shared_data['pass_val'][(domu_index_in_pass_val+1)%2]+=self.shared_data['stride_val'][(domu_index_in_pass_val+1)%2]
 				with open("data.txt", "a") as myfile:
-					myfile.write(self.domuid+" "+self.domuid+" stride turnover len 6"+ " "+str(now_time)+"\n")							
+					myfile.write(self.domuid+" "+self.domuid+" stride turnover len 6"+ " "+str(now_time)+"\n")			
+			else:
+				print(self.shared_data["contention_time_passed"])				
 		else:
 			self.shared_data['last_time_val'] = time.time()
 		return (cur_bw,other_cur_bw)
