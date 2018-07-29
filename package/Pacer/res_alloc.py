@@ -103,7 +103,7 @@ class ResourceAllocation:
 
 		return(int(cur_bw))
 
-	def exec_sharing(self,cur_bw,now_time):
+	def exec_stride_sharing(self,cur_bw,now_time):
 		allowed_processing_time_per_contention=3
 
 		other_info = self.shared_data[self.other_domuid]
