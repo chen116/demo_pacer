@@ -50,7 +50,7 @@ net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt.txt", "MobileNetSSD
 
 
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
-	# synching with Dom0
+	# synching with Dom0 with xenstore
 	domu_id = c.read("domid".encode())
 	key_path_hash_frame_number_entry=('/local/domain/'+domu_id.decode()+'/frame_number_entry').encode()
 	key_path_hash_box_entry=('/local/domain/'+domu_id.decode()+'/box_entry').encode()
@@ -98,15 +98,14 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				frame_size = light_workload_frame_size
 			frame = imutils.resize(frame, width=frame_size)
 			(startX, startY, endX, endY)=(0,0,0,0) 
-			
 			blob = cv2.dnn.blobFromImage(cv2.resize(frame, (frame_size, frame_size)),0.007843, (frame_size, frame_size), 127.5)			
 			net.setInput(blob)
-			detections = net.forward()
-			for i in np.arange(0, detections.shape[2]):
-				confidence = detections[0, 0, i, 2]
+			objects_detected = net.forward()
+			for i in np.arange(0, objects_detected.shape[2]):
+				confidence = objects_detected[0, 0, i, 2]
 				if confidence > 0.5:
 					(h, w) = frame.shape[:2]
-					box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
+					box = objects_detected[0, 0, i, 3:7] * np.array([w, h, w, h])
 					(startX, startY, endX, endY) = box.astype("int")
 			if sum((startX, startY, endX, endY)) > 0 :
 				detect_car = 1
