@@ -98,7 +98,7 @@ class ResourceAllocation:
 			cur_bw = self.timeslice_us-self.step_size
 		return(int(cur_bw))
 
-	def exec_sharing(self,cur_bw):
+	def exec_sharing(self,cur_bw,now_time):
 		other_info = self.shared_data[self.other_domuid]
 		if self.rtxen_or_credit=="rtxen":
 			for vcpu in other_info:
@@ -116,7 +116,7 @@ class ResourceAllocation:
 			my_pass_val = self.shared_data['pass_val'][domu_index_in_pass_val]
 			other_pass_val = self.shared_data['pass_val'][(domu_index_in_pass_val+1)%2]
 			last_time = self.shared_data['last_time_val']
-			now_time = time.clock()
+			# now_time = time.time()
 			if last_time==0:
 				last_time = now_time
 				self.shared_data['last_time_val'] = now_time
@@ -139,6 +139,6 @@ class ResourceAllocation:
 			else:
 				print(self.shared_data["contention_time_passed"])				
 		else:
-			self.shared_data['last_time_val'] = time.clock()
+			self.shared_data['last_time_val'] = time.time()
 		return (cur_bw,other_cur_bw)
 

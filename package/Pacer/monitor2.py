@@ -114,7 +114,7 @@ class MonitorThread(threading.Thread):
 					cur_bw=int(vcpu['w'])
 		
 		cur_bw = self.allocMod.exec_allocation(heart_rate,cur_bw)
-		(cur_bw,other_cur_bw)=self.allocMod.exec_sharing(cur_bw)
+		(cur_bw,other_cur_bw)=self.allocMod.exec_sharing(cur_bw,time.time())
 		other_info = self.shared_data[self.other_domuid]
 		if self.rtxen_or_credit=="rtxen":
 			for vcpu in other_info:
