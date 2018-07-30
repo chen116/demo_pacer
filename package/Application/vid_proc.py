@@ -10,7 +10,29 @@ import imutils
 import time
 import cv2
 import sys
+def motion(frame,pre_frame):
+	retal = 0
+	frame = imutils.resize(frame, width=1000)#frame_size
+	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+	gray = cv2.GaussianBlur(gray, (21, 21), 0)
+	if pre_frame is None:
+		pre_frame = gray
+	frameDelta = cv2.absdiff(pre_frame, gray)
+	thresh = cv2.threshold(frameDelta, 25, 255, cv2.THRESH_BINARY)[1]
 
+	# dilate the thresholded image to fill in holes, then find contours
+	# on thresholded image
+	thresh = cv2.dilate(thresh, None, iterations=2)
+	contours = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+	contours = contours[0] if imutils.is_cv2() else contours[1]
+	# loop over the contours
+	(startX, startY, endX, endY)=(0,0,0,0) 
+	for contour in contours:
+		# if the contour is too small, ignore it
+		if cv2.contourArea(contour) > args["min_area"]:
+			(startX, startY, endX, endY)= cv2.boundingRect(contour)
+			return 1
+	return 0
 
 
 # load video and create video 
@@ -139,28 +161,6 @@ comm.write("heart_rate", "done")
 print("done")
 fi()
 
-def motion(frame,pre_frame):
-	retal = 0
-	frame = imutils.resize(frame, width=1000)#frame_size
-	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-	gray = cv2.GaussianBlur(gray, (21, 21), 0)
-	if pre_frame is None:
-		pre_frame = gray
-	frameDelta = cv2.absdiff(pre_frame, gray)
-	thresh = cv2.threshold(frameDelta, 25, 255, cv2.THRESH_BINARY)[1]
 
-	# dilate the thresholded image to fill in holes, then find contours
-	# on thresholded image
-	thresh = cv2.dilate(thresh, None, iterations=2)
-	contours = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
-	contours = contours[0] if imutils.is_cv2() else contours[1]
-	# loop over the contours
-	(startX, startY, endX, endY)=(0,0,0,0) 
-	for contour in contours:
-		# if the contour is too small, ignore it
-		if cv2.contourArea(contour) > args["min_area"]:
-			(startX, startY, endX, endY)= cv2.boundingRect(contour)
-			return 1
-	return 0
 
 
