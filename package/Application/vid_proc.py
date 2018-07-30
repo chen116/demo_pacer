@@ -120,7 +120,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			hb.heartbeat_beat()
 			cntt+=1
 			# send heartrate to Pacer monitor in Dom0
-			if cntt%window_size_hr==5:
+			if cntt%window_size_hr==0:
 				comm.write("heart_rate", hb.get_window_heartrate())
 			# send change of framze sixe to Pacer monitor in Dom0
 			if prev_frame_size != frame_size:
