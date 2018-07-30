@@ -11,11 +11,8 @@ import time
 import cv2
 import sys
 def motion(frame,pre_frame):
-	if prev_frame is None:
-		return 0
-	retal = 0
-	frame = imutils.resize(frame, width=1000)#frame_size
-	pre_frame = imutils.resize(pre_frame, width=1000)#frame_size
+	frame = imutils.resize(frame, width=400)#frame_size
+	pre_frame = imutils.resize(pre_frame, width=400)#frame_size
 
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	gray = cv2.GaussianBlur(gray, (21, 21), 0)
@@ -116,7 +113,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	detect_car = vidarray_binary[0]
 	prev_frame_size = 0
 	
-	pre_frame = None
+	
 	# get frame numbers from dom0 to run object detection
 	while frame_number_entry != "done":
 		frame_number_entry = c.read(key_path_hash_frame_number_entry).decode()
@@ -139,7 +136,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			for i in np.arange(0, objects_detected.shape[2]):
 				confidence = objects_detected[0, 0, i, 2]
 				if confidence > 0.5:
-					if motion(frame,pre_frame)==1:
+					if prev_frame is not None and motion(frame,pre_frame)==1:
 						(h, w) = frame.shape[:2]
 						box = objects_detected[0, 0, i, 3:7] * np.array([w, h, w, h])
 						(startX, startY, endX, endY) = box.astype("int")
