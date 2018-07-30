@@ -84,7 +84,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	detect_car = vidarray_binary[0]
 	prev_frame_size = 0
 	
-
+	firstFrame = None
 	# get frame numbers from dom0 to run object detection
 	while frame_number_entry != "done":
 		frame_number_entry = c.read(key_path_hash_frame_number_entry).decode()
@@ -134,6 +134,8 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 hb.heartbeat_finish()
 comm.write("heart_rate", "done")
 print("done")
+fi()
 
-
+def fi():
+	print("meow")
 
