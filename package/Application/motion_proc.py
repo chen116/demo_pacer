@@ -121,13 +121,13 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
 			cnts = cnts[0] if imutils.is_cv2() else cnts[1]
 			# loop over the contours
-			for c in cnts:
+			for cnt in cnts:
 				# if the contour is too small, ignore it
 				if cv2.contourArea(c) < args["min_area"]:
 					continue
 				# compute the bounding box for the contour, draw it on the frame,
 				# and update the text
-				(startX, startY, endX, endY)= cv2.boundingRect(c)
+				(startX, startY, endX, endY)= cv2.boundingRect(cnt)
 			if sum((startX, startY, endX, endY)) > 0 :
 				detect_car = 1
 			else:
