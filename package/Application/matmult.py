@@ -22,9 +22,9 @@ comm = domU_comm.DomU(monitoring_items)
 matsize = 500
 comm.write("frame_size", matsize)
 for i in range(200):
-	# a= np.random.rand(matsize, matsize)
-	# b= np.random.rand(matsize, matsize)	
-	# c= np.matmul(b,a.T)
+	a= np.random.rand(matsize, matsize)
+	b= np.random.rand(matsize, matsize)	
+	c= np.matmul(b,a.T)
 	time.sleep(0.05)
 	hb.heartbeat_beat()
 	print("get_instant_heartrate:",hb.get_instant_heartrate())
@@ -32,9 +32,9 @@ for i in range(200):
 comm.write("frame_size", matsize)
 
 for i in range(200):
-	# a= np.random.rand(matsize, matsize)
-	# b= np.random.rand(matsize, matsize)	
-	# c= np.matmul(b,a.T)
+	a= np.random.rand(matsize, matsize)
+	b= np.random.rand(matsize, matsize)	
+	c= np.matmul(b,a.T)
 	time.sleep(0.025)
 	hb.heartbeat_beat()
 	print("get_instant_heartrate:",hb.get_instant_heartrate())
