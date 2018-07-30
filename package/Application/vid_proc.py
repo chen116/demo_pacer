@@ -11,7 +11,7 @@ import time
 import cv2
 import sys
 def motion(frame,pre_frame):
-	if prev_frame_size==0:
+	if prev_frame is None:
 		return 0
 	retal = 0
 	frame = imutils.resize(frame, width=1000)#frame_size
