@@ -157,7 +157,8 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				prev_frame_size = frame_size
 				comm.write("frame_size",frame_size)
 			prev_frame_num = frame_num
-			pre_frame = frame
+			if prev_frame is None:
+				prev_frame = frame
 
 
 
