@@ -21,11 +21,11 @@ def motion(frame,pre_frame):
 	gray = cv2.GaussianBlur(gray, (21, 21), 0)
 	if pre_frame is None:
 		pre_frame = gray
-	(width, height) = cv2.GetSize(pre_frame)
-	print(width, height)
-	(width, height) = cv2.GetSize(gray)
-	print(width, height)
-	
+
+	print( cv2.imread(frame).shape[:2])
+	print( cv2.imread(gray).shape[:2])
+
+
 	frameDelta = cv2.absdiff(pre_frame, gray)
 	thresh = cv2.threshold(frameDelta, 25, 255, cv2.THRESH_BINARY)[1]
 
