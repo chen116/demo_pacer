@@ -84,7 +84,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	detect_car = vidarray_binary[0]
 	prev_frame_size = 0
 	
-	firstFrame = None
+	pre_frame = None
 	# get frame numbers from dom0 to run object detection
 	while frame_number_entry != "done":
 		frame_number_entry = c.read(key_path_hash_frame_number_entry).decode()
@@ -107,9 +107,11 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			for i in np.arange(0, objects_detected.shape[2]):
 				confidence = objects_detected[0, 0, i, 2]
 				if confidence > 0.5:
-					(h, w) = frame.shape[:2]
-					box = objects_detected[0, 0, i, 3:7] * np.array([w, h, w, h])
-					(startX, startY, endX, endY) = box.astype("int")
+					if motion(frame,pre_frame)==1:
+						(h, w) = frame.shape[:2]
+						box = objects_detected[0, 0, i, 3:7] * np.array([w, h, w, h])
+						(startX, startY, endX, endY) = box.astype("int")
+
 			if sum((startX, startY, endX, endY)) > 0 :
 				detect_car = 1
 			else:
@@ -126,6 +128,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				prev_frame_size = frame_size
 				comm.write("frame_size",frame_size)
 			prev_frame_num = frame_num
+			pre_frame = frame
 
 
 
@@ -136,6 +139,28 @@ comm.write("heart_rate", "done")
 print("done")
 fi()
 
-def fi():
-	print("meow")
+def motion(frame,pre_frame):
+	retal = 0
+	frame = imutils.resize(frame, width=1000)#frame_size
+	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+	gray = cv2.GaussianBlur(gray, (21, 21), 0)
+	if pre_frame is None:
+		pre_frame = gray
+	frameDelta = cv2.absdiff(pre_frame, gray)
+	thresh = cv2.threshold(frameDelta, 25, 255, cv2.THRESH_BINARY)[1]
+
+	# dilate the thresholded image to fill in holes, then find contours
+	# on thresholded image
+	thresh = cv2.dilate(thresh, None, iterations=2)
+	contours = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+	contours = contours[0] if imutils.is_cv2() else contours[1]
+	# loop over the contours
+	(startX, startY, endX, endY)=(0,0,0,0) 
+	for contour in contours:
+		# if the contour is too small, ignore it
+		if cv2.contourArea(contour) > args["min_area"]:
+			(startX, startY, endX, endY)= cv2.boundingRect(contour)
+			return 1
+	return 0
+
 
