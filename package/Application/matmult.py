@@ -21,7 +21,7 @@ comm = domU_comm.DomU(monitoring_items)
 
 matsize = 500
 comm.write("frame_size", matsize)
-for i in range(500):
+for i in range(200):
 	# a= np.random.rand(matsize, matsize)
 	# b= np.random.rand(matsize, matsize)	
 	# c= np.matmul(b,a.T)
@@ -31,7 +31,7 @@ for i in range(500):
 	comm.write("heart_rate", hb.get_window_heartrate())
 comm.write("frame_size", matsize)
 
-for i in range(500):
+for i in range(200):
 	# a= np.random.rand(matsize, matsize)
 	# b= np.random.rand(matsize, matsize)	
 	# c= np.matmul(b,a.T)
