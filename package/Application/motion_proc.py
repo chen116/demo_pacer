@@ -105,7 +105,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				frame_size = heavy_workload_frame_size
 			else:
 				frame_size = light_workload_frame_size
-			frame = imutils.resize(frame, width=frame_size)
+			frame = imutils.resize(frame, width=300)
 			(startX, startY, endX, endY)=(0,0,0,0) 
 			gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 			gray = cv2.GaussianBlur(gray, (21, 21), 0)
