@@ -16,10 +16,16 @@ def motion(frame,pre_frame):
 	retal = 0
 	frame = imutils.resize(frame, width=300)#frame_size
 	pre_frame = imutils.resize(pre_frame, width=300)#frame_size
+
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	gray = cv2.GaussianBlur(gray, (21, 21), 0)
 	if pre_frame is None:
 		pre_frame = gray
+	(width, height) = cv2.GetSize(pre_frame)
+	print(width, height)
+	(width, height) = cv2.GetSize(gray)
+	print(width, height)
+	
 	frameDelta = cv2.absdiff(pre_frame, gray)
 	thresh = cv2.threshold(frameDelta, 25, 255, cv2.THRESH_BINARY)[1]
 
