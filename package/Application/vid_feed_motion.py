@@ -108,9 +108,9 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	for frame in vidarray:
 		tn = time.time()
 		if sum((startX, startY, endX, endY)) > 0:
-			frame = imutils.resize(frame, width=300)#args["heavy_workload_frame_size"])
+			frame = imutils.resize(frame, width=1000)#args["heavy_workload_frame_size"])
 		else:
-			frame = imutils.resize(frame, width=300)#args["light_workload_frame_size"])
+			frame = imutils.resize(frame, width=1000)#args["light_workload_frame_size"])
 		frame_cnt+=1
 
 		# send frame number to domUs

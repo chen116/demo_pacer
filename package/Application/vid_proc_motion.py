@@ -102,10 +102,10 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 		if frame_num > -1 and frame_num > prev_frame_num:
 			frame = vidarray[frame_num]
 			if detect_car == 1:
-				frame_size = 300#heavy_workload_frame_size
+				frame_size = 1000#heavy_workload_frame_size
 			else:
-				frame_size = 300#light_workload_frame_size
-			frame = imutils.resize(frame, width=300)#frame_size
+				frame_size = 1000#light_workload_frame_size
+			frame = imutils.resize(frame, width=1000)#frame_size
 			(startX, startY, endX, endY)=(0,0,0,0) 
 			gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 			gray = cv2.GaussianBlur(gray, (21, 21), 0)
