@@ -106,7 +106,6 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			else:
 				frame_size = 1000#light_workload_frame_size
 			frame = imutils.resize(frame, width=1000)#frame_size
-			(startX, startY, endX, endY)=(0,0,0,0) 
 			gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 			gray = cv2.GaussianBlur(gray, (21, 21), 0)
 			if firstFrame is None:
@@ -121,10 +120,12 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			contours = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
 			contours = contours[0] if imutils.is_cv2() else contours[1]
 			# loop over the contours
+			(startX, startY, endX, endY)=(0,0,0,0) 
 			for contour in contours:
 				# if the contour is too small, ignore it
 				if cv2.contourArea(contour) > args["min_area"]:
 					(startX, startY, endX, endY)= cv2.boundingRect(contour)
+
 			if sum((startX, startY, endX, endY)) > 0 :
 				detect_car = 1
 			else:
