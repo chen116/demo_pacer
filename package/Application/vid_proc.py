@@ -10,11 +10,12 @@ import imutils
 import time
 import cv2
 import sys
-def motion(frame,pre_frame,prev_frame_size):
+def motion(frame,pre_frame):
 	if prev_frame_size==0:
 		return 0
 	retal = 0
-	frame = imutils.resize(frame, width=prev_frame_size)#frame_size
+	frame = imutils.resize(frame, width=300)#frame_size
+	pre_frame = imutils.resize(pre_frame, width=300)#frame_size
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	gray = cv2.GaussianBlur(gray, (21, 21), 0)
 	if pre_frame is None:
