@@ -21,10 +21,10 @@ def motion(frame,pre_frame):
 	gray = cv2.GaussianBlur(gray, (21, 21), 0)
 	if pre_frame is None:
 		pre_frame = gray
-	fff = cv2.imread(frame)
-	ggg = cv2.imread(gray)
-	print( fff.shape[:2] )
-	print( ggg.shape[:2] )
+
+	print( np.size(frame, 0) , np.size(frame, 1)) 
+	print( np.size(gray, 0) , np.size(gray, 1)) 
+
 
 
 	frameDelta = cv2.absdiff(pre_frame, gray)
