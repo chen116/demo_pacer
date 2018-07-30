@@ -11,6 +11,12 @@ import time
 import cv2
 import sys
 
+# # construct the argument parser and parse the arguments
+ap = argparse.ArgumentParser()
+ap.add_argument("-v", "--video", help="path to the video file")
+ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
+ap.add_argument("-w", "--width", type=int, default=500, help="im show width")
+args = vars(ap.parse_args())
 
 
 # load video and create video 
@@ -86,6 +92,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	
 	cntt=-1
 	# get frame numbers from dom0 to run object detection
+	firstFrame = None
 	while frame_number_entry != "done":
 		frame_number_entry = c.read(key_path_hash_frame_number_entry).decode()
 		try:
@@ -100,27 +107,37 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				frame_size = light_workload_frame_size
 			frame = imutils.resize(frame, width=frame_size)
 			(startX, startY, endX, endY)=(0,0,0,0) 
-			blob = cv2.dnn.blobFromImage(cv2.resize(frame, (frame_size, frame_size)),0.007843, (frame_size, frame_size), 127.5)			
-			net.setInput(blob)
-			objects_detected = net.forward()
-			for i in np.arange(0, objects_detected.shape[2]):
-				confidence = objects_detected[0, 0, i, 2]
-				if confidence > 0.5:
-					(h, w) = frame.shape[:2]
-					box = objects_detected[0, 0, i, 3:7] * np.array([w, h, w, h])
-					(startX, startY, endX, endY) = box.astype("int")
+			gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+			gray = cv2.GaussianBlur(gray, (21, 21), 0)
+			if firstFrame is None:
+				firstFrame = gray
+				continue
+			frameDelta = cv2.absdiff(firstFrame, gray)
+			thresh = cv2.threshold(frameDelta, 25, 255, cv2.THRESH_BINARY)[1]
+
+			# dilate the thresholded image to fill in holes, then find contours
+			# on thresholded image
+			thresh = cv2.dilate(thresh, None, iterations=2)
+			cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+			cnts = cnts[0] if imutils.is_cv2() else cnts[1]
+			# loop over the contours
+			for c in cnts:
+				# if the contour is too small, ignore it
+				if cv2.contourArea(c) < args["min_area"]:
+					continue
+				# compute the bounding box for the contour, draw it on the frame,
+				# and update the text
+				(startX, startY, endX, endY)= cv2.boundingRect(c)
 			if sum((startX, startY, endX, endY)) > 0 :
 				detect_car = 1
 			else:
 				detect_car = 0
-			c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
-
+			c.write(key_path_hash_box_entry,(str(int(startX))+" "+str(int(startY))+" "+str(int(endX))+" "+str(int(endY))).encode())
 
 			# record a heartbeat
 			hb.heartbeat_beat()
 			cntt+=1
 			# send heartrate to Pacer monitor in Dom0
-
 			comm.write("heart_rate", hb.get_instant_heartrate())
 			# send change of framze sixe to Pacer monitor in Dom0
 			if prev_frame_size != frame_size:
