@@ -84,7 +84,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	detect_car = vidarray_binary[0]
 	prev_frame_size = 0
 	
-
+	cntt=-1
 	# get frame numbers from dom0 to run object detection
 	while frame_number_entry != "done":
 		frame_number_entry = c.read(key_path_hash_frame_number_entry).decode()
@@ -118,8 +118,10 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 
 			# record a heartbeat
 			hb.heartbeat_beat()
+			cntt+=1
 			# send heartrate to Pacer monitor in Dom0
-			comm.write("heart_rate", hb.get_window_heartrate())
+			if cntt%window_size_hr==5:
+				comm.write("heart_rate", hb.get_window_heartrate())
 			# send change of framze sixe to Pacer monitor in Dom0
 			if prev_frame_size != frame_size:
 				prev_frame_size = frame_size
