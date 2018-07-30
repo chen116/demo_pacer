@@ -118,16 +118,16 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			# dilate the thresholded image to fill in holes, then find contours
 			# on thresholded image
 			thresh = cv2.dilate(thresh, None, iterations=2)
-			cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
-			cnts = cnts[0] if imutils.is_cv2() else cnts[1]
+			contours = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+			contours = contours[0] if imutils.is_cv2() else contours[1]
 			# loop over the contours
-			for cnt in cnts:
+			for contour in contours:
 				# if the contour is too small, ignore it
-				if cv2.contourArea(c) < args["min_area"]:
+				if cv2.contourArea(contour) < args["min_area"]:
 					continue
 				# compute the bounding box for the contour, draw it on the frame,
 				# and update the text
-				(startX, startY, endX, endY)= cv2.boundingRect(cnt)
+				(startX, startY, endX, endY)= cv2.boundingRect(contour)
 			if sum((startX, startY, endX, endY)) > 0 :
 				detect_car = 1
 			else:
