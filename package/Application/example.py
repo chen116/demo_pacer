@@ -1,5 +1,3 @@
-
-
 import time
 
 # create heartbeat
@@ -24,6 +22,7 @@ for i in range(200):
 	hb.heartbeat_beat()
 	instant_heartrate = hb.get_instant_heartrate()
 	print("get_instant_heartrate:",instant_heartrate)
+	# send heart rate to Dom0
 	comm.write("heart_rate", instant_heartrate)
 comm.write("heart_rate", "done")
 hb.heartbeat_finish()
