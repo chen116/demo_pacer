@@ -112,7 +112,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	frame_size = vidarray_binary[0]
 	detect_car = vidarray_binary[0]
 	prev_frame_size = 0
-	
+	prev_frame = None
 	
 	# get frame numbers from dom0 to run object detection
 	while frame_number_entry != "done":
