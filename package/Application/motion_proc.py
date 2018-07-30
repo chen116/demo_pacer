@@ -132,7 +132,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				detect_car = 1
 			else:
 				detect_car = 0
-			c.write(key_path_hash_box_entry,(str(int(startX))+" "+str(int(startY))+" "+str(int(endX))+" "+str(int(endY))).encode())
+			c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
 
 			# record a heartbeat
 			hb.heartbeat_beat()
