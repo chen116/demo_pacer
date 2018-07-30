@@ -14,7 +14,7 @@ import sys
 # # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", help="path to the video file")
-ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
+ap.add_argument("-a", "--min-area", type=int, default=1000, help="minimum area size")
 ap.add_argument("-w", "--width", type=int, default=500, help="im show width")
 args = vars(ap.parse_args())
 
@@ -123,11 +123,8 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			# loop over the contours
 			for contour in contours:
 				# if the contour is too small, ignore it
-				if cv2.contourArea(contour) < args["min_area"]:
-					continue
-				# compute the bounding box for the contour, draw it on the frame,
-				# and update the text
-				(startX, startY, endX, endY)= cv2.boundingRect(contour)
+				if cv2.contourArea(contour) > args["min_area"]:
+					(startX, startY, endX, endY)= cv2.boundingRect(contour)
 			if sum((startX, startY, endX, endY)) > 0 :
 				detect_car = 1
 			else:
