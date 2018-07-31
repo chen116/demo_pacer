@@ -116,7 +116,11 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 		# send frame number to domUs
 		for domuid in domu_ids:
 			key_path_hash=('/local/domain/'+domuid+'/frame_number_entry').encode()
-			c.write(key_path_hash,str(frame_cnt).encode()) # write in frame number
+			while not success:
+				c.transaction()
+				c.write(key_path_hash,str(frame_cnt).encode()) # write in frame number
+				success = c.commit()
+			# c.write(key_path_hash,str(frame_cnt).encode()) # write in frame number
 		while time.time()- tn < 1/fps_feed:
 			fps_feed = fps_feed
 		font_size=-1
