@@ -203,7 +203,7 @@ car = np.concatenate((car, np.flipud(car)), axis=0)
 
 # create heartbeat
 import heartbeat
-window_size_hr=6
+window_size_hr=2
 sharedmem_id_for_heartbeat = 1024
 buffer_depth = 100
 log_name = "heartbeat.log"
@@ -275,9 +275,9 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				frame_size = light_workload_frame_size
 			frame = imutils.resize(frame, width=frame_size)
 			if frame_size == heavy_workload_frame_size:
-				period = 3
+				period = 1
 			else:
-				period = 6
+				period = 2
 			# (startX, startY, endX, endY)=(0,0,0,0) 
 			# if motion(frame,prev_frame):
 			# 	print("motion deteced at:", frame_num)
