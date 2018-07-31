@@ -111,7 +111,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	
 	frame_number_entry = "init"
 	prev_frame_num = -1
-	frame_size = vidarray_binary[0]+1
+	frame_size = vidarray_binary[0]
 	detect_car = vidarray_binary[0]
 	prev_frame_size = 0
 	prev_frame = None
@@ -131,10 +131,14 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			if detect_car == 1:
 				frame_size = heavy_workload_frame_size
 			else:
-				frame_size = ight_workload_frame_size
-			frame = imutils.resize(frame, width=300)#frame_size)
+				frame_size = light_workload_frame_size
+			frame = imutils.resize(frame, width=frame_size)
+
+			period = 2
+			if frame_size == 300:
+				period = 1
 			# (startX, startY, endX, endY)=(0,0,0,0) 
-			if cnt % frame_size ==0:
+			if cnt % period ==0:
 				(startX, startY, endX, endY)=(0,0,0,0) 
 
 				# blob = cv2.dnn.blobFromImage(cv2.resize(frame, (frame_size, frame_size)),0.007843, (frame_size, frame_size), 127.5)				
