@@ -13,13 +13,13 @@ import sys
 def motion(frame,prev_frame):
 	if prev_frame is None:
 		return 0
-	prev_frame = cv2.resize(prev_frame, (176, 144)) #frame_size
+	prev_frame = cv2.resize(prev_frame, (176*10, 144*10)) #frame_size
 	prev_frame = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
 	prev_frame = cv2.GaussianBlur(prev_frame, (21, 21), 0)
 
 
 
-	frame = cv2.resize(frame, (176,144))#frame_size
+	frame = cv2.resize(frame, (176*10,144*10))#frame_size
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	gray = cv2.GaussianBlur(gray, (21, 21), 0)
 
