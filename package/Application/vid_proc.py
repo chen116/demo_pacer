@@ -41,7 +41,7 @@ def motion(frame,prev_frame):
 	(startX, startY, endX, endY)=(0,0,0,0) 
 	for contour in contours:
 		# if the contour is too small, ignore it
-		if cv2.contourArea(contour) > 100:
+		if cv2.contourArea(contour) > 10:
 			(startX, startY, endX, endY)= cv2.boundingRect(contour)
 			return 1
 	return 0
@@ -142,9 +142,9 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				confidence = objects_detected[0, 0, i, 2]
 				if confidence > 0.5:
 					if motion(frame,prev_frame):
-							(h, w) = frame.shape[:2]
-							box = objects_detected[0, 0, i, 3:7] * np.array([w, h, w, h])
-							(startX, startY, endX, endY) = box.astype("int")
+						(h, w) = frame.shape[:2]
+						box = objects_detected[0, 0, i, 3:7] * np.array([w, h, w, h])
+						(startX, startY, endX, endY) = box.astype("int")
 
 			if sum((startX, startY, endX, endY)) > 0 :
 				detect_car = 1
