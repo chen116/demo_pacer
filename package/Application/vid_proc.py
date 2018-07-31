@@ -38,7 +38,7 @@ def motion(frame,prev_frame):
 	(startX, startY, endX, endY)=(0,0,0,0) 
 	for contour in contours:
 		# if the contour is too small, ignore it
-		if cv2.contourArea(contour) > 100:
+		if cv2.contourArea(contour) > 20*7:
 			(startX, startY, endX, endY)= cv2.boundingRect(contour)
 			return 1
 	return 0
@@ -113,8 +113,8 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	prev_frame_num = -1
 	frame_size = vidarray_binary[0]
 	detect_car = vidarray_binary[0]
-	prev_frame_size = 0
-	prev_frame = no_car[0]
+	prev_frame_size = vidarray[0]
+	prev_frame = None
 
 	prev_box = (0,0,0,0)
 	# get frame numbers from dom0 to run object detection
@@ -181,7 +181,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				prev_frame_size = frame_size
 				comm.write("frame_size",frame_size)
 			prev_frame_num = frame_num
-			
+			prev_frame = frame
 
 
 
