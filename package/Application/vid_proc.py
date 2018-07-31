@@ -92,7 +92,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			frame_num = int(frame_number_entry)
 		except:
 			frame_num = -1
-		if frame_num > -1 and frame_num > prev_frame_num:
+		if frame_num > -1 #and frame_num > prev_frame_num:
 			frame = vidarray[frame_num]
 			if detect_car == 1:
 				frame_size = heavy_workload_frame_size
@@ -133,7 +133,6 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 hb.heartbeat_finish()
 comm.write("heart_rate", "done")
 print("done")
-
 
 
 
@@ -315,7 +314,7 @@ print("done")
 # 			# record a heartbeat
 # 			hb.heartbeat_beat()
 # 			# send heartrate to Pacer monitor in Dom0
-# 			comm.write("heart_rate", hb.get_window_heartrate())
+# 			comm.write("heart_rate", hb.get_instant_heartrate())
 # 			# send change of framze sixe to Pacer monitor in Dom0
 # 			if prev_frame_size != frame_size:
 # 				prev_frame_size = frame_size
