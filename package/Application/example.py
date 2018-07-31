@@ -24,7 +24,7 @@ for i in range(100):
 	# processing
 
 
-	time.sleep(0.1)
+	c= np.matmul(b,a.T)
 
 	hb.heartbeat_beat()
 	instant_heartrate = hb.get_instant_heartrate()
@@ -52,7 +52,7 @@ for i in range(100):
 
 	# processing
 
-	time.sleep(0.1)
+	c= np.matmul(b,a.T)
 
 
 	hb.heartbeat_beat()
