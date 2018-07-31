@@ -20,10 +20,11 @@ args = vars(ap.parse_args())
 
 
 monitoring_items = ["heart_rate","frame_size"]
-monitoring_domU = ["VM1_id_placeholder","VM2_id_placeholder"]
+monitoring_domU = ["VM1_id_placeholder"]#,"VM2_id_placeholder"]
 
 # find correct domUs id
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
+	c.delete(b'/local/domain/VM2_id_placeholder')
 	domu_ids=[]
 	all_domuid_ids = []
 	for uid in c.list('/local/domain'.encode()):
@@ -31,10 +32,12 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	all_domuid_ids.pop(0)
 	for uid in all_domuid_ids:
 		name_path = ("/local/domain/"+uid+"/name").encode()
+		print(name_path)
+
 		if c[name_path].decode() == "VM1":
 			monitoring_domU[0] = uid
-		if c[name_path].decode() == "VM2":
-			monitoring_domU[1] = uid
+		# if c[name_path].decode() == "VM2":
+		# 	monitoring_domU[1] = uid
 
 
 
@@ -50,12 +53,12 @@ class MonitorThread(threading.Thread):
 	def __init__(self, threadLock,shared_data,domuid,rtxen_or_credit,timeslice_us,min_heart_rate,max_heart_rate,keys=['test'],base_path='/local/domain'):
 		threading.Thread.__init__(self)
 		self.domuid=(domuid)
-		self.other_domuid=monitoring_domU[1]
-		if self.domuid==monitoring_domU[1]:
+		self.other_domuid=monitoring_domU[0]
+		if self.domuid==monitoring_domU[0]:
 			self.other_domuid=monitoring_domU[0]
 
 		self.algo = args["algo1"]
-		if self.domuid==monitoring_domU[1]:
+		if self.domuid==monitoring_domU[0]:
 			self.algo = args["algo2"]
 		self.keys=keys
 		self.base_path=base_path
@@ -109,19 +112,15 @@ class MonitorThread(threading.Thread):
 		# calculate next cpu resource assignment
 		cur_bw = self.allocMod.exec_allocation(heart_rate,cur_bw)
 		# run stride sharing if needed
-		(cur_bw,other_cur_bw)=self.allocMod.exec_stride_sharing(cur_bw,time.time())
+		#(cur_bw,other_cur_bw)=self.allocMod.exec_stride_sharing(cur_bw,time.time())
 
 		# assign the new cpu resource to VM
-		other_info = self.shared_data[self.other_domuid]
 		if self.rtxen_or_credit=="rtxen":
-			for vcpu in other_info:
-				if vcpu['pcpu']!=-1:
-					vcpu['b']=other_cur_bw
 			for vcpu in myinfo:
 				if vcpu['pcpu']!=-1:
 					vcpu['b']=cur_bw
 			xen_interface.sched_rtds(self.domuid,self.timeslice_us,cur_bw,[])
-			xen_interface.sched_rtds(self.other_domuid,self.timeslice_us,other_cur_bw,[])
+			#xen_interface.sched_rtds(self.other_domuid,self.timeslice_us,other_cur_bw,[])
 		elif self.rtxen_or_credit=="credit":
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
@@ -131,13 +130,14 @@ class MonitorThread(threading.Thread):
 					vcpu['w']=cur_bw
 			xen_interface.sched_credit(self.domuid,cur_bw)
 			xen_interface.sched_credit(self.other_domuid,other_cur_bw)
-
+		# print(str(heart_rate))
+		
 		# write data to data.txt for realtime_plot.py for visulization
 		time_now=str(time.time())
 		info = self.domuid+" "+str(heart_rate)+" hr "+time_now+"\n"
 		place_holder_for_graph = " x x x x x "
 		info += self.domuid + " " +str(cur_bw/self.timeslice_us) + place_holder_for_graph+time_now+"\n"
-		info += self.other_domuid+ " "+str(other_cur_bw/self.timeslice_us) + place_holder_for_graph+time_now
+		# info += self.other_domuid+ " "+str(other_cur_bw/self.timeslice_us) + place_holder_for_graph+time_now
 		with open("data.txt", "a") as myfile:
 			myfile.write(info+"\n")
 		return
