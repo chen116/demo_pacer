@@ -32,7 +32,7 @@ for i in range(100):
 for i in range(100):
 
 	# processing
-	time.sleep(0.05)
+	time.sleep(0.2)
 
 	hb.heartbeat_beat()
 	instant_heartrate = hb.get_instant_heartrate()
@@ -44,7 +44,7 @@ for i in range(100):
 for i in range(100):
 
 	# processing
-	time.sleep(0.02)
+	time.sleep(0.1)
 
 	hb.heartbeat_beat()
 	instant_heartrate = hb.get_instant_heartrate()

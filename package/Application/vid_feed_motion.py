@@ -117,8 +117,8 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 		for domuid in domu_ids:
 			key_path_hash=('/local/domain/'+domuid+'/frame_number_entry').encode()
 			c.write(key_path_hash,str(frame_cnt).encode()) # write in frame number
-		while time.time()- tn < 1/fps_val:
-			continue
+		while time.time() - tn < 1/fps_val:
+			ii = 1
 		font_size=-1
 		# get boxes from domUs if any, and draw the boxes on the frame 
 		for domuid in domu_ids:
