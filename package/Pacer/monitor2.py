@@ -31,6 +31,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	all_domuid_ids.pop(0)
 	for uid in all_domuid_ids:
 		name_path = ("/local/domain/"+uid+"/name").encode()
+		print(name_path)
 		if c[name_path].decode() == "VM1":
 			monitoring_domU[0] = uid
 		# if c[name_path].decode() == "VM2":
