@@ -51,7 +51,19 @@ print('low')
 print("best case fps:",1/ ((l-2*(p*x))/x+2*(p*x)))
 print("worst case fps:",x/l)
 
+x=0.4
+p=10
+h=50
+l=25
 
+print("50%")
+print('high')
+print("best case fps:",((h-2*(p*x))/x+2*(p*x)))
+print("worst case fps:",h/x)
+
+print('low')
+print("best case fps:", ((l-2*(p*x))/x+2*(p*x)))
+print("worst case fps:",l/x)
 
 
 
