@@ -24,6 +24,7 @@ monitoring_domU = ["VM1_id_placeholder"]#,"VM2_id_placeholder"]
 
 # find correct domUs id
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
+	c.delete(b'/local/domain/VM2_id_placeholder')
 	domu_ids=[]
 	all_domuid_ids = []
 	for uid in c.list('/local/domain'.encode()):
@@ -32,6 +33,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	for uid in all_domuid_ids:
 		name_path = ("/local/domain/"+uid+"/name").encode()
 		print(name_path)
+
 		if c[name_path].decode() == "VM1":
 			monitoring_domU[0] = uid
 		# if c[name_path].decode() == "VM2":
