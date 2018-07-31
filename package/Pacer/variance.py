@@ -56,14 +56,14 @@ p=10
 h=50
 l=25
 
-print("50%")
+print("40%")
 print('high')
-print("best case fps:",((h-2*(p*x))/x+2*(p*x)))
-print("worst case fps:",h/x)
+print("best case :",((h-2*(p*x))/x+2*(p*x)))
+print("worst case :",h/x)
 
 print('low')
-print("best case fps:", ((l-2*(p*x))/x+2*(p*x)))
-print("worst case fps:",l/x)
+print("best case :", ((l-2*(p*x))/x+2*(p*x)))
+print("worst case :",l/x)
 
 
 
