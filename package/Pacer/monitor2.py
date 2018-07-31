@@ -130,13 +130,14 @@ class MonitorThread(threading.Thread):
 					vcpu['w']=cur_bw
 			xen_interface.sched_credit(self.domuid,cur_bw)
 			xen_interface.sched_credit(self.other_domuid,other_cur_bw)
-		print(str(heart_rate))
+		# print(str(heart_rate))
+		
 		# write data to data.txt for realtime_plot.py for visulization
 		time_now=str(time.time())
 		info = self.domuid+" "+str(heart_rate)+" hr "+time_now+"\n"
 		place_holder_for_graph = " x x x x x "
 		info += self.domuid + " " +str(cur_bw/self.timeslice_us) + place_holder_for_graph+time_now+"\n"
-		info += self.other_domuid+ " "+str(other_cur_bw/self.timeslice_us) + place_holder_for_graph+time_now
+		# info += self.other_domuid+ " "+str(other_cur_bw/self.timeslice_us) + place_holder_for_graph+time_now
 		with open("data.txt", "a") as myfile:
 			myfile.write(info+"\n")
 		return
