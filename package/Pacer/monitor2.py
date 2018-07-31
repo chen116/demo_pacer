@@ -112,7 +112,7 @@ class MonitorThread(threading.Thread):
 		# calculate next cpu resource assignment
 		cur_bw = self.allocMod.exec_allocation(heart_rate,cur_bw)
 		# run stride sharing if needed
-		(cur_bw,other_cur_bw)=self.allocMod.exec_stride_sharing(cur_bw,time.time())
+		#(cur_bw,other_cur_bw)=self.allocMod.exec_stride_sharing(cur_bw,time.time())
 
 		# assign the new cpu resource to VM
 		other_info = self.shared_data[self.other_domuid]
@@ -124,7 +124,7 @@ class MonitorThread(threading.Thread):
 				if vcpu['pcpu']!=-1:
 					vcpu['b']=cur_bw
 			xen_interface.sched_rtds(self.domuid,self.timeslice_us,cur_bw,[])
-			xen_interface.sched_rtds(self.other_domuid,self.timeslice_us,other_cur_bw,[])
+			#xen_interface.sched_rtds(self.other_domuid,self.timeslice_us,other_cur_bw,[])
 		elif self.rtxen_or_credit=="credit":
 			for vcpu in other_info:
 				if vcpu['pcpu']!=-1:
