@@ -116,6 +116,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 		# send frame number to domUs
 		for domuid in domu_ids:
 			key_path_hash=('/local/domain/'+domuid+'/frame_number_entry').encode()
+			success = False
 			while not success:
 				c.transaction()
 				c.write(key_path_hash,str(frame_cnt).encode()) # write in frame number
