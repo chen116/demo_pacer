@@ -139,7 +139,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			if cnt % 1 ==0:
 				(startX, startY, endX, endY)=(0,0,0,0) 
 
-				blob = cv2.dnn.blobFromImage(cv2.resize(frame, (200, 200)),0.007843, (200, 200), 127.5)				
+				blob = cv2.dnn.blobFromImage(cv2.resize(frame, (250, 250)),0.007843, (250, 250), 127.5)				
 				#blob = cv2.dnn.blobFromImage(frame,0.007843, (300, 300), 127.5)				
 				net.setInput(blob)
 				objects_detected = net.forward()
