@@ -137,7 +137,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				period = 1
 			else:
 				period = 2
-			period = 1
+			# period = 1
 			# (startX, startY, endX, endY)=(0,0,0,0) 
 			if cnt % period ==0:
 				(startX, startY, endX, endY)=(0,0,0,0) 
@@ -149,8 +149,8 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				for i in np.arange(0, objects_detected.shape[2]):
 					confidence = objects_detected[0, 0, i, 2]
 					if confidence > 0.5:
-						if motion(frame,prev_frame):
-							print("car moving at frame:", frame_num)
+						# if motion(frame,prev_frame):
+						# 	print("car moving at frame:", frame_num)
 						(h, w) = frame.shape[:2]
 						box = objects_detected[0, 0, i, 3:7] * np.array([w, h, w, h])
 						(startX, startY, endX, endY) = box.astype("int")
