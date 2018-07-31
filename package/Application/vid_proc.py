@@ -20,7 +20,7 @@ def motion(frame,prev_frame):
 	gray = cv2.GaussianBlur(gray, (21, 21), 0)
 
 
-	print( np.size(frame, 0) , np.size(prev_frame, 1)) 
+	print( np.size(prev_frame, 0) , np.size(prev_frame, 1)) 
 	print( np.size(gray, 0) , np.size(gray, 1)) 
 
 
