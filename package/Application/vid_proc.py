@@ -13,9 +13,10 @@ import sys
 def motion(frame,prev_frame):
 	if prev_frame is None:
 		return 0
-	frame = imutils.resize(frame, width=400)#frame_size
 	prev_frame = imutils.resize(prev_frame, width=400)#frame_size
-
+	prev_frame = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
+	prev_frame = cv2.GaussianBlur(prev_frame, (21, 21), 0)
+	frame = imutils.resize(frame, width=400)#frame_size
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	gray = cv2.GaussianBlur(gray, (21, 21), 0)
 
@@ -159,8 +160,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				comm.write("frame_size",frame_size)
 			prev_frame_num = frame_num
 			if prev_frame is None:
-				gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-				prev_frame = cv2.GaussianBlur(gray, (21, 21), 0)
+				prev_frame = frame
 
 
 
