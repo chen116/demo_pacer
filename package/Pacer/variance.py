@@ -16,7 +16,7 @@ x=args["util"]
 x=0.5
 p=0.01
 h=0.05
-l=0.024
+l=0.025
 
 print("50%")
 print('high')
@@ -32,7 +32,7 @@ print("worst case fps:",x/l)
 x=0.4
 p=0.01
 h=0.05
-l=0.024
+l=0.025
 
 
 print("40%")
