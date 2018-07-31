@@ -133,13 +133,16 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			else:
 				frame_size = light_workload_frame_size
 			frame = imutils.resize(frame, width=frame_size)
-
-
+			if frame_size == heavy_workload_frame_size:
+				period = 1
+			else:
+				period = 2
+			period = 1
 			# (startX, startY, endX, endY)=(0,0,0,0) 
-			if cnt % 1 ==0:
+			if cnt % period ==0:
 				(startX, startY, endX, endY)=(0,0,0,0) 
 
-				blob = cv2.dnn.blobFromImage(cv2.resize(frame, (250, 250)),0.007843, (250, 250), 127.5)				
+				blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)),0.007843, (300, 300), 127.5)				
 				#blob = cv2.dnn.blobFromImage(frame,0.007843, (300, 300), 127.5)				
 				net.setInput(blob)
 				objects_detected = net.forward()
