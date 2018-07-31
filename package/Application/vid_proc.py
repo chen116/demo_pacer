@@ -13,13 +13,13 @@ import sys
 def motion(frame,prev_frame):
 	if prev_frame is None:
 		return 0
-	prev_frame = cv2.resize(prev_frame, (500, 500)) #frame_size
+	prev_frame = cv2.resize(prev_frame, (176, 144)) #frame_size
 	prev_frame = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
 	prev_frame = cv2.GaussianBlur(prev_frame, (21, 21), 0)
 
 
 
-	frame = cv2.resize(frame, (500,500))#frame_size
+	frame = cv2.resize(frame, (176,144))#frame_size
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	gray = cv2.GaussianBlur(gray, (21, 21), 0)
 
@@ -138,7 +138,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			for i in np.arange(0, objects_detected.shape[2]):
 				confidence = objects_detected[0, 0, i, 2]
 				if confidence > 0.5:
-					if motion(frame,prev_frame):
+					if motion(frame,prev_frame)>-1:
 						(h, w) = frame.shape[:2]
 						box = objects_detected[0, 0, i, 3:7] * np.array([w, h, w, h])
 						(startX, startY, endX, endY) = box.astype("int")
