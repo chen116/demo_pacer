@@ -62,7 +62,7 @@ car = np.concatenate((car, np.flipud(car)), axis=0)
 
 # create heartbeat
 import heartbeat
-window_size_hr=5
+window_size_hr=10
 sharedmem_id_for_heartbeat = 1024
 buffer_depth = 100
 log_name = "heartbeat.log"
@@ -145,7 +145,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 
 			if sum((startX, startY, endX, endY)) > 0 :
 				detect_car = 1
-				objects_detected = net.forward()
+
 
 			else:
 				detect_car = 0
@@ -155,7 +155,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			# record a heartbeat
 			hb.heartbeat_beat()
 			# send heartrate to Pacer monitor in Dom0
-			comm.write("heart_rate", hb.get_instant_heartrate())
+			comm.write("heart_rate", hb.get_window_heartrate())
 			# send change of framze sixe to Pacer monitor in Dom0
 			if prev_frame_size != frame_size:
 				prev_frame_size = frame_size
