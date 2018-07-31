@@ -11,6 +11,8 @@ import time
 import cv2
 import sys
 def motion(frame,prev_frame):
+	if prev_frame is None:
+		return 0
 	frame = imutils.resize(frame, width=400)#frame_size
 	prev_frame = imutils.resize(prev_frame, width=400)#frame_size
 
@@ -24,7 +26,7 @@ def motion(frame,prev_frame):
 
 
 
-	frameDelta = cv2.absdiff(pre_frame, gray)
+	frameDelta = cv2.absdiff(prev_frame, gray)
 	thresh = cv2.threshold(frameDelta, 25, 255, cv2.THRESH_BINARY)[1]
 
 	# dilate the thresholded image to fill in holes, then find contours
