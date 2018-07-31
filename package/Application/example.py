@@ -23,7 +23,7 @@ for i in range(100):
 
 	# processing
 
-	c= np.matmul(b,a.T)
+
 	time.sleep(0.1)
 
 	hb.heartbeat_beat()
@@ -38,7 +38,7 @@ for i in range(100):
 	# processing
 	c= np.matmul(b,a.T)
 	c= np.matmul(b,a.T)
-	time.sleep(0.1)
+
 
 
 	hb.heartbeat_beat()
@@ -51,7 +51,7 @@ for i in range(100):
 for i in range(100):
 
 	# processing
-	c= np.matmul(b,a.T)
+
 	time.sleep(0.1)
 
 
