@@ -47,7 +47,7 @@ print("worst case fps:",x/l)
 x=0.5
 p=10
 h=50
-l=24
+l=25
 
 print("50%")
 print('high')
