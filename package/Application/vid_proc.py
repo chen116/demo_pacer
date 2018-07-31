@@ -142,16 +142,16 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				(startX, startY, endX, endY)=(0,0,0,0) 
 
 				# blob = cv2.dnn.blobFromImage(cv2.resize(frame, (frame_size, frame_size)),0.007843, (frame_size, frame_size), 127.5)				
-				blob = cv2.dnn.blobFromImage(frame,0.007843, (227, 227), 127.5)				
+				blob = cv2.dnn.blobFromImage(frame,0.007843, (frame_size, frame_size), 127.5)				
 				net.setInput(blob)
 				objects_detected = net.forward()
 				for i in np.arange(0, objects_detected.shape[2]):
 					confidence = objects_detected[0, 0, i, 2]
 					if confidence > 0.5:
-						if motion(frame,prev_frame)>-1:
-							(h, w) = frame.shape[:2]
-							box = objects_detected[0, 0, i, 3:7] * np.array([w, h, w, h])
-							(startX, startY, endX, endY) = box.astype("int")
+						# if motion(frame,prev_frame)>-1:
+						(h, w) = frame.shape[:2]
+						box = objects_detected[0, 0, i, 3:7] * np.array([w, h, w, h])
+						(startX, startY, endX, endY) = box.astype("int")
 				prev_box = (startX, startY, endX, endY) 
 			else:
 				(startX, startY, endX, endY) = prev_box
