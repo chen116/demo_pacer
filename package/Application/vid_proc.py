@@ -62,7 +62,7 @@ car = np.concatenate((car, np.flipud(car)), axis=0)
 
 # create heartbeat
 import heartbeat
-window_size_hr=10
+window_size_hr=2
 sharedmem_id_for_heartbeat = 1024
 buffer_depth = 100
 log_name = "heartbeat.log"
@@ -115,8 +115,10 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	detect_car = vidarray_binary[0]
 	prev_frame_size = 0
 	prev_frame = None
-	
+
+	prev_box = (0,0,0,0)
 	# get frame numbers from dom0 to run object detection
+	cnt = -1
 	while frame_number_entry != "done":
 		frame_number_entry = c.read(key_path_hash_frame_number_entry).decode()
 		try:
@@ -124,25 +126,31 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 		except:
 			frame_num = -1
 		if frame_num > -1 and frame_num > prev_frame_num:
+			cnt+=1
 			frame = vidarray[frame_num]
 			if detect_car == 1:
 				frame_size = heavy_workload_frame_size
 			else:
 				frame_size = light_workload_frame_size
 			frame = imutils.resize(frame, width=frame_size)
-			(startX, startY, endX, endY)=(0,0,0,0) 
-			blob = cv2.dnn.blobFromImage(cv2.resize(frame, (frame_size, frame_size)),0.007843, (frame_size, frame_size), 127.5)				
-			# blob = cv2.dnn.blobFromImage(frame,0.007843, (227, 227), 127.5)				
-			net.setInput(blob)
-			objects_detected = net.forward()
-			for i in np.arange(0, objects_detected.shape[2]):
-				confidence = objects_detected[0, 0, i, 2]
-				if confidence > 0.5:
-					# if motion(frame,prev_frame)>-1:
-					(h, w) = frame.shape[:2]
-					box = objects_detected[0, 0, i, 3:7] * np.array([w, h, w, h])
-					(startX, startY, endX, endY) = box.astype("int")
+			# (startX, startY, endX, endY)=(0,0,0,0) 
+			if cnt % 2 ==0:
+				(startX, startY, endX, endY)=(0,0,0,0) 
 
+				blob = cv2.dnn.blobFromImage(cv2.resize(frame, (frame_size, frame_size)),0.007843, (frame_size, frame_size), 127.5)				
+				# blob = cv2.dnn.blobFromImage(frame,0.007843, (227, 227), 127.5)				
+				net.setInput(blob)
+				objects_detected = net.forward()
+				for i in np.arange(0, objects_detected.shape[2]):
+					confidence = objects_detected[0, 0, i, 2]
+					if confidence > 0.5:
+						# if motion(frame,prev_frame)>-1:
+						(h, w) = frame.shape[:2]
+						box = objects_detected[0, 0, i, 3:7] * np.array([w, h, w, h])
+						(startX, startY, endX, endY) = box.astype("int")
+				prev_box = (startX, startY, endX, endY) 
+			else:
+				(startX, startY, endX, endY) = prev_box
 			if sum((startX, startY, endX, endY)) > 0 :
 				detect_car = 1
 			# sampling freq 1-/2, keep last box sent to send now
@@ -161,7 +169,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			# record a heartbeat
 			hb.heartbeat_beat()
 			# send heartrate to Pacer monitor in Dom0
-			comm.write("heart_rate", hb.get_instant_heartrate())
+			comm.write("heart_rate", hb.get_window_heartrate())
 			# send change of framze sixe to Pacer monitor in Dom0
 			if prev_frame_size != frame_size:
 				prev_frame_size = frame_size
