@@ -5,7 +5,11 @@ import matplotlib.animation as animation
 from matplotlib.widgets import Cursor
 from matplotlib.font_manager import FontProperties
 from matplotlib.widgets import CheckButtons
+import argparse
+ap = argparse.ArgumentParser()
+ap.add_argument("-i", "--interval", type=int, default=1000, help="target fps")
 
+args = vars(ap.parse_args())
 import time
 
 fig = plt.figure(figsize=(10, 7))
@@ -274,7 +278,7 @@ def animate2(i):
 
 
 
-ani = animation.FuncAnimation(fig, animate2, interval=1000)
+ani = animation.FuncAnimation(fig, animate2, interval=args["interval"])
 plt.show()
 
 
