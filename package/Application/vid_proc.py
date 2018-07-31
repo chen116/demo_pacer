@@ -38,7 +38,7 @@ def motion(frame,prev_frame):
 	(startX, startY, endX, endY)=(0,0,0,0) 
 	for contour in contours:
 		# if the contour is too small, ignore it
-		if cv2.contourArea(contour) > 10:
+		if cv2.contourArea(contour) > 100:
 			(startX, startY, endX, endY)= cv2.boundingRect(contour)
 			return 1
 	return 0
@@ -151,6 +151,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 						if motion(frame,prev_frame):
 							(h, w) = frame.shape[:2]
 							box = objects_detected[0, 0, i, 3:7] * np.array([w, h, w, h])
+							print(objects_detected)
 							(startX, startY, endX, endY) = box.astype("int")
 				prev_box = (startX, startY, endX, endY) 
 			else:
