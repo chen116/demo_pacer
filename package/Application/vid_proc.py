@@ -138,13 +138,15 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			for i in np.arange(0, objects_detected.shape[2]):
 				confidence = objects_detected[0, 0, i, 2]
 				if confidence > 0.5:
-					if motion(frame,prev_frame)>-1:
-						(h, w) = frame.shape[:2]
-						box = objects_detected[0, 0, i, 3:7] * np.array([w, h, w, h])
-						(startX, startY, endX, endY) = box.astype("int")
+					# if motion(frame,prev_frame)>-1:
+					(h, w) = frame.shape[:2]
+					box = objects_detected[0, 0, i, 3:7] * np.array([w, h, w, h])
+					(startX, startY, endX, endY) = box.astype("int")
 
 			if sum((startX, startY, endX, endY)) > 0 :
 				detect_car = 1
+				objects_detected = net.forward()
+
 			else:
 				detect_car = 0
 			c.write(key_path_hash_box_entry,(str(startX)+" "+str(startY)+" "+str(endX)+" "+str(endY)).encode())
