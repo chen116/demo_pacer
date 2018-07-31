@@ -18,8 +18,7 @@ def motion(frame,prev_frame):
 
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	gray = cv2.GaussianBlur(gray, (21, 21), 0)
-	if prev_frame is None:
-		prev_frame = gray
+
 
 	print( np.size(frame, 0) , np.size(prev_frame, 1)) 
 	print( np.size(gray, 0) , np.size(gray, 1)) 
@@ -160,7 +159,8 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				comm.write("frame_size",frame_size)
 			prev_frame_num = frame_num
 			if prev_frame is None:
-				prev_frame = frame
+				gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+				prev_frame = cv2.GaussianBlur(gray, (21, 21), 0)
 
 
 
