@@ -315,7 +315,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			# record a heartbeat
 			hb.heartbeat_beat()
 			# send heartrate to Pacer monitor in Dom0
-			if cnt>window_size_hr:
+			if cnt%window_size_hr==0:
 				comm.write("heart_rate", hb.get_window_heartrate())
 			# send change of framze sixe to Pacer monitor in Dom0
 			if prev_frame_size != frame_size:
