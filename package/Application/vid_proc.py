@@ -138,7 +138,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			if frame_size == 300:
 				period = 1
 			# (startX, startY, endX, endY)=(0,0,0,0) 
-			if cnt % period ==0:
+			if cnt % 1 ==0:
 				(startX, startY, endX, endY)=(0,0,0,0) 
 
 				# blob = cv2.dnn.blobFromImage(cv2.resize(frame, (frame_size, frame_size)),0.007843, (frame_size, frame_size), 127.5)				
