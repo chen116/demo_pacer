@@ -10,16 +10,16 @@ import imutils
 import time
 import cv2
 import sys
-def motion(frame,pre_frame):
+def motion(frame,prev_frame):
 	frame = imutils.resize(frame, width=400)#frame_size
-	pre_frame = imutils.resize(pre_frame, width=400)#frame_size
+	prev_frame = imutils.resize(prev_frame, width=400)#frame_size
 
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	gray = cv2.GaussianBlur(gray, (21, 21), 0)
-	if pre_frame is None:
-		pre_frame = gray
+	if prev_frame is None:
+		prev_frame = gray
 
-	print( np.size(frame, 0) , np.size(pre_frame, 1)) 
+	print( np.size(frame, 0) , np.size(prev_frame, 1)) 
 	print( np.size(gray, 0) , np.size(gray, 1)) 
 
 
@@ -136,8 +136,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			for i in np.arange(0, objects_detected.shape[2]):
 				confidence = objects_detected[0, 0, i, 2]
 				if confidence > 0.5:
-					if prev_frame is not None:
-						if motion(frame,pre_frame)==1:
+					if motion(frame,prev_frame):
 							(h, w) = frame.shape[:2]
 							box = objects_detected[0, 0, i, 3:7] * np.array([w, h, w, h])
 							(startX, startY, endX, endY) = box.astype("int")
