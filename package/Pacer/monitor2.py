@@ -33,8 +33,8 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 		name_path = ("/local/domain/"+uid+"/name").encode()
 		if c[name_path].decode() == "VM1":
 			monitoring_domU[0] = uid
-		if c[name_path].decode() == "VM2":
-			monitoring_domU[1] = uid
+		# if c[name_path].decode() == "VM2":
+		# 	monitoring_domU[1] = uid
 
 
 
