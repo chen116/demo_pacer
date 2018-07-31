@@ -14,13 +14,16 @@ hb = heartbeat.Heartbeat(sharedmem_id_for_heartbeat,window_size_hr,buffer_depth,
 import domU_comm
 monitoring_items = ["heart_rate"]
 comm = domU_comm.DomU(monitoring_items)
-
-
+matsize = 1000
+a= np.random.rand(matsize, matsize)
+b= np.random.rand(matsize, matsize)	
+c= np.matmul(b,a.T)
 # loop
 for i in range(100):
 
 	# processing
-	time.sleep(0.1)
+
+	c= np.matmul(b,a.T)
 
 	hb.heartbeat_beat()
 	instant_heartrate = hb.get_instant_heartrate()
@@ -32,7 +35,8 @@ for i in range(100):
 for i in range(100):
 
 	# processing
-	time.sleep(0.2)
+	c= np.matmul(b,a.T)
+	c= np.matmul(b,a.T)
 
 	hb.heartbeat_beat()
 	instant_heartrate = hb.get_instant_heartrate()
@@ -44,7 +48,7 @@ for i in range(100):
 for i in range(100):
 
 	# processing
-	time.sleep(0.1)
+	c= np.matmul(b,a.T)
 
 	hb.heartbeat_beat()
 	instant_heartrate = hb.get_instant_heartrate()
