@@ -131,8 +131,8 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 				frame_size = light_workload_frame_size
 			frame = imutils.resize(frame, width=frame_size)
 			(startX, startY, endX, endY)=(0,0,0,0) 
-			# blob = cv2.dnn.blobFromImage(cv2.resize(frame, (frame_size, frame_size)),0.007843, (frame_size, frame_size), 127.5)				
-			blob = cv2.dnn.blobFromImage(frame,0.007843, (227, 227), 127.5)				
+			blob = cv2.dnn.blobFromImage(cv2.resize(frame, (frame_size, frame_size)),0.007843, (frame_size, frame_size), 127.5)				
+			# blob = cv2.dnn.blobFromImage(frame,0.007843, (227, 227), 127.5)				
 			net.setInput(blob)
 			objects_detected = net.forward()
 			for i in np.arange(0, objects_detected.shape[2]):
