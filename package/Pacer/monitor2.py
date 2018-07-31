@@ -53,12 +53,12 @@ class MonitorThread(threading.Thread):
 	def __init__(self, threadLock,shared_data,domuid,rtxen_or_credit,timeslice_us,min_heart_rate,max_heart_rate,keys=['test'],base_path='/local/domain'):
 		threading.Thread.__init__(self)
 		self.domuid=(domuid)
-		self.other_domuid=monitoring_domU[1]
-		if self.domuid==monitoring_domU[1]:
+		self.other_domuid=monitoring_domU[0]
+		if self.domuid==monitoring_domU[0]:
 			self.other_domuid=monitoring_domU[0]
 
 		self.algo = args["algo1"]
-		if self.domuid==monitoring_domU[1]:
+		if self.domuid==monitoring_domU[0]:
 			self.algo = args["algo2"]
 		self.keys=keys
 		self.base_path=base_path
