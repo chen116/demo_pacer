@@ -92,7 +92,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			frame_num = int(frame_number_entry)
 		except:
 			frame_num = -1
-		if frame_num > -1 #and frame_num > prev_frame_num:
+		if frame_num > -1 :#and frame_num > prev_frame_num:
 			frame = vidarray[frame_num]
 			if detect_car == 1:
 				frame_size = heavy_workload_frame_size
