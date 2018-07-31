@@ -139,14 +139,14 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 			if cnt % 1 ==0:
 				(startX, startY, endX, endY)=(0,0,0,0) 
 
-				blob = cv2.dnn.blobFromImage(cv2.resize(frame, (200, 200)),0.007843, (200, 200), 127.5)				
+				blob = cv2.dnn.blobFromImage(cv2.resize(frame, (frame_size, frame_size)),0.007843, (frame_size, frame_size), 127.5)				
 				#blob = cv2.dnn.blobFromImage(frame,0.007843, (300, 300), 127.5)				
 				net.setInput(blob)
 				objects_detected = net.forward()
 				for i in np.arange(0, objects_detected.shape[2]):
 					confidence = objects_detected[0, 0, i, 2]
 					if confidence > 0.5:
-						if motion(frame,prev_frame):
+						if 0:
 							print("car moving at frame:", frame_num)
 						(h, w) = frame.shape[:2]
 						box = objects_detected[0, 0, i, 3:7] * np.array([w, h, w, h])
