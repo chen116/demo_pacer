@@ -1,5 +1,5 @@
 import time
-
+import numpy as np
 # create heartbeat
 import heartbeat
 window_size_hr=5
