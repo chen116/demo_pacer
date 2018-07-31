@@ -20,7 +20,7 @@ args = vars(ap.parse_args())
 
 
 monitoring_items = ["heart_rate","frame_size"]
-monitoring_domU = ["VM1_id_placeholder","VM2_id_placeholder"]
+monitoring_domU = ["VM1_id_placeholder"]#,"VM2_id_placeholder"]
 
 # find correct domUs id
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
