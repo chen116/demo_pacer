@@ -14,7 +14,7 @@ hb = heartbeat.Heartbeat(sharedmem_id_for_heartbeat,window_size_hr,buffer_depth,
 import domU_comm
 monitoring_items = ["heart_rate"]
 comm = domU_comm.DomU(monitoring_items)
-matsize = 500
+matsize = 1000
 a= np.random.rand(matsize, matsize)
 b= np.random.rand(matsize, matsize)	
 c= np.matmul(b,a.T)
