@@ -19,17 +19,19 @@ a= np.random.rand(matsize, matsize)
 b= np.random.rand(matsize, matsize)	
 c= np.matmul(b,a.T)
 # loop
+
 for i in range(50):
 
 	# processing
 
-
+	tn = time.time()
 	c= np.matmul(b,a.T)
 
 	c= np.matmul(b,a.T)
-	hb.heartbeat_beat()
-	instant_heartrate = hb.get_instant_heartrate()
-	print("get_instant_heartrate:",instant_heartrate)
+	print(time.time()-tn)
+	# hb.heartbeat_beat()
+	# instant_heartrate = hb.get_instant_heartrate()
+	# print("get_instant_heartrate:",instant_heartrate)
 	# send heart rate to Dom0
 	#comm.write("heart_rate", instant_heartrate)
 
@@ -37,14 +39,16 @@ for i in range(50):
 for i in range(50):
 
 	# processing
+	tn = time.time()
 
 	c= np.matmul(b,a.T)
+	print("        ",time.time()-tn)
 
 
 
-	hb.heartbeat_beat()
-	instant_heartrate = hb.get_instant_heartrate()
-	print("		get_instant_heartrate:",instant_heartrate)
+	# hb.heartbeat_beat()
+	# instant_heartrate = hb.get_instant_heartrate()
+	# print("		get_instant_heartrate:",instant_heartrate)
 	# send heart rate to Dom0
 	#comm.write("heart_rate", instant_heartrate)
 
