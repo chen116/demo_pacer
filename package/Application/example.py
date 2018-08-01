@@ -19,7 +19,7 @@ a= np.random.rand(matsize, matsize)
 b= np.random.rand(matsize, matsize)	
 c= np.matmul(b,a.T)
 # loop
-for i in range(100):
+for i in range(50):
 
 	# processing
 
@@ -34,7 +34,7 @@ for i in range(100):
 	comm.write("heart_rate", instant_heartrate)
 
 # loop
-for i in range(100):
+for i in range(50):
 
 	# processing
 
