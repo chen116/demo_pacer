@@ -1,8 +1,26 @@
-xentrace -T 5 -e 0xfffff000 raw_trace_one_VM_high_workload
-xenalyze --scatterplot-pcpu rawdata > out.txt
+https://blog.xenproject.org/2012/09/27/tracing-with-xentrace-and-xenalyze/
 
 
+to generate xentrace raw file:
+$ xentrace -T 5 -e 0xfffff000 raw_trace_one_VM_high_workload
 
+-T = trace for how long
+-e = event masks. 0xffff000 = all events
+
+
+to get readable output with xenalyze:
+
+$ xenalyze --scatterplot-pcpu raw_trace_two_VM_low_workload > out.txt
+
+
+to undersatnd what is in  out.txt:
+$ cat out.txt
+4v0 0.001289140 10
+
+the line above means:  dom4's vcpu 0 is running on pcpu 10 at time 0.001289140 sec$
+(VM1's uid=1, VM2's uid=4 in these four traces)
+
+get to more xenalyze options for what kind of output, do "xenalyze --help"
 
 Usage: xenalyze [-"%sa(*,?] [-# [0|1]] [-$ size] [-  domain-id] [-! domain-id]
             [-i sec] [-& L] [-' filename] [-) HZ] [-+ errlevel]
