@@ -20,7 +20,7 @@ b= np.random.rand(matsize, matsize)
 
 # loop
 
-for i in range(100):
+for i in range(200):
 
 	# processing
 
