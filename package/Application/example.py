@@ -23,9 +23,12 @@ for i in range(100):
 
 	# processing
 
+	a= np.random.rand(matsize, matsize)
+	b= np.random.rand(matsize, matsize)	
 	c= np.matmul(b,a.T)
+	a= np.random.rand(matsize, matsize)
+	b= np.random.rand(matsize, matsize)	
 	c= np.matmul(b,a.T)
-
 	hb.heartbeat_beat()
 	instant_heartrate = hb.get_instant_heartrate()
 	print("get_instant_heartrate:",instant_heartrate)
@@ -36,6 +39,8 @@ for i in range(100):
 for i in range(100):
 
 	# processing
+	a= np.random.rand(matsize, matsize)
+	b= np.random.rand(matsize, matsize)	
 	c= np.matmul(b,a.T)
 
 
