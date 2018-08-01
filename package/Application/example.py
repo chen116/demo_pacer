@@ -28,7 +28,7 @@ for i in range(50):
 	c= np.matmul(b,a.T)
 
 	c= np.matmul(b,a.T)
-	print(time.time()-tn)
+	print(1/(time.time()-tn))
 	# hb.heartbeat_beat()
 	# instant_heartrate = hb.get_instant_heartrate()
 	# print("get_instant_heartrate:",instant_heartrate)
@@ -42,7 +42,7 @@ for i in range(50):
 	tn = time.time()
 
 	c= np.matmul(b,a.T)
-	print("        ",time.time()-tn)
+	print("        ",1/(time.time()-tn))
 
 
 
