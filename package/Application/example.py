@@ -20,20 +20,20 @@ b= np.random.rand(matsize, matsize)
 
 # loop
 
-# for i in range(200):
+for i in range(200):
 
-# 	# processing
+	# processing
 
 
-# 	c= np.matmul(b,a.T)
+	c= np.matmul(b,a.T)
 
-# 	c= np.matmul(b,a.T)
+	c= np.matmul(b,a.T)
 
-# 	hb.heartbeat_beat()
-# 	instant_heartrate = hb.get_instant_heartrate()
-# 	print("get_instant_heartrate:",instant_heartrate)
-# 	# send heart rate to Dom0
-# 	comm.write("heart_rate", instant_heartrate)
+	hb.heartbeat_beat()
+	instant_heartrate = hb.get_instant_heartrate()
+	print("get_instant_heartrate:",instant_heartrate)
+	# send heart rate to Dom0
+	comm.write("heart_rate", instant_heartrate)
 
 # loop
 for i in range(200):
