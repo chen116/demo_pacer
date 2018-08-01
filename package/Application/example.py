@@ -1,5 +1,4 @@
-import time
-import numpy as np
+
 # create heartbeat
 import heartbeat
 window_size_hr=5
@@ -14,6 +13,11 @@ hb = heartbeat.Heartbeat(sharedmem_id_for_heartbeat,window_size_hr,buffer_depth,
 import domU_comm
 monitoring_items = ["heart_rate"]
 comm = domU_comm.DomU(monitoring_items)
+
+
+
+import time
+import numpy as np
 matsize = 1000#650
 a= np.random.rand(matsize, matsize)
 b= np.random.rand(matsize, matsize)	

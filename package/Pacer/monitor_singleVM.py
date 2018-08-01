@@ -18,7 +18,7 @@ ap.add_argument("-s", "--static-alloc", type=int, default=20, help="static utili
 args = vars(ap.parse_args())
 
 
-monitoring_items = ["heart_rate","frame_size"]
+monitoring_items = ["heart_rate"]
 monitoring_domU = ["VM1_id_placeholder"]
 
 # find correct domUs id
@@ -72,10 +72,6 @@ class MonitorThread(threading.Thread):
 				path,token=next(m.wait())
 				msg=c.read(path).decode()
 				self.threadLock.acquire()
-				if "frame_size" in path.decode():
-					if msg.isdigit():
-						with open("data.txt", "a") as myfile:
-							myfile.write(self.domuid+" "+(msg)+" frame size"+ " "+str(time.time())+"\n")
 				if "heart_rate" in path.decode():
 					heart_rate=-1
 					try :
