@@ -152,7 +152,7 @@ pp.pprint(shared_data)
 
 # stdout ready status to inform user
 print('')
-print('Single VM')
+print('Single VM mode')
 print('monitoring:')
 for i in range(len(monitoring_domU)):
 	vmstr = 'VM'+str(i+1)
