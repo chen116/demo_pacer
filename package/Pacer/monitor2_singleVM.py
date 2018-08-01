@@ -113,7 +113,8 @@ class MonitorThread(threading.Thread):
 		cur_bw = self.allocMod.exec_allocation(heart_rate,cur_bw)
 		# run stride sharing if needed
 		#(cur_bw,other_cur_bw)=self.allocMod.exec_stride_sharing(cur_bw,time.time())
-
+		if cur_bw==self.timeslice_us-self.timeslice_us*0.01:
+			cur_bw = self.timeslice_us
 		# assign the new cpu resource to VM
 		if self.rtxen_or_credit=="rtxen":
 			for vcpu in myinfo:
@@ -131,7 +132,7 @@ class MonitorThread(threading.Thread):
 			xen_interface.sched_credit(self.domuid,cur_bw)
 			xen_interface.sched_credit(self.other_domuid,other_cur_bw)
 		# print(str(heart_rate))
-		
+
 		# write data to data.txt for realtime_plot.py for visulization
 		time_now=str(time.time())
 		info = self.domuid+" "+str(heart_rate)+" hr "+time_now+"\n"
