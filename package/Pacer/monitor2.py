@@ -41,7 +41,7 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 # create xenstore entry for DomU to write data
 domUs = dom0_comm.Dom0(monitoring_items,monitoring_domU)
 
-timeslice_us=5000#args["timeslice"]
+timeslice_us=10000#args["timeslice"]
 min_heart_rate = float(args["fps"])
 max_heart_rate = float(args["fps"])*1.5
 
