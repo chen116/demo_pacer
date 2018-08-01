@@ -1,4 +1,4 @@
-xentrace 5 -e 0xfffff000 rawdata
+xentrace -T 5 -e 0xfffff000 raw_trace_one_VM_high_workload
 xenalyze --scatterplot-pcpu rawdata > out.txt
 
 
