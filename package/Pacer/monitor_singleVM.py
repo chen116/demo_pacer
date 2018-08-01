@@ -23,7 +23,6 @@ monitoring_domU = ["VM1_id_placeholder"]
 
 # find correct domUs id
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
-	c.delete(b'/local/domain/VM2_id_placeholder')
 	domu_ids=[]
 	all_domuid_ids = []
 	for uid in c.list('/local/domain'.encode()):
@@ -32,7 +31,6 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	for uid in all_domuid_ids:
 		name_path = ("/local/domain/"+uid+"/name").encode()
 		print(name_path)
-
 		if c[name_path].decode() == "VM1":
 			monitoring_domU[0] = uid
 
@@ -194,9 +192,8 @@ for t in threads:
 	threads_cnt+=1
 print('Final domUs info:')
 print("Exiting the Monitor, total",threads_cnt,"monitoring threads")
-if (args["algo2"]==0 and args["algo1"]>0) or (args["algo1"]==0 and args["algo2"]>0):
-	print('Exiting Experiment 2: Pacer vs Static')
-elif args["algo2"] * args["algo1"] > 0:
-	print('Exiting Experiment 3: Pacer under Resoruce Contention')
+
+print('Exiting Single VM mode')
+
 
 
