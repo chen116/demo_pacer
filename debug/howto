@@ -1,0 +1,35 @@
+xentrace 5 -e 0xfffff000 rawdata
+xenalyze --scatterplot-pcpu rawdata > out.txt
+
+
+
+
+Usage: xenalyze [-"%sa(*,?] [-# [0|1]] [-$ size] [-  domain-id] [-! domain-id]
+            [-i sec] [-& L] [-' filename] [-) HZ] [-+ errlevel]
+            [--show-default-domain-summary] [--mmio-enumeration-skip-vga=[0|1]]
+            [--sample-size=size] [--report-pcpu] [--summary] [--dump-all]
+            [--dump-ipi-latency] [--dump-no-processing] [--dump-raw-process]
+            [--dump-raw-reads] [--dump-show-power-states]
+            [--dump-trace-volume-on-lost-record]
+            [--interval-domain-guest-interrupt=domain-id]
+            [--interval-domain-grant-maps=domain-id] [--interval=sec]
+            [--interval-cr3-schedule-ordered]
+            [--interval-cr3-schedule-time=gmfn[,gmfn...]]
+            [--interval-cr3-schedule-time-all]
+            [--interval-cr3-short-summary=gmfn]
+            [--interval-domain-short-summary=domain-id]
+            [--interval-domain-total-time=domain[,domain...]]
+            [--interval-domain-total-time-all]
+            [--histogram-interrupt-eip=vector[,increment]] [--scatterplot-cpi]
+            [--scatterplot-cr3-switch] [--scatterplot-extint-cycles=vector]
+            [--scatterplot-interrupt-eip=vector] [--scatterplot-io=port]
+            [--scatterplot-irq] [--scatterplot-pcpu] [--scatterplot-rdtsc]
+            [--scatterplot-runstate] [--scatterplot-runstate-time]
+            [--scatterplot-unpin-promote] [--scatterplot-vmexit-eip]
+            [--scatterplot-wake-to-halt] [--with-cr3-enumeration]
+            [--with-interrupt-eip-enumeration=vector]
+            [--with-mmio-enumeration] [--with-pio-enumeration]
+            [--default-guest-paging-levels=L] [--symbol-file=filename]
+            [--svm-mode] [--cpu-hz=HZ] [--progress] [--tolerance=errlevel]
+            [--tsc-loop-fatal] [--help] [--usage] [trace file]
+

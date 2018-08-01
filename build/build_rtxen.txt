@@ -2,17 +2,16 @@ apt update && git clone https://github.com/PennPanda/RT-Xen.git && cd RT-Xen && 
 
 
 
-make world
+make world -j8
+(will fail)
 nano /root/RT-Xen/extras/mini-os-remote/Makefile
-
 include /root/RT-Xen/config/MiniOS.mk
 #include $(MINI-OS_ROOT)/config/MiniOS.mk
 
 sed -i 's/include \$(MINI-OS_ROOT)\/config\/MiniOS.mk/include \/root\/RT-Xen\/config\/MiniOS.mk/g' /root/RT-Xen/extras/mini-os-remote/Makefile
 
 ./configure --disable-qemu-traditional  --with-extra-qemuu-configure-args='--disable-werror'
-make world
-make install
+make world -j8 && make install -j8
 /sbin/ldconfig
 update-rc.d xencommons defaults 19 18
 update-rc.d xendomains defaults 21 20
@@ -22,7 +21,7 @@ service apparmor stop
 update-rc.d -f apparmor remove
 
 
-sed -i '/GRUB_DEFAULT=0/a GRUB_CMDLINE_XEN_DEFAULT="dom0_mem=24000M,max:24000M dom0_max_vcpus=6 dom0_vcpus_pin sched=rtds"' /etc/default/grub
+sed -i '/GRUB_DEFAULT=0/a GRUB_CMDLINE_XEN_DEFAULT="dom0_mem=16000M,max:16000M dom0_max_vcpus=4 dom0_vcpus_pin sched=rtds"' /etc/default/grub
 sed -i 's/GRUB_DEFAULT=0/GRUB_DEFAULT="Ubuntu GNU\/Linux, with Xen hypervisor"/g' /etc/default/grub
 update-grub
 sed -i 's/#autoballoon="auto"/autoballoon=0/g' /etc/xen/xl.conf
@@ -30,7 +29,17 @@ sed -i 's/#autoballoon="auto"/autoballoon=0/g' /etc/xen/xl.conf
 apt -y install libvirt-bin
 reboot
 
+#gui
+apt -y install lxde lxde-common
 
+# turbo vnc 
+cd /root/ && apt -y install x11-xkb-utils && wget https://sourceforge.net/projects/turbovnc/files/2.1.2/turbovnc_2.1.2_amd64.deb && dpkg -i turbovnc*.deb && /opt/TurboVNC/bin/vncserver
+/opt/TurboVNC/bin/vncserver -kill :1
+sed -i '/#!\/bin\/sh/a \/usr\/bin\/lxterminal --geometry=90x30 --show-menubar --show-borders --show-scrollbar --font=10' /root/.vnc/xstartup.turbovnc
+/opt/TurboVNC/bin/vncserver
+/opt/TurboVNC/bin/vncserver
+
+# pacer
 
 cd /root/  && apt update && apt -y install git &&  apt -y install gcc && apt -y install python3-dev && wget http://semanchuk.com/philip/sysv_ipc/sysv_ipc-1.0.0.tar.gz && tar -xzf sysv_ipc-1.0.0.tar.gz && cd sysv_ipc-1.0.0 && python3 setup.py install && cd /root/  && apt -y install python3-pip && pip3 install numpy && apt-get -y install python3-setuptools && git clone https://github.com/selectel/pyxs && cd pyxs && python3 setup.py install && cd /root/ && apt -y install xenstore-utils && cd /root &&  git clone https://github.com/chen116/demo2018.git && cd demo2018/pacer 
 python3 monitor.py 2 10 1,2 10000

@@ -20,7 +20,7 @@ b= np.random.rand(matsize, matsize)
 
 # loop
 
-for i in range(50):
+for i in range(100):
 
 	# processing
 
@@ -36,7 +36,7 @@ for i in range(50):
 	comm.write("heart_rate", instant_heartrate)
 
 # loop
-for i in range(50):
+for i in range(100):
 
 	# processing
 
