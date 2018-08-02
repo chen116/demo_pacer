@@ -228,7 +228,7 @@ def animate2(i):
     ax2.set_xlabel('Time')
     ax1.set_ylabel('FPS(frames/sec)')
     ax2.set_ylabel('Assigned CPU Time (%)')
-    ax1.set_ylim( 0, 50 )  
+    # ax1.set_ylim( 0, 50 )  
     ax2.set_ylim( -5, 105 )  
     # if time_start>0 and time_end>0 and len(miny)>1:
     #     ax1.plot([-1,48],maxy[0:2],'r',label= 'Target\nFPS')
