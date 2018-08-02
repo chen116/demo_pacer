@@ -125,13 +125,11 @@ int main( int argc, const char** argv )
 
     /** Printing the contents of third matrix. */
 
-    printf ("\n");
 
-
-
-
-    printf ("\n");
     heartbeat_finish(heart);
+    th = xs_transaction_start(xs);
+    er = xs_write(xs, th, path, "done", strlen("done"));
+    xs_transaction_end(xs, th, false);
     return (0);
 
 }
