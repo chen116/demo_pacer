@@ -74,7 +74,7 @@ rpm -ivh dev86-0.16.21-2.el7.x86_64.rpm
 git clone https://github.com/PennPanda/RT-Xen.git && cd RT-Xen
 ./configure --with-extra-qemuu-configure-args='--disable-werror' 
 make -j8 install-tools
-
+/sbin/ldconfig 
 
 
 
