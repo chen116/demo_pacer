@@ -44,7 +44,7 @@ int main ()
     int **ptr1, **ptr2, **ptr3;
     int  col1, row2, col2;
     srand ((unsigned) time (&t));
-    int N=100;
+    int N=150;
     int j,i;
     ptr1 = (int **) malloc (sizeof (int *) * N);
     ptr2 = (int **) malloc (sizeof (int *) * N);
