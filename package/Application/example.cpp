@@ -1,5 +1,5 @@
 #include <cstddef>
-using namespace std;
+
 
 //git pull && gcc example.cpp -lhb-shared -lhrm-shared -lxenstore && ./a.out
 #include <xenstore.h> // Prior to Xen 4.2.0 use xs.h
