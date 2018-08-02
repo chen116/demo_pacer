@@ -105,6 +105,7 @@ int main( int argc, const char** argv )
         matmult(ptr1,ptr2,ptr3,N);
 
         heartbeat(heart, 1);
+        char hr_str[10];
         gcvt(hb_get_instant_rate(heart) , 8, hr_str);
         printf("%s %d \n", hr_str, strlen(hr_str));
         th = xs_transaction_start(xs);
