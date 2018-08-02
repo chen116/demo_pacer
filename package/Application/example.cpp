@@ -62,9 +62,15 @@ unsigned int num_strings;
 char * buf;
 unsigned int len;
 /* Get a connection to the daemon */
-xs = xs_open();
+/*Attempts to make a connection over the socket interface,
+ * and if it fails, then over the  xenbus interface.
+ * Mode 0 specifies read-write access, XS_OPEN_READONLY for
+ * read-only access.*/
+xs = xs_open(0);
 if ( xs == NULL ) printf("not good\n");
 /* Get the local domain path */
+
+
 path = xs_get_domain_path(xs, 5); // replace "domid" with a valid domain ID (or one which will become valid)
 if ( path == NULL ) printf("not good\n");
 /* Make space for our node on the path */
