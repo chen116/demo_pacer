@@ -1,21 +1,40 @@
 
-
-
-//git pull && gcc example.cpp -lhb-shared -lhrm-shared -lxenstore -std=c++11  && ./a.out
+git pull && gcc example.cpp -lhb-shared -lhrm-shared -lxenstore -std=c++11  && ./a.out
 #include <stdlib.h>
 #include <xenstore.h> // Prior to Xen 4.2.0 use xs.h
 
-//gcc -Wall example.c -o example.out  -lxenstore
+
+
+//gcc -Wall example.c -o example.out  -lxenstore 
 
 int main( int argc, const char** argv )
 {
+char *path;
 
 struct xs_handle *xs;
 xs_transaction_t th;
 xs = xs_daemon_open();
-printf("hi\n");
+path = xs_get_domain_path(xs, 5); 
+printf("%s\n",path);
     return (0);
 }
+
+
+// //git pull && gcc example.cpp -lhb-shared -lhrm-shared -lxenstore -std=c++11  && ./a.out
+// #include <stdlib.h>
+// #include <xenstore.h> // Prior to Xen 4.2.0 use xs.h
+
+// //gcc -Wall example.c -o example.out  -lxenstore
+
+// int main( int argc, const char** argv )
+// {
+
+// struct xs_handle *xs;
+// xs_transaction_t th;
+// xs = xs_daemon_open();
+// printf("hi\n");
+//     return (0);
+// }
 
 
 // //git pull && gcc example.cpp -lhb-shared -lhrm-shared -lxenstore -std=c++11  && ./a.out
@@ -79,13 +98,13 @@ printf("hi\n");
 // char * buf;
 // unsigned int len;
 // /* Get a connection to the daemon */
-// /*Attempts to make a connection over the socket interface,
+// Attempts to make a connection over the socket interface,
 //  * and if it fails, then over the  xenbus interface.
 //  * Mode 0 specifies read-write access, XS_OPEN_READONLY for
-//  * read-only access.*/
+//  * read-only access.
 // xs = xs_daemon_open();
 // if ( xs == NULL ) printf("not good\n");
-// /* Get the local domain path */
+/* Get the local domain path */
 
 
 // path = xs_get_domain_path(xs, 5); // replace "domid" with a valid domain ID (or one which will become valid)
