@@ -15,7 +15,11 @@ struct xs_handle *xs;
 xs_transaction_t th;
 xs = xs_daemon_open();
 path = xs_get_domain_path(xs, 4); 
+path = (char*)realloc(path, strlen(path) + strlen("/heart_rate") + 1);
+if ( path == NULL ) printf("not good\n");
+strcat(path, "/heart_rate");
 printf("%s\n",path);
+
     return (0);
 }
 
@@ -107,7 +111,7 @@ printf("%s\n",path);
 /* Get the local domain path */
 
 
-// path = xs_get_domain_path(xs, 5); // replace "domid" with a valid domain ID (or one which will become valid)
+// path = xs_get_domain_path(xs, 4); // replace "domid" with a valid domain ID (or one which will become valid)
 // if ( path == NULL ) printf("not good\n");
 // /* Make space for our node on the path */
 // path = (char*)realloc(path, strlen(path) + strlen("/heart_rate") + 1);
