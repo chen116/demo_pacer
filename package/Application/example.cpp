@@ -1,15 +1,15 @@
 
 
 #include <stdlib.h>
-#include <xenstore.h> // Prior to Xen 4.2.0 use xs.h
-
+#ifdef __cplusplus
+extern "C" {
+#endif
+#include <xenstore.h>
+#ifdef __cplusplus
+}
+#endif
 #include <heartbeats/heartbeat.h>
-
 #include <string.h>
-
-
-
-
 
 heartbeat_t* heart;
 
@@ -23,7 +23,7 @@ static const char* vic_log_file ="vic.log";
 static const int64_t vic_min_target = 100;
 static const int64_t vic_max_target = 1000;
 
-//git pull && gcc -Wall example.c -o out  -lxenstore -lhb-shared && ./out
+//git pull && g++ -Wall example.cpp -o out -lxenstore -lhb-shared && ./out
 void matmult(int **,int **,int **,int);
 
 void matmult(int ** ptr1,int ** ptr2, int ** ptr3,int N){
@@ -46,18 +46,18 @@ void matmult(int ** ptr1,int ** ptr2, int ** ptr3,int N){
 
 int main( int argc, const char** argv )
 {
-char *path;
-int er;
-struct xs_handle *xs;
-xs_transaction_t th;
-xs = xs_daemon_open();
-path = xs_get_domain_path(xs, 4); 
-path = (char*)realloc(path, strlen(path) + strlen("/heart_rate") + 1);
-if ( path == NULL ) printf("not good\n");
-strcat(path, "/heart_rate");
-printf("%s\n",path);
+    char *path;
+    int er;
+    struct xs_handle *xs;
+    xs_transaction_t th;
+    xs = xs_daemon_open();
+    path = xs_get_domain_path(xs, 4); 
+    path = (char*)realloc(path, strlen(path) + strlen("/heart_rate") + 1);
+    if ( path == NULL ) printf("not good\n");
+    strcat(path, "/heart_rate");
+    printf("%s\n",path);
 
- heart = heartbeat_init(vic_win_size, vic_buf_depth, vic_log_file, vic_min_target, vic_max_target);
+     heart = heartbeat_init(vic_win_size, vic_buf_depth, vic_log_file, vic_min_target, vic_max_target);
 
 
     int **ptr1, **ptr2, **ptr3;
@@ -85,7 +85,7 @@ printf("%s\n",path);
             ptr2[i][j] = rand ()%10;
         }
     }
-    for (i = 0; i < 5; ++i)
+    for (i = 0; i < 500; ++i)
     {
 
 
@@ -93,24 +93,41 @@ printf("%s\n",path);
         matmult(ptr1,ptr2,ptr3,N);
 
         heartbeat(heart, 1);
-        // char hr_str[10];
-        // gcvt(hb_get_instant_rate(heart) , 6, hr_str);
-        // printf("%s %d \n", hr_str, strlen(hr_str));
+        char hr_str[10];
+        gcvt(hb_get_instant_rate(heart) , 8, hr_str);
+        printf("%s %d \n", hr_str, strlen(hr_str));
         th = xs_transaction_start(xs);
-        er = xs_write(xs, th, path, "11.0", strlen("11.0"));
+        er = xs_write(xs, th, path, hr_str, strlen(hr_str));
         xs_transaction_end(xs, th, false);
+
+
         printf("heartbeat: instant rate: %f\n",hb_get_instant_rate(heart) );
     }
     
+    for (i = 0; i < 500; ++i)
+    {
 
+
+        matmult(ptr1,ptr2,ptr3,N);
+
+        heartbeat(heart, 1);
+        char hr_str[10];
+        gcvt(hb_get_instant_rate(heart) , 8, hr_str);
+        printf("%s %d \n", hr_str, strlen(hr_str));
+        th = xs_transaction_start(xs);
+        er = xs_write(xs, th, path, hr_str, strlen(hr_str));
+        xs_transaction_end(xs, th, false);
+
+
+        printf("heartbeat: instant rate: %f\n",hb_get_instant_rate(heart) );
+    }
+    
 
     /** Printing the contents of third matrix. */
 
     printf ("\n");
 
-th = xs_transaction_start(xs);
-er = xs_write(xs, th, path, "done", strlen("done"));
-xs_transaction_end(xs, th, false);
+
 
 
     printf ("\n");
