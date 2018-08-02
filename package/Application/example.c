@@ -5,7 +5,7 @@ git pull && gcc example.cpp -lhb-shared -lhrm-shared -lxenstore -std=c++11  && .
 
 
 
-//gcc -Wall example.c -o example.out  -lxenstore 
+//git pull && gcc -Wall example.c -o out  -lxenstore && ./out
 
 int main( int argc, const char** argv )
 {
@@ -14,7 +14,7 @@ char *path;
 struct xs_handle *xs;
 xs_transaction_t th;
 xs = xs_daemon_open();
-path = xs_get_domain_path(xs, 5); 
+path = xs_get_domain_path(xs, 4); 
 printf("%s\n",path);
     return (0);
 }
