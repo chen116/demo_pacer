@@ -2,14 +2,8 @@
 
 #include <stdlib.h>
 #include <xenstore.h> // Prior to Xen 4.2.0 use xs.h
-
 #include <heartbeats/heartbeat.h>
-
 #include <string.h>
-
-
-
-
 
 heartbeat_t* heart;
 
@@ -85,7 +79,7 @@ int main( int argc, const char** argv )
             ptr2[i][j] = rand ()%10;
         }
     }
-    for (i = 0; i < 5; ++i)
+    for (i = 0; i < 500; ++i)
     {
 
 
@@ -94,17 +88,33 @@ int main( int argc, const char** argv )
 
         heartbeat(heart, 1);
         char hr_str[10];
-        gcvt(hb_get_instant_rate(heart) , 6, hr_str);
+        gcvt(hb_get_instant_rate(heart) , 8, hr_str);
         printf("%s %d \n", hr_str, strlen(hr_str));
         th = xs_transaction_start(xs);
         er = xs_write(xs, th, path, hr_str, strlen(hr_str));
         xs_transaction_end(xs, th, false);
 
-        
+
         printf("heartbeat: instant rate: %f\n",hb_get_instant_rate(heart) );
     }
     
+    for (i = 0; i < 500; ++i)
+    {
 
+
+        matmult(ptr1,ptr2,ptr3,N);
+
+        heartbeat(heart, 1);
+        gcvt(hb_get_instant_rate(heart) , 8, hr_str);
+        printf("%s %d \n", hr_str, strlen(hr_str));
+        th = xs_transaction_start(xs);
+        er = xs_write(xs, th, path, hr_str, strlen(hr_str));
+        xs_transaction_end(xs, th, false);
+
+
+        printf("heartbeat: instant rate: %f\n",hb_get_instant_rate(heart) );
+    }
+    
 
     /** Printing the contents of third matrix. */
 
