@@ -67,7 +67,7 @@ int main ()
             ptr2[i][j] = rand ()%10;
         }
     }
-    for (i = 0; i < 10; ++i)
+    for (i = 0; i < 100; ++i)
     {
         matmult(ptr1,ptr2,ptr3,N);
         matmult(ptr1,ptr2,ptr3,N);
@@ -75,7 +75,7 @@ int main ()
         printf("heartbeat: instant rate: %f\n",hb_get_instant_rate(heart) );
     }
     
-    for (i = 0; i < 10; ++i)
+    for (i = 0; i < 100; ++i)
     {
         matmult(ptr1,ptr2,ptr3,N);
         heartbeat(heart, 1);
