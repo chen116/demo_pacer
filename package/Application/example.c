@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <xenstore.h> // Prior to Xen 4.2.0 use xs.h
 
-//gcc -Wall example.c -o example.o  -lxenstore
+//gcc -Wall example.c -o example.out  -lxenstore
 
 int main( int argc, const char** argv )
 {
@@ -13,6 +13,7 @@ int main( int argc, const char** argv )
 struct xs_handle *xs;
 xs_transaction_t th;
 xs = xs_daemon_open();
+print("hi\n")
     return (0);
 }
 
