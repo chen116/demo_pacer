@@ -42,7 +42,7 @@ int main ()
     int **ptr1, **ptr2, **ptr3;
     int  col1, row2, col2;
     srand ((unsigned) time (&t));
-    int N=300;
+    int N=200;
     int j,i;
     ptr1 = (int **) malloc (sizeof (int *) * N);
     ptr2 = (int **) malloc (sizeof (int *) * N);
@@ -72,19 +72,25 @@ int main ()
         heartbeat(heart, 1);
         printf("heartbeat: instant rate: %f\n",hb_get_instant_rate(heart) );
     }
-
+    for (i = 0; i < 10; ++i)
+    {
+        matmult(ptr1,ptr2,ptr3,N);
+        matmult(ptr1,ptr2,ptr3,N);
+        heartbeat(heart, 1);
+        printf("    heartbeat: instant rate: %f\n",hb_get_instant_rate(heart) );
+    }
     
     /** Printing the contents of third matrix. */
 
     printf ("\n");
     /* Printing the contents of third matrix. */
 
-    printf ("\n\nFinal Matrix :");
-    for (i = 0; i < N; i++) {
-        printf ("\n\t");
-        for (j = 0; j < N; j++)
-            printf ("%4d  ", ptr3[i][j]);
-    }
+    // printf ("\n\nFinal Matrix :");
+    // for (i = 0; i < N; i++) {
+    //     printf ("\n\t");
+    //     for (j = 0; j < N; j++)
+    //         printf ("%4d  ", ptr3[i][j]);
+    // }
 
     printf ("\n");
     heartbeat_finish(heart);
