@@ -23,7 +23,7 @@ static const char* vic_log_file ="vic.log";
 static const int64_t vic_min_target = 100;
 static const int64_t vic_max_target = 1000;
 
-//git pull && g++ -Wall example.cpp -o out -lxenstore -lhb-shared && ./out
+//git pull && g++ -Wall example.cpp -o out -lxenstore -lhb-shared -std=c++11 && ./out
 void matmult(int **,int **,int **,int);
 
 void matmult(int ** ptr1,int ** ptr2, int ** ptr3,int N){
@@ -85,7 +85,7 @@ int main( int argc, const char** argv )
             ptr2[i][j] = rand ()%10;
         }
     }
-    for (i = 0; i < 500; ++i)
+    for (i = 0; i < 50; ++i)
     {
 
 
@@ -95,16 +95,16 @@ int main( int argc, const char** argv )
         heartbeat(heart, 1);
         char hr_str[10];
         gcvt(hb_get_instant_rate(heart) , 8, hr_str);
-        printf("%s %d \n", hr_str, strlen(hr_str));
+        // printf("%s %d \n", hr_str, strlen(hr_str));
         th = xs_transaction_start(xs);
         er = xs_write(xs, th, path, hr_str, strlen(hr_str));
         xs_transaction_end(xs, th, false);
 
 
-        printf("heartbeat: instant rate: %f\n",hb_get_instant_rate(heart) );
+        // printf("heartbeat: instant rate: %f\n",hb_get_instant_rate(heart) );
     }
     
-    for (i = 0; i < 500; ++i)
+    for (i = 0; i < 50; ++i)
     {
 
 
@@ -113,13 +113,13 @@ int main( int argc, const char** argv )
         heartbeat(heart, 1);
         char hr_str[10];
         gcvt(hb_get_instant_rate(heart) , 8, hr_str);
-        printf("%s %d \n", hr_str, strlen(hr_str));
+        // printf("%s %d \n", hr_str, strlen(hr_str));
         th = xs_transaction_start(xs);
         er = xs_write(xs, th, path, hr_str, strlen(hr_str));
         xs_transaction_end(xs, th, false);
 
 
-        printf("heartbeat: instant rate: %f\n",hb_get_instant_rate(heart) );
+        // printf("heartbeat: instant rate: %f\n",hb_get_instant_rate(heart) );
     }
     
 
