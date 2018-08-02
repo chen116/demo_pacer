@@ -10,7 +10,7 @@
 int main( int argc, const char** argv )
 {
 char *path;
-
+int er;
 struct xs_handle *xs;
 xs_transaction_t th;
 xs = xs_daemon_open();
