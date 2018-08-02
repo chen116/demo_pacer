@@ -21,24 +21,7 @@ void matmult(int ** ptr1,int ** ptr2, int ** ptr3,int N){
 
     int i, j, k;
 
-    for (i = 0; i < N; i++)
-        ptr1[i] = (int *) malloc (sizeof (int) * N);
-    for (i = 0; i < N; i++)
-        ptr2[i] = (int *) malloc (sizeof (int) * N);
-    for (i = 0; i < N; i++)
-        ptr3[i] = (int *) malloc (sizeof (int) * N);
 
-    for (i = 0; i < N; i++) {
-        for (j = 0; j < N; j++) {
-            ptr1[i][j] = rand ()%100;
-        }
-    }
-
-    for (i = 0; i < N; i++) {
-        for (j = 0; j < N; j++) {
-            ptr2[i][j] = rand ()%100;
-        }
-    }
 
     for (i = 0; i < N; i++) {
         for (j = 0; j < N; j++) {
@@ -57,15 +40,32 @@ int main ()
     heart = heartbeat_init(vic_win_size, vic_buf_depth, vic_log_file, vic_min_target, vic_max_target);
     time_t t;
     int **ptr1, **ptr2, **ptr3;
-    int N, col1, row2, col2;
+    int  col1, row2, col2;
     srand ((unsigned) time (&t));
     int N=3;
     int j,i;
     ptr1 = (int **) malloc (sizeof (int *) * N);
     ptr2 = (int **) malloc (sizeof (int *) * N);
     ptr3 = (int **) malloc (sizeof (int *) * N);
-    
+    for (i = 0; i < N; i++)
+        ptr1[i] = (int *) malloc (sizeof (int) * N);
+    for (i = 0; i < N; i++)
+        ptr2[i] = (int *) malloc (sizeof (int) * N);
+    for (i = 0; i < N; i++)
+        ptr3[i] = (int *) malloc (sizeof (int) * N);
 
+    for (i = 0; i < N; i++) {
+        for (j = 0; j < N; j++) {
+            ptr1[i][j] = rand ()%100;
+        }
+    }
+
+    for (i = 0; i < N; i++) {
+        for (j = 0; j < N; j++) {
+            ptr2[i][j] = rand ()%100;
+        }
+    }
+    
     for (i = 0; i < 10; ++i)
     {
         matmult(ptr1,ptr2,ptr3,N);
