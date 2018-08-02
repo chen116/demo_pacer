@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <xenstore.h> // Prior to Xen 4.2.0 use xs.h
 
-gcc -Wall example.c -o example.o  -lxenstore
+//gcc -Wall example.c -o example.o  -lxenstore
 
 int main( int argc, const char** argv )
 {
