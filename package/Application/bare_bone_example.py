@@ -2,7 +2,7 @@ import time
 import numpy as np
 # create heartbeat
 
-matsize = 650
+matsize = 1000
 a= np.random.rand(matsize, matsize)
 b= np.random.rand(matsize, matsize)	
 
