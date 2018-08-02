@@ -97,7 +97,7 @@ int main( int argc, const char** argv )
         gcvt(hb_get_instant_rate(heart) , 6, hr_str);
         printf("%s %d \n", hr_str, strlen(hr_str));
         th = xs_transaction_start(xs);
-        er = xs_write(xs, th, path, "11.0", strlen("11.0"));
+        er = xs_write(xs, th, path, hr_str, strlen(hr_str));
         xs_transaction_end(xs, th, false);
 
         
