@@ -12,7 +12,7 @@ int main( int argc, const char** argv )
 
 struct xs_handle *xs;
 xs_transaction_t th;
-
+xs = xs_daemon_open();
     return (0);
 }
 
