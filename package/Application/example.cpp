@@ -59,17 +59,17 @@ char * buf;
 unsigned int len;
 /* Get a connection to the daemon */
 xs = xs_daemon_open();
-if ( xs == NULL ) error();
+if ( xs == NULL ) printf("not good\n");
 /* Get the local domain path */
 path = xs_get_domain_path(xs, 5); // replace "domid" with a valid domain ID (or one which will become valid)
-if ( path == NULL ) error();
+if ( path == NULL ) printf("not good\n");
 /* Make space for our node on the path */
 path = realloc(path, strlen(path) + strlen("/heart_rate") + 1);
-if ( path == NULL ) error();
+if ( path == NULL ) printf("not good\n");
 strcat(path, "/heart_rate");
 /* Create a watch on /local/domain/%d/heart_rate. */
 // er = xs_watch(xs, path, "mytoken");
-if ( er == 0 ) error();
+if ( er == 0 ) printf("not good\n");
 /* We are notified of read availability on the watch via the
  * file descriptor.
  */
