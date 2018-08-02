@@ -42,7 +42,7 @@ int main ()
     int **ptr1, **ptr2, **ptr3;
     int  col1, row2, col2;
     srand ((unsigned) time (&t));
-    int N=3;
+    int N=1000;
     int j,i;
     ptr1 = (int **) malloc (sizeof (int *) * N);
     ptr2 = (int **) malloc (sizeof (int *) * N);
@@ -56,13 +56,13 @@ int main ()
 
     for (i = 0; i < N; i++) {
         for (j = 0; j < N; j++) {
-            ptr1[i][j] = rand ()%100;
+            ptr1[i][j] = rand ()%10;
         }
     }
 
     for (i = 0; i < N; i++) {
         for (j = 0; j < N; j++) {
-            ptr2[i][j] = rand ()%100;
+            ptr2[i][j] = rand ()%10;
         }
     }
 
