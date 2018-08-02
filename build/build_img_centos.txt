@@ -64,6 +64,16 @@ yum -y install python34-tkinter
 # addition steps(not required, get this from original heartbit repo issues):
 # hmod 750 /usr/local/include/heartbeats/
 
+======setting up xensore====
+
+yum install -y python-devel
+github clone xen,
+
+git checkout staging-4.6
+cd tools
+
+
+
 
 =====setting opencv======
 

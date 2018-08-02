@@ -1,10 +1,10 @@
-//git pull && gcc example.c -lhb-shared -lhrm-shared -lxenstore && ./a.out
+//git pull && gcc example.cpp -lhb-shared -lhrm-shared -lxenstore && ./a.out
 #include <xenstore.h> // Prior to Xen 4.2.0 use xs.h
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <heartbeats/heartbeat.h>
-
+#include <string.h>
 
 
 
@@ -61,7 +61,7 @@ unsigned int len;
 xs = xs_daemon_open();
 if ( xs == NULL ) error();
 /* Get the local domain path */
-path = xs_get_domain_path(xs, domid); // replace "domid" with a valid domain ID (or one which will become valid)
+path = xs_get_domain_path(xs, 5); // replace "domid" with a valid domain ID (or one which will become valid)
 if ( path == NULL ) error();
 /* Make space for our node on the path */
 path = realloc(path, strlen(path) + strlen("/heart_rate") + 1);
