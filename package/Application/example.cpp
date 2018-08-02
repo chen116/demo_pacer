@@ -64,7 +64,7 @@ if ( xs == NULL ) printf("not good\n");
 path = xs_get_domain_path(xs, 5); // replace "domid" with a valid domain ID (or one which will become valid)
 if ( path == NULL ) printf("not good\n");
 /* Make space for our node on the path */
-path = realloc(path, 10);//strlen(path) + strlen('/heart_rate') + 1);
+path = (char*)realloc(path, strlen(path) + strlen("/heart_rate") + 1);
 if ( path == NULL ) printf("not good\n");
 strcat(path, "/heart_rate");
 /* Create a watch on /local/domain/%d/heart_rate. */
