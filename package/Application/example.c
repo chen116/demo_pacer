@@ -65,7 +65,7 @@ int main ()
             ptr2[i][j] = rand ()%100;
         }
     }
-    
+
     for (i = 0; i < 10; ++i)
     {
         matmult(ptr1,ptr2,ptr3,N);
@@ -83,7 +83,7 @@ int main ()
     for (i = 0; i < N; i++) {
         printf ("\n\t");
         for (j = 0; j < N; j++)
-            printf ("%4d", ptr3[i][j]);
+            printf ("%4d  ", ptr3[i][j]);
     }
 
     printf ("\n");
