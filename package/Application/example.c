@@ -46,18 +46,18 @@ void matmult(int ** ptr1,int ** ptr2, int ** ptr3,int N){
 
 int main( int argc, const char** argv )
 {
-char *path;
-int er;
-struct xs_handle *xs;
-xs_transaction_t th;
-xs = xs_daemon_open();
-path = xs_get_domain_path(xs, 4); 
-path = (char*)realloc(path, strlen(path) + strlen("/heart_rate") + 1);
-if ( path == NULL ) printf("not good\n");
-strcat(path, "/heart_rate");
-printf("%s\n",path);
+    char *path;
+    int er;
+    struct xs_handle *xs;
+    xs_transaction_t th;
+    xs = xs_daemon_open();
+    path = xs_get_domain_path(xs, 4); 
+    path = (char*)realloc(path, strlen(path) + strlen("/heart_rate") + 1);
+    if ( path == NULL ) printf("not good\n");
+    strcat(path, "/heart_rate");
+    printf("%s\n",path);
 
- heart = heartbeat_init(vic_win_size, vic_buf_depth, vic_log_file, vic_min_target, vic_max_target);
+     heart = heartbeat_init(vic_win_size, vic_buf_depth, vic_log_file, vic_min_target, vic_max_target);
 
 
     int **ptr1, **ptr2, **ptr3;
@@ -99,6 +99,8 @@ printf("%s\n",path);
         th = xs_transaction_start(xs);
         er = xs_write(xs, th, path, "11.0", strlen("11.0"));
         xs_transaction_end(xs, th, false);
+
+        
         printf("heartbeat: instant rate: %f\n",hb_get_instant_rate(heart) );
     }
     
@@ -108,9 +110,7 @@ printf("%s\n",path);
 
     printf ("\n");
 
-th = xs_transaction_start(xs);
-er = xs_write(xs, th, path, "done", strlen("done"));
-xs_transaction_end(xs, th, false);
+
 
 
     printf ("\n");
