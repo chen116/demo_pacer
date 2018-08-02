@@ -15,9 +15,9 @@ static const char* vic_log_file ="vic.log";
 static const int64_t vic_min_target = 100;
 static const int64_t vic_max_target = 1000;
 
-void matmult(int **,int **,int **);
+void matmult(int **,int **,int **,int);
 
-void matmult(int ** ptr1,int ** ptr2, int ** ptr3){
+void matmult(int ** ptr1,int ** ptr2, int ** ptr3,int N){
 
     int i, j, k;
 
@@ -68,7 +68,7 @@ int main ()
 
     for (i = 0; i < 10; ++i)
     {
-        matmult(ptr1,ptr2,ptr3);
+        matmult(ptr1,ptr2,ptr3,N);
         heartbeat(heart, 1);
         printf("heartbeat: instant rate: %f\n",hb_get_instant_rate(heart) );
     }
