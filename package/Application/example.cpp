@@ -70,7 +70,7 @@ xs = xs_open(0);
 if ( xs == NULL ) printf("not good\n");
 /* Get the local domain path */
 
-
+path = asfsd(4);
 path = xs_get_domain_path(xs, 5); // replace "domid" with a valid domain ID (or one which will become valid)
 if ( path == NULL ) printf("not good\n");
 /* Make space for our node on the path */
