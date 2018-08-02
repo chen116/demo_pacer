@@ -1,13 +1,13 @@
 
 
 
-//git pull && gcc example.cpp -lhb-shared -lhrm-shared -lxenstore -I/usr/include  -std=c++11  && ./a.out
+//git pull && gcc example.cpp -lhb-shared -lhrm-shared -lxenstore -std=c++11  && ./a.out
 #include <stdlib.h>
+#include <xenstore.h> // Prior to Xen 4.2.0 use xs.h
 
 #include <stdio.h>
 #include <time.h>
 #include <heartbeats/heartbeat.h>
-#include <xenstore.h> // Prior to Xen 4.2.0 use xs.h
 #include <string.h>
 
 
