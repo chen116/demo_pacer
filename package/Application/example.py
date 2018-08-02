@@ -18,7 +18,7 @@ comm = domU_comm.DomU(monitoring_items)
 
 import time
 import numpy as np
-matsize = 1000#650
+matsize = 500#650
 a= np.random.rand(matsize, matsize)
 b= np.random.rand(matsize, matsize)	
 
