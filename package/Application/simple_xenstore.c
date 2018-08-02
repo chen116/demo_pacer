@@ -1,4 +1,4 @@
-// gcc -Wall simple_xenstore.c -o simple -lxenstore 
+// gcc -Wall test.c -o test -lxenstore 
 
 #include <stdlib.h>
 #include <xenstore.h> 
