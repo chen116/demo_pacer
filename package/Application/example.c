@@ -17,7 +17,7 @@ static const int64_t vic_max_target = 1000;
 
 void matmult(int **,int **,int **);
 
-void matmult(int ** ptr1,int ** ptr1, int ** ptr3){
+void matmult(int ** ptr1,int ** ptr2, int ** ptr3){
 
     int i, j, k;
 
@@ -59,13 +59,14 @@ int main ()
     int **ptr1, **ptr2, **ptr3;
     int N, col1, row2, col2;
     srand ((unsigned) time (&t));
-    N=3;
+    int N=3;
+    int j,i;
     ptr1 = (int **) malloc (sizeof (int *) * N);
     ptr2 = (int **) malloc (sizeof (int *) * N);
     ptr3 = (int **) malloc (sizeof (int *) * N);
     
 
-    for (int i = 0; i < 10; ++i)
+    for (i = 0; i < 10; ++i)
     {
         matmult(ptr1,ptr2,ptr3);
         heartbeat(heart, 1);
