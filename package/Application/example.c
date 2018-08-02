@@ -44,7 +44,7 @@ int main ()
     int **ptr1, **ptr2, **ptr3;
     int  col1, row2, col2;
     srand ((unsigned) time (&t));
-    int N=180;
+    int N=100;
     int j,i;
     ptr1 = (int **) malloc (sizeof (int *) * N);
     ptr2 = (int **) malloc (sizeof (int *) * N);
@@ -67,21 +67,21 @@ int main ()
             ptr2[i][j] = rand ()%10;
         }
     }
-
     for (i = 0; i < 10; ++i)
     {
+        matmult(ptr1,ptr2,ptr3,N);
         matmult(ptr1,ptr2,ptr3,N);
         heartbeat(heart, 1);
         printf("heartbeat: instant rate: %f\n",hb_get_instant_rate(heart) );
     }
+    
     for (i = 0; i < 10; ++i)
     {
-        matmult(ptr1,ptr2,ptr3,N);
         matmult(ptr1,ptr2,ptr3,N);
         heartbeat(heart, 1);
         printf("    heartbeat: instant rate: %f\n",hb_get_instant_rate(heart) );
     }
-    
+
     /** Printing the contents of third matrix. */
 
     printf ("\n");
