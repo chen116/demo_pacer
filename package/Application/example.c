@@ -19,7 +19,9 @@ path = (char*)realloc(path, strlen(path) + strlen("/heart_rate") + 1);
 if ( path == NULL ) printf("not good\n");
 strcat(path, "/heart_rate");
 printf("%s\n",path);
-
+th = xs_transaction_start(xs);
+er = xs_write(xs, th, path, "10.0", strlen("10.0"));
+xs_transaction_end(xs, th, false);
     return (0);
 }
 
