@@ -66,7 +66,7 @@ unsigned int len;
  * and if it fails, then over the  xenbus interface.
  * Mode 0 specifies read-write access, XS_OPEN_READONLY for
  * read-only access.*/
-xs = xs_open(0);
+xs = xs_daemon_open();
 if ( xs == NULL ) printf("not good\n");
 /* Get the local domain path */
 
