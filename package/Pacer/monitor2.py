@@ -85,7 +85,6 @@ class MonitorThread(threading.Thread):
 				if "heart_rate" in path.decode():
 					heart_rate=-1
 					try :
-						print(msg)
 						heart_rate = float(msg)
 						self.res_allocat(heart_rate)	
 					except:
