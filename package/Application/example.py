@@ -1,5 +1,5 @@
 import gc
-# gc.disable()
+gc.disable()
 # create heartbeat
 import heartbeat
 window_size_hr=5
