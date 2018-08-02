@@ -62,7 +62,7 @@ unsigned int num_strings;
 char * buf;
 unsigned int len;
 /* Get a connection to the daemon */
-xs = xs_daemon_open();
+xs = xs_open();
 if ( xs == NULL ) printf("not good\n");
 /* Get the local domain path */
 path = xs_get_domain_path(xs, 5); // replace "domid" with a valid domain ID (or one which will become valid)
