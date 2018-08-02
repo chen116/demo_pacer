@@ -13,7 +13,7 @@ char *path;
 
 struct xs_handle *xs;
 xs_transaction_t th;
-xs = xs_daemon_open(0);
+xs = xs_daemon_open();
 path = xs_get_domain_path(xs, 4); 
 printf("%s\n",path);
     return (0);
