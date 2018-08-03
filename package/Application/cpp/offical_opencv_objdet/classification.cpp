@@ -215,18 +215,18 @@ int main(int argc, char **argv)
 
 
     net.setInput(inputBlob, "data");        //set the network input
-    Mat hi = net.forward();
-    int midx, npairs;
-    int nparts = hi.size[1];
-    int H = hi.size[2];
-    int W = hi.size[3];
-    cout << nparts << " " << H<<" "<<W <<endl;
+    Mat hi = net.forward("DetectionOutput");
+    // int midx, npairs;
+    // int nparts = hi.size[1];
+    // int H = hi.size[2];
+    // int W = hi.size[3];
+    // cout << nparts << " " << H<<" "<<W <<endl;
 
 
-            net.setInput(inputBlob, "data");        //set the network input
-            std::vector<Mat> outs;
-            net.forward(outs, getOutputsNames(net));
-            postprocess(img, outs, net);
+            // net.setInput(inputBlob, "data");        //set the network input
+            // std::vector<Mat> outs;
+            // net.forward(outs, getOutputsNames(net));
+            // postprocess(img, outs, net);
 
     cv::TickMeter t;
 
