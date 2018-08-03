@@ -3,6 +3,7 @@
 
 app: clean
 	-git pull
+	#g++ yolo_object_detection.cpp -o app `pkg-config --libs opencv` -std=c++11 
 	g++ yolo_object_detection.cpp -o app `pkg-config --libs opencv` -std=c++11 
 
 clean:
