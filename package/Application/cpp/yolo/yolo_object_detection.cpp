@@ -20,8 +20,8 @@ static const char* about =
 "Class names can be downloaded here: https://github.com/pjreddie/darknet/tree/master/data\n";
 static const char* params =
 "{ help           | false | print usage         }"
-"{ cfg            |  yolov3-tiny.cfg     | model configuration }"
-"{ model          |   yolov3-tiny.weights    | model weights       }"
+"{ cfg            |  yolov3.cfg     | model configuration }"
+"{ model          |   yolov3.weights    | model weights       }"
 "{ camera_device  | 0     | camera device number}"
 "{ source         |  person.jpg    | video or image for detection}"
 "{ out            |       | path to output video file}"
@@ -40,6 +40,7 @@ int main(int argc, char** argv)
     }
     String modelConfiguration = parser.get<String>("cfg");
     String modelBinary = parser.get<String>("model");
+    printf("%s %s\n",modelBinary,modelConfiguration );
     dnn::Net net = readNetFromDarknet(modelConfiguration, modelBinary);
     if (net.empty())
     {
