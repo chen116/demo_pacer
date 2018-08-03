@@ -79,7 +79,7 @@ cout.rdbuf( oldCoutStreamBuf );
 
 // Will output our Hello World! from above.
 cout << strCout.str();
-
+strCout.int() >> domid
 
 // fstream domid_file("id.txt");
 // int domid;
