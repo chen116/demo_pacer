@@ -126,8 +126,10 @@ std::vector<String> getOutputsNames(const Net& net)
         std::vector<String> layersNames = net.getLayerNames();
         names.resize(outLayers.size());
         for (size_t i = 0; i < outLayers.size(); ++i)
+        {
             names[i] = layersNames[outLayers[i] - 1];
             cout << outLayers[i] <<endl;
+        }
     }
     return names;
 }
