@@ -23,8 +23,8 @@ static const char* about =
 "Class names can be downloaded here: https://github.com/pjreddie/darknet/tree/master/data\n";
 static const char* params =
 "{ help           | false | print usage         }"
-"{ cfg            |  /root/darknet/cfg/yolov1.cfg     | model configuration }"
-"{ model          |   /root/darknet/yolo.weight    | model weights       }"
+"{ cfg            |  yolov3-tiny.cfg     | model configuration }"
+"{ model          |   yolov3-tiny.weights    | model weights       }"
 "{ camera_device  | 0     | camera device number}"
 "{ source         |       | video or image for detection}"
 "{ out            |       | path to output video file}"
