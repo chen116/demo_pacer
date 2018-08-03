@@ -5,7 +5,10 @@
 
 
 // able to cut vid frame
-//automatic know its VM1 id
+//resize()
+//automatic know its VM's id, sort of, better to do inline
+// get coordinates:
+
 
 
 #include <opencv2/dnn.hpp>
@@ -59,29 +62,13 @@ static const int64_t vic_buf_depth = 1000;
 static const char* vic_log_file ="vic.log";
 static const int64_t vic_min_target = 100;
 static const int64_t vic_max_target = 1000;
+
+#include <vector>
 int main(int argc, char** argv)
 {
 
 
-system("python3 getDomUid.py > id.txt"); 
-// system(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()')"); 
-fstream domid_file("id.txt");
-int domid;
-domid_file >> domid;
-
-
-    char *path;
-    int er;
-    struct xs_handle *xs;
-    xs_transaction_t th;
-    xs = xs_daemon_open();
-    path = xs_get_domain_path(xs, domid); 
-    path = (char*)realloc(path, strlen(path) + strlen("/heart_rate") + 1);
-    if ( path == NULL ) printf("not good\n");
-    strcat(path, "/heart_rate");
-    printf("%s\n",path);
-    heart = heartbeat_init(vic_win_size, vic_buf_depth, vic_log_file, vic_min_target, vic_max_target);
-
+//yolo
     CommandLineParser parser(argc, argv, params);
     if (parser.get<bool>("help"))
     {
@@ -138,6 +125,61 @@ domid_file >> domid;
             classNamesVec.push_back(className);
     }
     String object_roi_style = parser.get<String>("style");
+//yolo
+
+system("python3 getDomUid.py > id.txt"); 
+// system(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()')"); 
+fstream domid_file("id.txt");
+int domid;
+domid_file >> domid;
+
+
+    char *path;
+    int er;
+    struct xs_handle *xs;
+    xs_transaction_t th;
+    xs = xs_daemon_open();
+    path = xs_get_domain_path(xs, domid); 
+    path = (char*)realloc(path, strlen(path) + strlen("/heart_rate") + 1);
+    if ( path == NULL ) printf("not good\n");
+    strcat(path, "/heart_rate");
+    printf("%s\n",path);
+    heart = heartbeat_init(vic_win_size, vic_buf_depth, vic_log_file, vic_min_target, vic_max_target);
+
+
+vector<Mat> car;
+vector<Mat> no_car;
+for (int k = 0; i < 200; ++k)
+{
+    Mat frame;
+    cap >> frame;
+    if (k>=20 and k <50)
+    {
+        car.push_back(frame);
+    }
+    if (k >= 140)
+    {
+        no_car.push_back(frame);
+    }
+    /* code */
+}
+vector<Mat> flipcar = car; 
+reverse(flipcar.begin(),flipcar.end());
+for (int i=0;i<flipcar.size();i++)
+{
+    car.push_back(flipcar[i]);
+}
+
+// assuming i get what i need. 
+// while c.read(key_path_hash_frame_number_entry).decode() != "init":
+//     continue
+
+
+//doing resieze before running yolo
+
+Mat new_img;
+resize(frame, new_frame, cv::Size(), frame_size/176, frame_size/176);
+
     for(;;)
     {
         heartbeat(heart, 1);

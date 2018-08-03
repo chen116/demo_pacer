@@ -1,6 +1,4 @@
 from pyxs import Client
-
-
 # create a object for DomU to send data to Dom0
 class DomU:
 	def __init__(self,keys=['test'],base_path='/local/domain'):
