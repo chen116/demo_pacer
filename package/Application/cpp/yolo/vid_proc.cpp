@@ -4,6 +4,10 @@
 
 
 
+// able to cut vid frame
+//automatic know its VM1 id
+
+
 #include <opencv2/dnn.hpp>
 #include <opencv2/dnn/shape_utils.hpp>
 #include <opencv2/imgproc.hpp>
@@ -32,10 +36,7 @@ static const char* params =
 
 
 
-#include <heartbeats/heartbeat.h>
-#include <string.h>
 
-heartbeat_t* heart;
 
 #include <stdlib.h>
 #ifdef __cplusplus
@@ -44,9 +45,11 @@ extern "C" {
 #include <xenstore.h>
 #ifdef __cplusplus
 }
+#endif
 
-
-
+#include <heartbeats/heartbeat.h>
+#include <string.h>
+heartbeat_t* heart;
 static const int64_t vic_win_size = 10;
 static const int64_t vic_buf_depth = 1000;
 static const char* vic_log_file ="vic.log";
@@ -131,7 +134,7 @@ int main(int argc, char** argv)
         th = xs_transaction_start(xs);
         er = xs_write(xs, th, path, hr_str, strlen(hr_str));
         xs_transaction_end(xs, th, false);
-        
+
         Mat frame;
         cap >> frame; // get a new frame from camera/video or read image
         if (frame.empty())

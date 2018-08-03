@@ -64,10 +64,10 @@ yum -y install python34-tkinter
 # addition steps(not required, get this from original heartbit repo issues):
 # hmod 750 /usr/local/include/heartbeats/
 
-======setting up xenstore====
+======setting up xenstore for c api====
 
-yum -y install epel-release
-yum -y install python-devel iasl uuid-devel ncurses-devel
+
+yum update -y && yum -y groupinstall "Development Tools" && yum install -y gcc gcc-c++ git patch texinfo && yum install -y python-devel acpica-tools libuuid-devel ncurses-devel glib2 glib2-devel libaio-devel openssl-devel yajl-devel glibc-devel glibc-devel.i686 pixman-devel
 wget http://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/d/dev86-0.16.21-2.el7.x86_64.rpm
 rpm -ivh dev86-0.16.21-2.el7.x86_64.rpm
 

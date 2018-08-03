@@ -1,4 +1,4 @@
-
+//git pull && g++ -Wall example.cpp -o out -lxenstore -lhb-shared -std=c++11 && ./out
 
 #include <stdlib.h>
 #ifdef __cplusplus
@@ -23,7 +23,7 @@ static const char* vic_log_file ="vic.log";
 static const int64_t vic_min_target = 100;
 static const int64_t vic_max_target = 1000;
 
-//git pull && g++ -Wall example.cpp -o out -lxenstore -lhb-shared -std=c++11 && ./out
+
 void matmult(int **,int **,int **,int);
 
 void matmult(int ** ptr1,int ** ptr2, int ** ptr3,int N){
