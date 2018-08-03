@@ -16,6 +16,7 @@ using namespace cv::dnn;
 using namespace std;
 void postprocess(Mat& frame, const std::vector<Mat>& outs, Net& net)
 {
+    float confThreshold = 0.5;
     static std::vector<int> outLayers = net.getUnconnectedOutLayers();
     static std::string outLayerType = net.getLayer(outLayers[0])->type;
 
