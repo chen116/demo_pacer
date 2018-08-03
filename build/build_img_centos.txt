@@ -64,7 +64,7 @@ yum -y install python34-tkinter
 # addition steps(not required, get this from original heartbit repo issues):
 # hmod 750 /usr/local/include/heartbeats/
 
-======setting up xensore====
+======setting up xenstore====
 
 yum -y install epel-release
 yum -y install python-devel iasl uuid-devel ncurses-devel
@@ -83,13 +83,13 @@ make -j8 install-tools
 
 =====setting opencv======
 
-# compile opencv3 from source
+# compile opencv3.x from source
 cp /root/demo_pacer/build/cv3_install_for_py3.sh /root/ && sh cv3_install_for_py3.sh
-# opencv2
+
+# opencv2.x
 yum install opencv-devel   
 
 # skinny install for python3:
-
 pip3 install opencv-python-headless
 
 

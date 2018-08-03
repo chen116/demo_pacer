@@ -1,142 +1,89 @@
 //g++ cobj.cpp -o app `pkg-config --cflags --libs opencv` -std=c++11 
 
-
-#include <fstream>
-#include <sstream>
-
 #include <opencv2/dnn.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
-
-const char* keys =
-    "{ help  h     | | Print help message. }"
-    "{ input i     | | Path to input image or video file. Skip this argument to capture frames from a camera.}"
-    "{ model m     | | Path to a binary file of model contains trained weights. "
-                      "It could be a file with extensions .caffemodel (Caffe), "
-                      ".pb (TensorFlow), .t7 or .net (Torch), .weights (Darknet) }"
-    "{ config c    | | Path to a text file of model contains network configuration. "
-                      "It could be a file with extensions .prototxt (Caffe), .pbtxt (TensorFlow), .cfg (Darknet) }"
-    "{ framework f | | Optional name of an origin framework of the model. Detect it automatically if it does not set. }"
-    "{ classes     | | Optional path to a text file with names of classes. }"
-    "{ mean        | | Preprocess input image by subtracting mean values. Mean values should be in BGR order and delimited by spaces. }"
-    "{ scale       | 1 | Preprocess input image by multiplying on a scale factor. }"
-    "{ width       |   | Preprocess input image by resizing to a specific width. }"
-    "{ height      |   | Preprocess input image by resizing to a specific height. }"
-    "{ rgb         |   | Indicate that model works with RGB input images instead BGR ones. }"
-    "{ backend     | 0 | Choose one of computation backends: "
-                        "0: automatically (by default), "
-                        "1: Halide language (http://halide-lang.org/), "
-                        "2: Intel's Deep Learning Inference Engine (https://software.intel.com/openvino-toolkit), "
-                        "3: OpenCV implementation }"
-    "{ target      | 0 | Choose one of target computation devices: "
-                        "0: CPU target (by default), "
-                        "1: OpenCL, "
-                        "2: OpenCL fp16 (half-float precision), "
-                        "3: VPU }";
-
+#include <opencv2/core/utils/trace.hpp>
 using namespace cv;
-using namespace dnn;
-
-std::vector<std::string> classes;
-
-int main(int argc, char** argv)
+using namespace cv::dnn;
+#include <fstream>
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+/* Find best class for the blob (i. e. class with maximal probability) */
+static void getMaxClass(const Mat &probBlob, int *classId, double *classProb)
 {
-    CommandLineParser parser(argc, argv, keys);
-    parser.about("Use this script to run classification deep learning networks using OpenCV.");
-    if (argc == 1 || parser.has("help"))
-    {
-        parser.printMessage();
-        return 0;
-    }
-
-    float scale = parser.get<float>("scale");
-    Scalar mean = parser.get<Scalar>("mean");
-    bool swapRB = parser.get<bool>("rgb");
-    CV_Assert(parser.has("width"), parser.has("height"));
-    int inpWidth = parser.get<int>("width");
-    int inpHeight = parser.get<int>("height");
-    String model = parser.get<String>("model");
-    String config = parser.get<String>("config");
-    String framework = parser.get<String>("framework");
-    int backendId = parser.get<int>("backend");
-    int targetId = parser.get<int>("target");
-
-    // Open file with classes names.
-    if (parser.has("classes"))
-    {
-        std::string file = parser.get<String>("classes");
-        std::ifstream ifs(file.c_str());
-        if (!ifs.is_open())
-            CV_Error(Error::StsError, "File " + file + " not found");
-        std::string line;
-        while (std::getline(ifs, line))
-        {
-            classes.push_back(line);
-        }
-    }
-
-    CV_Assert(parser.has("model"));
-    //! [Read and initialize network]
-    Net net = readNet(model, config, framework);
-    net.setPreferableBackend(backendId);
-    net.setPreferableTarget(targetId);
-    //! [Read and initialize network]
-
-    // Create a window
-    static const std::string kWinName = "Deep learning image classification in OpenCV";
-    namedWindow(kWinName, WINDOW_NORMAL);
-
-    //! [Open a video file or an image file or a camera stream]
-    VideoCapture cap;
-    if (parser.has("input"))
-        cap.open(parser.get<String>("input"));
-    else
-        cap.open(0);
-    //! [Open a video file or an image file or a camera stream]
-
-    // Process frames.
-    Mat frame, blob;
-    while (waitKey(1) < 0)
-    {
-        cap >> frame;
-        if (frame.empty())
-        {
-            waitKey();
-            break;
-        }
-
-        //! [Create a 4D blob from a frame]
-        blobFromImage(frame, blob, scale, Size(inpWidth, inpHeight), mean, swapRB, false);
-        //! [Create a 4D blob from a frame]
-
-        //! [Set input blob]
-        net.setInput(blob);
-        //! [Set input blob]
-        //! [Make forward pass]
-        Mat prob = net.forward();
-        //! [Make forward pass]
-
-        //! [Get a class with a highest score]
-        Point classIdPoint;
-        double confidence;
-        minMaxLoc(prob.reshape(1, 1), 0, &confidence, 0, &classIdPoint);
-        int classId = classIdPoint.x;
-        //! [Get a class with a highest score]
-
-        // Put efficiency information.
-        std::vector<double> layersTimes;
-        double freq = getTickFrequency() / 1000;
-        double t = net.getPerfProfile(layersTimes) / freq;
-        std::string label = format("Inference time: %.2f ms", t);
-        putText(frame, label, Point(0, 15), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 255, 0));
-
-        // Print predicted class.
-        label = format("%s: %.4f", (classes.empty() ? format("Class #%d", classId).c_str() :
-                                                      classes[classId].c_str()),
-                                   confidence);
-        putText(frame, label, Point(0, 40), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 255, 0));
-
-        imshow(kWinName, frame);
-    }
-    return 0;
+    Mat probMat = probBlob.reshape(1, 1); //reshape the blob to 1x1000 matrix
+    Point classNumber;
+    minMaxLoc(probMat, NULL, classProb, NULL, &classNumber);
+    *classId = classNumber.x;
 }
+static std::vector<String> readClassNames(const char *filename = "synset_words.txt")
+{
+    std::vector<String> classNames;
+    std::ifstream fp(filename);
+    if (!fp.is_open())
+    {
+        std::cerr << "File with classes labels not found: " << filename << std::endl;
+        exit(-1);
+    }
+    std::string name;
+    while (!fp.eof())
+    {
+        std::getline(fp, name);
+        if (name.length())
+            classNames.push_back( name.substr(name.find(' ')+1) );
+    }
+    fp.close();
+    return classNames;
+}
+int main(int argc, char **argv)
+{
+    CV_TRACE_FUNCTION();
+    String modelTxt = "bvlc_googlenet.prototxt";
+    String modelBin = "bvlc_googlenet.caffemodel";
+    String imageFile = (argc > 1) ? argv[1] : "space_shuttle.jpg";
+    Net net;
+    try {
+        net = dnn::readNetFromCaffe(modelTxt, modelBin);
+    }
+    catch (cv::Exception& e) {
+        std::cerr << "Exception: " << e.what() << std::endl;
+        if (net.empty())
+        {
+            std::cerr << "Can't load network by using the following files: " << std::endl;
+            std::cerr << "prototxt:   " << modelTxt << std::endl;
+            std::cerr << "caffemodel: " << modelBin << std::endl;
+            std::cerr << "bvlc_googlenet.caffemodel can be downloaded here:" << std::endl;
+            std::cerr << "http://dl.caffe.berkeleyvision.org/bvlc_googlenet.caffemodel" << std::endl;
+            exit(-1);
+        }
+    }
+    Mat img = imread(imageFile);
+    if (img.empty())
+    {
+        std::cerr << "Can't read image from the file: " << imageFile << std::endl;
+        exit(-1);
+    }
+    //GoogLeNet accepts only 224x224 BGR-images
+    Mat inputBlob = blobFromImage(img, 1.0f, Size(224, 224),
+                                  Scalar(104, 117, 123), false);   //Convert Mat to batch of images
+    Mat prob;
+    cv::TickMeter t;
+    for (int i = 0; i < 10; i++)
+    {
+        CV_TRACE_REGION("forward");
+        net.setInput(inputBlob, "data");        //set the network input
+        t.start();
+        prob = net.forward("prob");                          //compute output
+        t.stop();
+    }
+    int classId;
+    double classProb;
+    getMaxClass(prob, &classId, &classProb);//find the best class
+    std::vector<String> classNames = readClassNames();
+    std::cout << "Best class: #" << classId << " '" << classNames.at(classId) << "'" << std::endl;
+    std::cout << "Probability: " << classProb * 100 << "%" << std::endl;
+    std::cout << "Time: " << (double)t.getTimeMilli() / t.getCounter() << " ms (average from " << t.getCounter() << " iterations)" << std::endl;
+    return 0;
+} //main
