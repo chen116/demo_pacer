@@ -93,7 +93,7 @@ int main(int argc, char **argv)
 
 
                 Mat detectionMat; = net.forward("detection_out");   //compute output
-        for (int j = 0; j < detectionMat.rows; i++)
+        for (int j = 0; j < detectionMat.rows; j++)
         {
               
                 float x_center = detectionMat.at<float>(j, 0) * img.cols;
@@ -115,7 +115,7 @@ int main(int argc, char **argv)
         t.start();
         prob = net.forward("prob");                          //compute output
           detectionMat = net.forward("detection_out");   //compute output
-        for (int j = 0; j < detectionMat.rows; i++)
+        for (int j = 0; j < detectionMat.rows; j++)
         {
               
               float  x_center = detectionMat.at<float>(j, 0) * img.cols;
