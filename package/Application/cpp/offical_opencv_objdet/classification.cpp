@@ -1,5 +1,4 @@
 //g++ cobj.cpp -o app `pkg-config --cflags --libs opencv` -std=c++11 
-
 #include <opencv2/dnn.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
@@ -18,7 +17,7 @@ static void getMaxClass(const Mat &probBlob, int *classId, double *classProb)
     minMaxLoc(probMat, NULL, classProb, NULL, &classNumber);
     *classId = classNumber.x;
 }
-static std::vector<String> readClassNames(const char *filename = "synset_words.txt")
+static std::vector<String> readClassNames(const char *filename )
 {
     std::vector<String> classNames;
     std::ifstream fp(filename);
@@ -37,17 +36,32 @@ static std::vector<String> readClassNames(const char *filename = "synset_words.t
     fp.close();
     return classNames;
 }
+const char* params
+    = "{ help           | false | Sample app for loading googlenet model }"
+      "{ proto          | bvlc_googlenet.prototxt | model configuration }"
+      "{ model          | bvlc_googlenet.caffemodel | model weights }"
+      "{ label          | synset_words.txt | names of ILSVRC2012 classes }"
+      "{ image          | space_shuttle.jpg | path to image file }"
+      "{ opencl         | false | enable OpenCL }"
+;
 int main(int argc, char **argv)
 {
     CV_TRACE_FUNCTION();
-    String modelTxt = "bvlc_googlenet.prototxt";
-    String modelBin = "bvlc_googlenet.caffemodel";
-    String imageFile = (argc > 1) ? argv[1] : "space_shuttle.jpg";
+    CommandLineParser parser(argc, argv, params);
+    if (parser.get<bool>("help"))
+    {
+        parser.printMessage();
+        return 0;
+    }
+    String modelTxt = parser.get<string>("proto");
+    String modelBin = parser.get<string>("model");
+    String imageFile = parser.get<String>("image");
+    String classNameFile = parser.get<String>("label");
     Net net;
     try {
         net = dnn::readNetFromCaffe(modelTxt, modelBin);
     }
-    catch (cv::Exception& e) {
+    catch (const cv::Exception& e) {
         std::cerr << "Exception: " << e.what() << std::endl;
         if (net.empty())
         {
@@ -59,6 +73,10 @@ int main(int argc, char **argv)
             exit(-1);
         }
     }
+    if (parser.get<bool>("opencl"))
+    {
+        net.setPreferableTarget(DNN_TARGET_OPENCL);
+    }
     Mat img = imread(imageFile);
     if (img.empty())
     {
@@ -68,7 +86,8 @@ int main(int argc, char **argv)
     //GoogLeNet accepts only 224x224 BGR-images
     Mat inputBlob = blobFromImage(img, 1.0f, Size(224, 224),
                                   Scalar(104, 117, 123), false);   //Convert Mat to batch of images
-    Mat prob;
+    net.setInput(inputBlob, "data");        //set the network input
+    Mat prob = net.forward("prob");         //compute output
     cv::TickMeter t;
     for (int i = 0; i < 10; i++)
     {
@@ -81,7 +100,7 @@ int main(int argc, char **argv)
     int classId;
     double classProb;
     getMaxClass(prob, &classId, &classProb);//find the best class
-    std::vector<String> classNames = readClassNames();
+    std::vector<String> classNames = readClassNames(classNameFile.c_str());
     std::cout << "Best class: #" << classId << " '" << classNames.at(classId) << "'" << std::endl;
     std::cout << "Probability: " << classProb * 100 << "%" << std::endl;
     std::cout << "Time: " << (double)t.getTimeMilli() / t.getCounter() << " ms (average from " << t.getCounter() << " iterations)" << std::endl;
