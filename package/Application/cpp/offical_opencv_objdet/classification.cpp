@@ -215,8 +215,7 @@ int main(int argc, char **argv)
     Mat prob = net.forward("prob");         //compute output
 
 
-    net.setInput(inputBlob);        //set the network input
-    Mat hi = net.forward("Region");
+
     // int midx, npairs;
     // int nparts = hi.size[1];
     // int H = hi.size[2];
