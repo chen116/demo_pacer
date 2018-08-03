@@ -61,26 +61,13 @@ static const int64_t vic_min_target = 100;
 static const int64_t vic_max_target = 1000;
 int main(int argc, char** argv)
 {
+
+
+system("python3 getDomUid.py > id.txt"); 
+// system(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()')"); 
+fstream domid_file("id.txt");
 int domid;
-streambuf* oldCoutStreamBuf = cout.rdbuf();
-ostringstream strCout;
-cout.rdbuf( strCout.rdbuf() );
-// system("python3 getDomUid.py > id.txt"); 
-system(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()'
-)"); 
-
-
-
-// Restore old cout.
-cout.rdbuf( oldCoutStreamBuf );
-
-// Will output our Hello World! from above.
-
-cout << "domuid:" << strCout.str() <<endl;
-
-// fstream domid_file("id.txt");
-// int domid;
-// domid_file >> domid;
+domid_file >> domid;
 
 
     char *path;
