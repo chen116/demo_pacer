@@ -219,11 +219,11 @@ int main(int argc, char **argv)
 
 
     net.setInput(inputBlob, "data");        //set the network input
-    Mat hi = net.forward();         //compute output
+    Mat hi = net.forward("softmax");         //compute output
     int midx, npairs;
     int nparts = hi.size[1];
     int H = hi.size[2];
-    int W = hi[0].size[3];
+    int W = hi.size[3];
     cout << nparts << " " << H<<" "<<W <<endl;
 
 
