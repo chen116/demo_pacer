@@ -23,12 +23,12 @@ static const char* params =
 "{ cfg            |  yolov2-tiny.cfg   | model configuration }"
 "{ model          |    yolov2-tiny.weights   | model weights       }"
 "{ camera_device  | 0     | camera device number}"
-"{ source         |  person.jpg    | video or image for detection}"
+"{ source         |  rollcar.3gp    | video or image for detection}"
 "{ out            |       | path to output video file}"
 "{ fps            | 3     | frame per second }"
 "{ style          | box   | box or line style draw }"
 "{ min_confidence | 0.24  | min confidence      }"
-"{ class_names    |  /root/darknet/data/coco.names   | File with class names, [PATH-TO-DARKNET]/data/coco.names }";
+"{ class_names    |  coco.names   | File with class names, [PATH-TO-DARKNET]/data/coco.names }";
 int main(int argc, char** argv)
 {
     CommandLineParser parser(argc, argv, params);
