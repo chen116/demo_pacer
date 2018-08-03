@@ -40,7 +40,7 @@ int main(int argc, char** argv)
     }
     String modelConfiguration = parser.get<String>("cfg");
     String modelBinary = parser.get<String>("model");
-    printf("%s %s\n",modelBinary,modelConfiguration );
+    cout<<modelBinary<<" "<<modelConfiguration ;
     dnn::Net net = readNetFromDarknet(modelConfiguration, modelBinary);
     if (net.empty())
     {
