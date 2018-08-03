@@ -86,8 +86,23 @@ int main(int argc, char **argv)
     //GoogLeNet accepts only 224x224 BGR-images
     Mat inputBlob = blobFromImage(img, 1.0f, Size(224, 224),
                                   Scalar(104, 117, 123), false);   //Convert Mat to batch of images
+    
+
     net.setInput(inputBlob, "data");        //set the network input
     Mat prob = net.forward("prob");         //compute output
+
+
+                Mat detectionMat; = net.forward("detection_out");   //compute output
+                float x_center = detectionMat.at<float>(i, 0) * img.cols;
+                float y_center = detectionMat.at<float>(i, 1) * img.rows;
+                float width = detectionMat.at<float>(i, 2) * img.cols;
+                float height = detectionMat.at<float>(i, 3) * img.rows;
+
+                cout << x_center << y_center << width << height <<endl;
+
+
+
+
     cv::TickMeter t;
     for (int i = 0; i < 10; i++)
     {
@@ -95,6 +110,13 @@ int main(int argc, char **argv)
         net.setInput(inputBlob, "data");        //set the network input
         t.start();
         prob = net.forward("prob");                          //compute output
+                detectionMat = net.forward("detection_out");   //compute output
+               x_center = detectionMat.at<float>(i, 0) * img.cols;
+               y_center = detectionMat.at<float>(i, 1) * img.rows;
+               width = detectionMat.at<float>(i, 2) * img.cols;
+               height = detectionMat.at<float>(i, 3) * img.rows;
+                cout << x_center << y_center << width << height <<endl;
+
         t.stop();
     }
     int classId;
