@@ -3,9 +3,6 @@
 //https://docs.opencv.org/3.4.1/da/d9d/tutorial_dnn_yolo.html
 
 
--source=[PATH-IMAGE]  -cfg=[PATH-TO-DARKNET]/cfg/yolo.cfg -model=[PATH-TO-DARKNET]/yolo.weights   -class_names=[PATH-TO-DARKNET]/data/coco.names
-
-
 
 #include <opencv2/dnn.hpp>
 #include <opencv2/dnn/shape_utils.hpp>
