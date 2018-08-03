@@ -93,29 +93,37 @@ int main(int argc, char **argv)
 
 
                 Mat detectionMat; = net.forward("detection_out");   //compute output
-                float x_center = detectionMat.at<float>(i, 0) * img.cols;
-                float y_center = detectionMat.at<float>(i, 1) * img.rows;
-                float width = detectionMat.at<float>(i, 2) * img.cols;
-                float height = detectionMat.at<float>(i, 3) * img.rows;
-
+        for (int j = 0; j < detectionMat.rows; i++)
+        {
+              
+                float x_center = detectionMat.at<float>(j, 0) * img.cols;
+               float y_center = detectionMat.at<float>(j, 1) * img.rows;
+               float width = detectionMat.at<float>(j, 2) * img.cols;
+               float  height = detectionMat.at<float>(j, 3) * img.rows;
                 cout << x_center << y_center << width << height <<endl;
+            }
 
 
 
 
     cv::TickMeter t;
+
     for (int i = 0; i < 10; i++)
     {
         CV_TRACE_REGION("forward");
         net.setInput(inputBlob, "data");        //set the network input
         t.start();
         prob = net.forward("prob");                          //compute output
-                detectionMat = net.forward("detection_out");   //compute output
-               x_center = detectionMat.at<float>(i, 0) * img.cols;
-               y_center = detectionMat.at<float>(i, 1) * img.rows;
-               width = detectionMat.at<float>(i, 2) * img.cols;
-               height = detectionMat.at<float>(i, 3) * img.rows;
+          detectionMat = net.forward("detection_out");   //compute output
+        for (int j = 0; j < detectionMat.rows; i++)
+        {
+              
+              float  x_center = detectionMat.at<float>(j, 0) * img.cols;
+              float  y_center = detectionMat.at<float>(j, 1) * img.rows;
+              float  width = detectionMat.at<float>(j, 2) * img.cols;
+              float  height = detectionMat.at<float>(j, 3) * img.rows;
                 cout << x_center << y_center << width << height <<endl;
+            }
 
         t.stop();
     }
