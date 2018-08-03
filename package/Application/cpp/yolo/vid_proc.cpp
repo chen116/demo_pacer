@@ -69,7 +69,7 @@ system(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xe
 
 fstream domid_file("id.txt");
 int domid;
-domid_file >> domid;
+cout >> domid;
 
 
     char *path;
