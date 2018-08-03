@@ -20,8 +20,8 @@ static const char* about =
 "Class names can be downloaded here: https://github.com/pjreddie/darknet/tree/master/data\n";
 static const char* params =
 "{ help           | false | print usage         }"
-"{ cfg            |   /root/demo_pacer/package/Application/cpp/yolo/yolov2.cfg   | model configuration }"
-"{ model          |     /root/demo_pacer/package/Application/cpp/yolo/yolov2.weights   | model weights       }"
+"{ cfg            |  yolov2.cfg   | model configuration }"
+"{ model          |    yolov2.weights   | model weights       }"
 "{ camera_device  | 0     | camera device number}"
 "{ source         |  person.jpg    | video or image for detection}"
 "{ out            |       | path to output video file}"
@@ -38,8 +38,8 @@ int main(int argc, char** argv)
         parser.printMessage();
         return 0;
     }
-    String modelConfiguration = "/root/darknet/cfg/yolov2.cfg";//parser.get<String>("cfg");
-    String modelBinary = "/root/darknet/cfg/yolov2.weights";//parser.get<String>("model");
+    String modelConfiguration = parser.get<String>("cfg");
+    String modelBinary = parser.get<String>("model");
     cout<<modelBinary<<" "<<modelConfiguration ;
     dnn::Net net = readNetFromDarknet(modelConfiguration, modelBinary);
     if (net.empty())
