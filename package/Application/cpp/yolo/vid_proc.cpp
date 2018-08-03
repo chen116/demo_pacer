@@ -23,7 +23,7 @@ static const char* params =
 "{ cfg            |  yolov2-tiny.cfg   | model configuration }"
 "{ model          |    yolov2-tiny.weights   | model weights       }"
 "{ camera_device  | 0     | camera device number}"
-"{ source         |  person.jpg    | video or image for detection}"
+"{ source         |  rollcar.3gp    | video or image for detection}"
 "{ out            |       | path to output video file}"
 "{ fps            | 3     | frame per second }"
 "{ style          | box   | box or line style draw }"
