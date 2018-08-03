@@ -38,8 +38,8 @@ static std::vector<String> readClassNames(const char *filename )
 }
 const char* params
     = "{ help           | false | Sample app for loading googlenet model }"
-      "{ proto          | bvlc_googlenet.prototxt | model configuration }"
-      "{ model          | bvlc_googlenet.caffemodel | model weights }"
+      "{ proto          | ../../MobileNetSSD_deploy.prototxt.txt | model configuration }"
+      "{ model          | ../../MobileNetSSD_deploy.caffemodel | model weights }"
       "{ label          | synset_words.txt | names of ILSVRC2012 classes }"
       "{ image          | space_shuttle.jpg | path to image file }"
       "{ opencl         | false | enable OpenCL }"
