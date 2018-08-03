@@ -38,8 +38,8 @@ int main(int argc, char** argv)
         parser.printMessage();
         return 0;
     }
-    String modelConfiguration = parser.get<String>("cfg");
-    String modelBinary = parser.get<String>("model");
+    String modelConfiguration = "/root/demo_pacer/package/Application/cpp/yolo/yolov3.cfg";//parser.get<String>("cfg");
+    String modelBinary = "/root/demo_pacer/package/Application/cpp/yolo/yolov3.weights";//parser.get<String>("model");
     cout<<modelBinary<<" "<<modelConfiguration ;
     dnn::Net net = readNetFromDarknet(modelConfiguration, modelBinary);
     if (net.empty())
