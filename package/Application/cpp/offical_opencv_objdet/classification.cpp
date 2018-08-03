@@ -92,7 +92,7 @@ int main(int argc, char **argv)
     Mat prob = net.forward("prob");         //compute output
 
 
-                Mat detectionMat; = net.forward("detection_out");   //compute output
+                Mat detectionMat = net.forward("detection_out");   //compute output
         for (int j = 0; j < detectionMat.rows; j++)
         {
               
