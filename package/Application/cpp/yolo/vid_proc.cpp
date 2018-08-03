@@ -46,6 +46,10 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
+
 
 #include <heartbeats/heartbeat.h>
 #include <string.h>
@@ -57,6 +61,10 @@ static const int64_t vic_min_target = 100;
 static const int64_t vic_max_target = 1000;
 int main(int argc, char** argv)
 {
+
+system("python3 getDomUid.py > id.txt"); 
+cout << std::ifstream("id.txt").rdbuf();
+
     char *path;
     int er;
     struct xs_handle *xs;
