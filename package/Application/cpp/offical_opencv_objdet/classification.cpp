@@ -219,7 +219,7 @@ int main(int argc, char **argv)
 
 
     net.setInput(inputBlob, "data");        //set the network input
-    Mat hi = net.forward("softmax");         //compute output
+    Mat hi = net.forward("Softmax");         //compute output
     int midx, npairs;
     int nparts = hi.size[1];
     int H = hi.size[2];
