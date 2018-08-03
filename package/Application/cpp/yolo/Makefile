@@ -4,7 +4,7 @@
 app: clean
 	-git pull
 	#g++ yolo_object_detection.cpp -o app `pkg-config --libs opencv` -std=c++11 
-	g++ vid_proc.cpp -o app `pkg-config --libs opencv` -std=c++11 -lhb-shared
+	g++ vid_proc.cpp -o app `pkg-config --libs opencv` -std=c++11 -lhb-shared -lxenstore
 
 clean:
 	-rm -f app

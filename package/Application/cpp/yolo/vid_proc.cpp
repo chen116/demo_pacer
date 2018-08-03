@@ -37,7 +37,13 @@ static const char* params =
 
 heartbeat_t* heart;
 
-
+#include <stdlib.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+#include <xenstore.h>
+#ifdef __cplusplus
+}
 
 
 
@@ -48,7 +54,17 @@ static const int64_t vic_min_target = 100;
 static const int64_t vic_max_target = 1000;
 int main(int argc, char** argv)
 {
-         heart = heartbeat_init(vic_win_size, vic_buf_depth, vic_log_file, vic_min_target, vic_max_target);
+    char *path;
+    int er;
+    struct xs_handle *xs;
+    xs_transaction_t th;
+    xs = xs_daemon_open();
+    path = xs_get_domain_path(xs, 10); 
+    path = (char*)realloc(path, strlen(path) + strlen("/heart_rate") + 1);
+    if ( path == NULL ) printf("not good\n");
+    strcat(path, "/heart_rate");
+    printf("%s\n",path);
+    heart = heartbeat_init(vic_win_size, vic_buf_depth, vic_log_file, vic_min_target, vic_max_target);
 
     CommandLineParser parser(argc, argv, params);
     if (parser.get<bool>("help"))
@@ -110,6 +126,12 @@ int main(int argc, char** argv)
     {
         heartbeat(heart, 1);
         printf("heartbeat: instant rate: %f\n",hb_get_instant_rate(heart) );
+        char hr_str[10];
+        gcvt(hb_get_instant_rate(heart) , 8, hr_str);
+        th = xs_transaction_start(xs);
+        er = xs_write(xs, th, path, hr_str, strlen(hr_str));
+        xs_transaction_end(xs, th, false);
+        
         Mat frame;
         cap >> frame; // get a new frame from camera/video or read image
         if (frame.empty())
@@ -172,6 +194,7 @@ int main(int argc, char** argv)
         if (waitKey(1) >= 0) break;
     }
     heartbeat_finish(heart);
-
+xs_daemon_close(xs);
+free(path);
     return 0;
 } // main
