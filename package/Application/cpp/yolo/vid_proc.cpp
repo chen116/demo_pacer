@@ -63,7 +63,10 @@ int main(int argc, char** argv)
 {
 
 system("python3 getDomUid.py > id.txt"); 
-cout << std::ifstream("id.txt").rdbuf();
+fstream domid_file("id.txt");
+int a;
+domid_file >> a;
+cout << a << endl;
 
     char *path;
     int er;
