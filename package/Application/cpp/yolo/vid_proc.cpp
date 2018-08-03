@@ -29,8 +29,27 @@ static const char* params =
 "{ style          | box   | box or line style draw }"
 "{ min_confidence | 0.24  | min confidence      }"
 "{ class_names    |  coco.names   | File with class names, [PATH-TO-DARKNET]/data/coco.names }";
+
+
+
+#include <heartbeats/heartbeat.h>
+#include <string.h>
+
+heartbeat_t* heart;
+
+
+
+
+
+static const int64_t vic_win_size = 10;
+static const int64_t vic_buf_depth = 1000;
+static const char* vic_log_file ="vic.log";
+static const int64_t vic_min_target = 100;
+static const int64_t vic_max_target = 1000;
 int main(int argc, char** argv)
 {
+         heart = heartbeat_init(vic_win_size, vic_buf_depth, vic_log_file, vic_min_target, vic_max_target);
+
     CommandLineParser parser(argc, argv, params);
     if (parser.get<bool>("help"))
     {
@@ -89,6 +108,8 @@ int main(int argc, char** argv)
     String object_roi_style = parser.get<String>("style");
     for(;;)
     {
+        heartbeat(heart, 1);
+        printf("heartbeat: instant rate: %f\n",hb_get_instant_rate(heart) );
         Mat frame;
         cap >> frame; // get a new frame from camera/video or read image
         if (frame.empty())
@@ -150,5 +171,7 @@ int main(int argc, char** argv)
         imshow("YOLO: Detections", frame);
         if (waitKey(1) >= 0) break;
     }
+    heartbeat_finish(heart);
+    
     return 0;
 } // main
