@@ -62,7 +62,7 @@ static const int64_t vic_max_target = 1000;
 int main(int argc, char** argv)
 {
 int domid;
-treambuf* oldCoutStreamBuf = cout.rdbuf();
+streambuf* oldCoutStreamBuf = cout.rdbuf();
 ostringstream strCout;
 cout.rdbuf( strCout.rdbuf() );
 // system("python3 getDomUid.py > id.txt"); 
