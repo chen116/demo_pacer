@@ -91,19 +91,7 @@ int main(int argc, char **argv)
     net.setInput(inputBlob, "data");        //set the network input
     Mat prob = net.forward("prob");         //compute output
 
-
-                Mat detectionMat = net.forward("detection_out");   //compute output
-        for (int j = 0; j < detectionMat.rows; j++)
-        {
-              
-                float x_center = detectionMat.at<float>(j, 0) * img.cols;
-               float y_center = detectionMat.at<float>(j, 1) * img.rows;
-               float width = detectionMat.at<float>(j, 2) * img.cols;
-               float  height = detectionMat.at<float>(j, 3) * img.rows;
-                cout << x_center << y_center << width << height <<endl;
-            }
-
-
+    Mat hi = net.forward()''
 
 
     cv::TickMeter t;
@@ -114,16 +102,7 @@ int main(int argc, char **argv)
         net.setInput(inputBlob, "data");        //set the network input
         t.start();
         prob = net.forward("prob");                          //compute output
-          detectionMat = net.forward("detection_out");   //compute output
-        for (int j = 0; j < detectionMat.rows; j++)
-        {
-              
-              float  x_center = detectionMat.at<float>(j, 0) * img.cols;
-              float  y_center = detectionMat.at<float>(j, 1) * img.rows;
-              float  width = detectionMat.at<float>(j, 2) * img.cols;
-              float  height = detectionMat.at<float>(j, 3) * img.rows;
-                cout << x_center << y_center << width << height <<endl;
-            }
+
 
         t.stop();
     }
