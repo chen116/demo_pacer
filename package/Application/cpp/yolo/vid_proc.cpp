@@ -20,8 +20,8 @@ static const char* about =
 "Class names can be downloaded here: https://github.com/pjreddie/darknet/tree/master/data\n";
 static const char* params =
 "{ help           | false | print usage         }"
-"{ cfg            |  yolov2.cfg   | model configuration }"
-"{ model          |    yolov2.weights   | model weights       }"
+"{ cfg            |  yolov2-tiny.cfg   | model configuration }"
+"{ model          |    yolov2-tiny.weights   | model weights       }"
 "{ camera_device  | 0     | camera device number}"
 "{ source         |  person.jpg    | video or image for detection}"
 "{ out            |       | path to output video file}"
@@ -172,6 +172,6 @@ int main(int argc, char** argv)
         if (waitKey(1) >= 0) break;
     }
     heartbeat_finish(heart);
-    
+
     return 0;
 } // main
