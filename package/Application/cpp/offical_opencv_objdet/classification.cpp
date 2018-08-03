@@ -97,6 +97,7 @@ int main(int argc, char **argv)
     int nparts = hi.size[1];
     int H = hi.size[2];
     int W = hi.size[3];
+    cout << nparts <<endl;
 
     cv::TickMeter t;
 
