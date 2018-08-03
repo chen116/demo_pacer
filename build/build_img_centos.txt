@@ -83,11 +83,12 @@ make -j8 install-tools
 
 =====setting opencv======
 
-
+# compile opencv3 from source
 cp /root/demo_pacer/build/cv3_install_for_py3.sh /root/ && sh cv3_install_for_py3.sh
+# opencv2
+yum install opencv-devel   
 
-
-# skinny install:
+# skinny install for python3:
 
 pip3 install opencv-python-headless
 
