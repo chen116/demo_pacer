@@ -127,6 +127,7 @@ std::vector<String> getOutputsNames(const Net& net)
         names.resize(outLayers.size());
         for (size_t i = 0; i < outLayers.size(); ++i)
             names[i] = layersNames[outLayers[i] - 1];
+            cout << outLayers[i] <<endl;
     }
     return names;
 }
@@ -223,7 +224,7 @@ int main(int argc, char **argv)
     // cout << nparts << " " << H<<" "<<W <<endl;
 
 
-            net.setInput(inputBlob, "data");        //set the network input
+            net.setInput(inputBlob);        //set the network input
             std::vector<Mat> outs;
             net.forward(outs, getOutputsNames(net));
             postprocess(img, outs, net);
