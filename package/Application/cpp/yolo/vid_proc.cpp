@@ -64,16 +64,16 @@ int main(int argc, char** argv)
 
 system("python3 getDomUid.py > id.txt"); 
 fstream domid_file("id.txt");
-int a;
-domid_file >> a;
-cout << a << endl;
+int domid;
+domid_file >> domid;
+
 
     char *path;
     int er;
     struct xs_handle *xs;
     xs_transaction_t th;
     xs = xs_daemon_open();
-    path = xs_get_domain_path(xs, 10); 
+    path = xs_get_domain_path(xs, domid); 
     path = (char*)realloc(path, strlen(path) + strlen("/heart_rate") + 1);
     if ( path == NULL ) printf("not good\n");
     strcat(path, "/heart_rate");
