@@ -91,7 +91,7 @@ int main(int argc, char **argv)
     net.setInput(inputBlob, "data");        //set the network input
     Mat prob = net.forward("prob");         //compute output
 
-    Mat hi = net.forward()''
+    Mat hi = net.forward();
 
 
     cv::TickMeter t;
