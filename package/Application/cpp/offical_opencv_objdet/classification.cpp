@@ -90,7 +90,7 @@ int main(int argc, char **argv)
 
     net.setInput(inputBlob, "data");        //set the network input
     Mat prob = net.forward("prob");         //compute output
-
+ net.setInput(inputBlob, "data");        //set the network input
     Mat hi = net.forward();
     cout << "M = "<< endl << " "  << hi << endl << endl;
 
