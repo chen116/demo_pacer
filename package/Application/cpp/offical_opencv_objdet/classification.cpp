@@ -223,7 +223,7 @@ int main(int argc, char **argv)
     int midx, npairs;
     int nparts = hi.size[1];
     int H = hi.size[2];
-    int W = hi.size[3];
+    int W = hi[0].size[3];
     cout << nparts << " " << H<<" "<<W <<endl;
 
 
