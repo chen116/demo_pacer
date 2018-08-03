@@ -92,9 +92,11 @@ int main(int argc, char **argv)
     Mat prob = net.forward("prob");         //compute output
  net.setInput(inputBlob, "data");        //set the network input
     Mat hi = net.forward();
-    cout << "M = "<< endl << " "  << hi << endl << endl;
-cout << "image1 row: 0~2 = "<< endl << " "  << hi.rowRange(0, 1) << endl << endl;
 
+    int midx, npairs;
+    int nparts = hi.size[1];
+    int H = hi.size[2];
+    int W = hi.size[3];
 
     cv::TickMeter t;
 
