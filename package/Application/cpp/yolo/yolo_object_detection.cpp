@@ -1,6 +1,12 @@
 // Brief Sample of using OpenCV dnn module in real time with device capture, video and image.
 // VIDEO DEMO: https://www.youtube.com/watch?v=NHtRlndE2cg
 //https://docs.opencv.org/3.4.1/da/d9d/tutorial_dnn_yolo.html
+
+
+-source=[PATH-IMAGE]  -cfg=[PATH-TO-DARKNET]/cfg/yolo.cfg -model=[PATH-TO-DARKNET]/yolo.weights   -class_names=[PATH-TO-DARKNET]/data/coco.names
+
+
+
 #include <opencv2/dnn.hpp>
 #include <opencv2/dnn/shape_utils.hpp>
 #include <opencv2/imgproc.hpp>
@@ -17,15 +23,15 @@ static const char* about =
 "Class names can be downloaded here: https://github.com/pjreddie/darknet/tree/master/data\n";
 static const char* params =
 "{ help           | false | print usage         }"
-"{ cfg            |       | model configuration }"
-"{ model          |       | model weights       }"
+"{ cfg            |  /root/darknet/cfg/yolov1.cfg     | model configuration }"
+"{ model          |   /root/darknet/yolo.weight    | model weights       }"
 "{ camera_device  | 0     | camera device number}"
 "{ source         |       | video or image for detection}"
 "{ out            |       | path to output video file}"
 "{ fps            | 3     | frame per second }"
 "{ style          | box   | box or line style draw }"
 "{ min_confidence | 0.24  | min confidence      }"
-"{ class_names    |       | File with class names, [PATH-TO-DARKNET]/data/coco.names }";
+"{ class_names    |  /root/darknet/data/coco.names   | File with class names, [PATH-TO-DARKNET]/data/coco.names }";
 int main(int argc, char** argv)
 {
     CommandLineParser parser(argc, argv, params);
