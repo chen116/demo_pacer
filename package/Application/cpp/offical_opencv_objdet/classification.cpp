@@ -92,6 +92,7 @@ int main(int argc, char **argv)
     Mat prob = net.forward("prob");         //compute output
 
     Mat hi = net.forward();
+    imshow("hi",hi);
 
 
     cv::TickMeter t;
