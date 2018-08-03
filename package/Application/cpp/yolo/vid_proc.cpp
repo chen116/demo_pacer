@@ -63,7 +63,7 @@ int main(int argc, char** argv)
 {
 
 // system("python3 getDomUid.py > id.txt"); 
-system("python3 -c \'from pyxs import Client;c=Client(xen_bus_path=\"/dev/xen/xenbus\");c.connect();print((c.read(\"domid\".encode())).decode());c.close()\'
+system("python3 -c \'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()\'
  > id.txt"); 
 
 
