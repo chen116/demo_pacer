@@ -20,8 +20,8 @@ static const char* about =
 "Class names can be downloaded here: https://github.com/pjreddie/darknet/tree/master/data\n";
 static const char* params =
 "{ help           | false | print usage         }"
-"{ cfg            |   /root/demo_pacer/package/Application/cpp/yolo/yolov3.cfg   | model configuration }"
-"{ model          |     /root/demo_pacer/package/Application/cpp/yolo/yolov3.weights   | model weights       }"
+"{ cfg            |   /root/demo_pacer/package/Application/cpp/yolo/yolov2.cfg   | model configuration }"
+"{ model          |     /root/demo_pacer/package/Application/cpp/yolo/yolov2.weights   | model weights       }"
 "{ camera_device  | 0     | camera device number}"
 "{ source         |  person.jpg    | video or image for detection}"
 "{ out            |       | path to output video file}"
