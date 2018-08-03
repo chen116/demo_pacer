@@ -63,12 +63,12 @@ int main(int argc, char** argv)
 {
 int domid;
 streambuf* oldCoutStreamBuf = cout.rdbuf();
-istringstream strCout;
+ostringstream strCout;
 cout.rdbuf( strCout.rdbuf() );
 // system("python3 getDomUid.py > id.txt"); 
 system(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()'
 )"); 
-strCout >> domid;
+
 
 
 // Restore old cout.
@@ -76,7 +76,7 @@ cout.rdbuf( oldCoutStreamBuf );
 
 // Will output our Hello World! from above.
 
-cout << "domuid:" << domid <<endl;
+cout << "domuid:" << strCout.str() <<endl;
 
 // fstream domid_file("id.txt");
 // int domid;
