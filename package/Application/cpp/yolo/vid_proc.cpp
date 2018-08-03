@@ -78,7 +78,7 @@ cout << "Hello, World!" << endl;
 cout.rdbuf( oldCoutStreamBuf );
 
 // Will output our Hello World! from above.
-strCout >> domid
+strCout >> domid;
 
 // fstream domid_file("id.txt");
 // int domid;
