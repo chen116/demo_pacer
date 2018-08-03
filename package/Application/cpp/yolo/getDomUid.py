@@ -2,3 +2,9 @@ from pyxs import Client
 with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	domu_id = c.read("domid".encode())
 print(domu_id.decode())
+
+
+
+python3 -c 'from pyxs import Client as c;print((c.read("domid".encode())).decode())'
+
+
