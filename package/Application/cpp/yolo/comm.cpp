@@ -50,7 +50,7 @@ static const int64_t vic_max_target = 1000;
 
 
 
-char * cpp_xs_read(xs_handle* xs ,xs_transaction_t th, const char*, path , unsigned int* len)
+char * cpp_xs_read(xs_handle* xs ,xs_transaction_t th, const char* path , unsigned int* len)
 {
 	char * buf;
 	th = xs_transaction_start(xs);
