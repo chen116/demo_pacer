@@ -64,7 +64,7 @@ int main(int argc, char** argv)
 	char * buf;
 	// unsigned int *len =  (unsigned int*) malloc(sizeof(unsigned int));
 	// int len = 42;
-	unsigned int lenn;
+	unsigned int *lenn;
 	unsigned int *len = static_cast<unsigned int*>(lenn);
 
 
