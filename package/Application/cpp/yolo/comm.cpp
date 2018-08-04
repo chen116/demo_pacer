@@ -63,8 +63,9 @@ int main(int argc, char** argv)
 	int er;
 	char * buf;
 	// unsigned int *len =  (unsigned int*) malloc(sizeof(unsigned int));
-	unsigned int len = 42;
-
+	int len = 42;
+	// int leni = c;
+ //  	int *len = &leni;
 
     struct xs_handle *xs;
     xs_transaction_t th;
