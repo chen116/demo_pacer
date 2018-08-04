@@ -50,7 +50,7 @@ static const int64_t vic_max_target = 1000;
 
 // #include <typeinfo>
 
-char * cpp_xs_read()
+// char * cpp_xs_read()
 
 int main(int argc, char** argv)
 {
