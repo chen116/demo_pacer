@@ -74,7 +74,7 @@ int main(int argc, char** argv)
     while (strcmp(buf,"init"))//buf[0]!='i')
     {
     	th = xs_transaction_start(xs);
-		buf = xs_read(xs, th, path, len);
+		buf = xs_read(xs, th, path, bb);
     	xs_transaction_end(xs, th, false);
     }
     cout << buf;
