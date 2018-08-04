@@ -62,8 +62,9 @@ int main(int argc, char** argv)
     char *path;
 	int er;
 	char * buf;
-	unsigned int *len =  (unsigned int*) malloc(sizeof(unsigned int));
-	cout << typeid(len).name() << endl;
+	// unsigned int *len =  (unsigned int*) malloc(sizeof(unsigned int));
+	unsigned int a = 42;
+	cout << typeid(&a).name() << endl;
 
 //     struct xs_handle *xs;
 //     xs_transaction_t th;
@@ -93,7 +94,7 @@ int main(int argc, char** argv)
 // heartbeat_finish(heart);
 // xs_daemon_close(xs);
 free(path);
-free(len);
+// free(len);
 return 0;
 
 
