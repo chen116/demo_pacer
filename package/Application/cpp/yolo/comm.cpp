@@ -48,7 +48,7 @@ static const int64_t vic_max_target = 1000;
 
 #include <vector>
 
-
+#include <typeinfo>
 int main(int argc, char** argv)
 {
 
@@ -62,34 +62,36 @@ int main(int argc, char** argv)
     char *path;
 	int er;
 	char * buf;
-	unsigned int *len =  (unsigned int*) malloc(sizeof(unsigdned int));
-    struct xs_handle *xs;
-    xs_transaction_t th;
-    xs = xs_daemon_open();
+	unsigned int *len =  (unsigned int*) malloc(sizeof(unsigned int));
+	cout << typeid(len).name() << endl;
 
-    path = xs_get_domain_path(xs, domid); 
-    path = (char*)realloc(path, strlen(path) + strlen("/frame_number_entry") + 1);
-    strcat(path, "/frame_number_entry");
-    printf("%s\n",path);
-    while (strcmp(buf,"init"))//buf[0]!='i')
-    {
-    	th = xs_transaction_start(xs);
-		buf = xs_read(xs, th, path, len);
-    	xs_transaction_end(xs, th, false);
-    }
-    cout << buf;
+//     struct xs_handle *xs;
+//     xs_transaction_t th;
+//     xs = xs_daemon_open();
 
-    heart = heartbeat_init(vic_win_size, vic_buf_depth, vic_log_file, vic_min_target, vic_max_target);
+//     path = xs_get_domain_path(xs, domid); 
+//     path = (char*)realloc(path, strlen(path) + strlen("/frame_number_entry") + 1);
+//     strcat(path, "/frame_number_entry");
+//     printf("%s\n",path);
+//     while (strcmp(buf,"init"))//buf[0]!='i')
+//     {
+//     	th = xs_transaction_start(xs);
+// 		buf = xs_read(xs, th, path, len);
+//     	xs_transaction_end(xs, th, false);
+//     }
+//     cout << buf;
+
+//     heart = heartbeat_init(vic_win_size, vic_buf_depth, vic_log_file, vic_min_target, vic_max_target);
         
 
-    heartbeat(heart, 1);
-    printf("heartbeat: instant rate: %f\n",hb_get_instant_rate(heart) );
-    char hr_str[10];
-    gcvt(hb_get_instant_rate(heart) , 8, hr_str);
+//     heartbeat(heart, 1);
+//     printf("heartbeat: instant rate: %f\n",hb_get_instant_rate(heart) );
+//     char hr_str[10];
+//     gcvt(hb_get_instant_rate(heart) , 8, hr_str);
 
 
-heartbeat_finish(heart);
-xs_daemon_close(xs);
+// heartbeat_finish(heart);
+// xs_daemon_close(xs);
 free(path);
 free(len);
 return 0;
