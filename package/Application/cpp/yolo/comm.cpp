@@ -49,6 +49,9 @@ static const int64_t vic_max_target = 1000;
 #include <vector>
 
 // #include <typeinfo>
+
+char * cpp_xs_read()
+
 int main(int argc, char** argv)
 {
 
@@ -80,7 +83,7 @@ int main(int argc, char** argv)
     {
 
     	th = xs_transaction_start(xs);
-		buf = xs_read(xs, th, path, len);
+		buf = xs_read(xs, th, path, 1);
     	xs_transaction_end(xs, th, false);
 
     }
