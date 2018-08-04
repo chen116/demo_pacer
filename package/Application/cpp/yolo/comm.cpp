@@ -62,7 +62,7 @@ int main(int argc, char** argv)
     char *path;
 	int er;
 	char * buf;
-	unsigned int len;
+	unsigned int* len;
     struct xs_handle *xs;
     xs_transaction_t th;
     xs = xs_daemon_open();
@@ -74,7 +74,7 @@ int main(int argc, char** argv)
     while (strcmp(buf,"init"))//buf[0]!='i')
     {
     	th = xs_transaction_start(xs);
-		buf = xs_read(xs, th, path, &len);
+		buf = xs_read(xs, th, path, len);
     	xs_transaction_end(xs, th, false);
     }
     cout << buf;
