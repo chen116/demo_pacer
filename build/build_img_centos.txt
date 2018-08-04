@@ -85,7 +85,9 @@ make -j8 install-tools
 
 # compile opencv3.x from source
 cp /root/demo_pacer/build/cv3_install_for_py3.sh /root/ && sh cv3_install_for_py3.sh
-export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig/
+
+echo "export lPKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig/" >> ~/.bashrc && source ~/.bashrc 
+
 # opencv2.x
 yum install opencv-devel   
 
