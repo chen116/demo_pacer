@@ -64,7 +64,7 @@ int main(int argc, char** argv)
 	char * buf;
 	// unsigned int *len =  (unsigned int*) malloc(sizeof(unsigned int));
 	// int len = 42;
-	unsigned int leni = c;
+	unsigned int leni = 0;
   	unsigned int *len = &leni;
 
     struct xs_handle *xs;
