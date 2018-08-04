@@ -62,7 +62,7 @@ int main(int argc, char** argv)
     char *path;
 	int er;
 	char * buf;
-	int len;
+	char len[10];
     struct xs_handle *xs;
     xs_transaction_t th;
     xs = xs_daemon_open();
