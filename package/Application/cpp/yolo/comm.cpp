@@ -63,9 +63,9 @@ int main(int argc, char** argv)
 	int er;
 	char * buf;
 	// unsigned int *len =  (unsigned int*) malloc(sizeof(unsigned int));
-	int len = 42;
-	// int leni = c;
- //  	int *len = &leni;
+	// int len = 42;
+	unsigned int leni = c;
+  	unsigned int *len = &leni;
 
     struct xs_handle *xs;
     xs_transaction_t th;
@@ -78,7 +78,7 @@ int main(int argc, char** argv)
     while (strcmp(buf,"init"))//buf[0]!='i')
     {
     	th = xs_transaction_start(xs);
-		buf = xs_read(xs, th, path, &len);
+		buf = xs_read(xs, th, path, len);
     	xs_transaction_end(xs, th, false);
     }
     cout << buf;
