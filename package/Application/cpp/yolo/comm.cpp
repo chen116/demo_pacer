@@ -49,8 +49,8 @@ static const int64_t vic_max_target = 1000;
 #include <vector>
 
 // #include <typeinfo>
-
-// char * cpp_xs_read()
+// void* xs_read(xs_handle*, xs_transaction_t, const char*, unsigned int*)’ [-fpermissive]
+// char * cpp_xs_read(xs_handle*,xs_transaction_t)
 
 int main(int argc, char** argv)
 {
@@ -67,8 +67,8 @@ int main(int argc, char** argv)
 	char * buf;
 	// unsigned int *len =  (unsigned int*) malloc(sizeof(unsigned int));
 	// int len = 42;
-	unsigned int *lenn;
-	unsigned int *len = static_cast<unsigned int*>(lenn);
+
+	unsigned int *len;
 
 
     struct xs_handle *xs;
@@ -83,7 +83,7 @@ int main(int argc, char** argv)
     {
 
     	th = xs_transaction_start(xs);
-		buf = xs_read(xs, th, path, 1);
+		buf = xs_read(xs, th, path, len);
     	xs_transaction_end(xs, th, false);
 
     }
