@@ -31,7 +31,7 @@ using namespace cv::dnn;
 // #include <xenstore.h>
 // #ifdef __cplusplus
 // }
-#endif
+// #endif
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
