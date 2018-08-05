@@ -24,13 +24,13 @@ using namespace cv::dnn;
 
 
 
-#include <stdlib.h>
-#ifdef __cplusplus
-extern "C" {
-#endif
-#include <xenstore.h>
-#ifdef __cplusplus
-}
+// #include <stdlib.h>
+// #ifdef __cplusplus
+// extern "C" {
+// #endif
+// #include <xenstore.h>
+// #ifdef __cplusplus
+// }
 #endif
 #include <cstdlib>
 #include <fstream>
@@ -65,7 +65,7 @@ int main(int argc, char** argv)
 {
 
 	int g;
-	cout << hi();
+	cout << hi() <<endl;;
 	return 0;
 
 }
