@@ -7,8 +7,8 @@ app: clean
 	#g++ vid_proc.cpp -o app `pkg-config --libs opencv` -std=c++11 -lhb-shared -lxenstore
 	# g++ comm.cpp -o app `pkg-config --libs opencv` -std=c++11 -lhb-shared -lxenstore
 	# works #gcc xen_comm.c -o app -lhb-shared -lxenstore
-	gcc xen_comm.c -c
-	g++ comm.cpp -c 
+	gcc xen_comm.c -c -lhb-shared -lxenstore
+	g++ comm.cpp -c `pkg-config --libs opencv` -std=c++11 -lhb-shared -lxenstore
 	g++ xen_comm.o comm.o -o app
 clean:
 	-rm -f app
