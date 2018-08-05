@@ -50,7 +50,7 @@ static const int64_t vic_max_target = 1000;
 
 
 
-char * cpp_xs_read(xs_handle* xs ,xs_transaction_t th, const char* path , unsigned int* len)
+extern "C" char * cpp_xs_read(xs_handle* xs ,xs_transaction_t th, const char* path , unsigned int *len)
 {
 	char * buf;
 	th = xs_transaction_start(xs);
@@ -89,7 +89,7 @@ int main(int argc, char** argv)
     printf("%s\n",path);
     while (strcmp(buf,"init"))//buf[0]!='i')
     {
-    	buf = cpp_xs_read(xs, th, path, len);
+    	buf = cpp_xs_read(xs, th, path, &len);
   //   	th = xs_transaction_start(xs);
 		// buf = xs_read(xs, th, path, len);
   //   	xs_transaction_end(xs, th, false);
