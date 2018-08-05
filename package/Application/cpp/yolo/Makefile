@@ -9,7 +9,7 @@ app: clean
 	# works #gcc xen_comm.c -o app -lhb-shared -lxenstore
 	gcc xen_comm.c -c -lhb-shared -lxenstore
 	g++ comm.cpp -c `pkg-config --libs opencv` -std=c++11 -lhb-shared -lxenstore
-	g++ xen_comm.o comm.o -o app
+	g++ xen_comm.o comm.o -o app `pkg-config --libs opencv` -std=c++11 -lhb-shared -lxenstore
 clean:
 	-rm -f app
 
