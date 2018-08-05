@@ -109,7 +109,7 @@ int main(int argc, char** argv)
 heartbeat_finish(heart);
 xs_daemon_close(xs);
 free(path);
-free(len);
+// free(len);
 
 return 0;
 
