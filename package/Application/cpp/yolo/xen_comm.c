@@ -10,7 +10,7 @@ static const int64_t vic_min_target = 100;
 static const int64_t vic_max_target = 1000;
 
 
-int main( )
+int hi( )
 {
     char *path;
 	int er;
@@ -32,5 +32,5 @@ int main( )
 	xs_transaction_end(xs, th, false);
 	printf("%s\n",buf );
 
-	return 0;
+	return 1;
 }
