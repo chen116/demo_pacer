@@ -133,9 +133,32 @@ String object_roi_style = parser.get<String>("style");
 
 
 
+vector<Mat> car;
+vector<Mat> no_car;
+for (int k = 0; i < 200; ++k)
+{
+    Mat frame;
+    cap >> frame;
+    if (k>=20 and k <50)
+    {
+        car.push_back(frame);
+    }
+    if (k >= 140)
+    {
+        no_car.push_back(frame);
+    }
+    /* code */
+}
+vector<Mat> flipcar = car; 
+reverse(flipcar.begin(),flipcar.end());
+for (int i=0;i<flipcar.size();i++)
+{
+    car.push_back(flipcar[i]);
+}
 
 
-	
+
+
 
 	system("python3 getDomUid.py > id.txt"); 
 	// system(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()')"); 
