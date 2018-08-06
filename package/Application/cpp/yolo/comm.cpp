@@ -237,7 +237,7 @@ int prev_frame_num = -1;
 
 while (strcmp("done",item)!=0)
 {
-	frame_num = atoi(xenstore_read(xs,th,frame_num_path,&len));
+	frame_num = atoi(item);
 	if (frame_num > prev_frame_num) 
 	{
 		cout << frame_num << endl;
