@@ -62,7 +62,7 @@ int main(int argc, char** argv)
 	int domid;
 	domid_file >> domid;
 
-	char *base_path;
+
     char *frame_num_path;
     char *box_path;
 	int er;
@@ -70,10 +70,11 @@ int main(int argc, char** argv)
     struct xs_handle *xs;
     xs_transaction_t th;
     xs = xs_daemon_open();
-    base_path = xs_get_domain_path(xs, domid); 
-    frame_num_path = (char*)realloc(base_path, strlen(base_path) + strlen("/frame_number_entry") + 1);
-    box_path = (char*)realloc(base_path, strlen(base_path) + strlen("/box_entry") + 1);
+    frame_num_path = xs_get_domain_path(xs, domid); 
+    box_path = xs_get_domain_path(xs, domid);
+    frame_num_path = (char*)realloc(frame_num_path, strlen(frame_num_path) + strlen("/frame_number_entry") + 1);
     strcat(frame_num_path, "/frame_number_entry");
+    box_path = (char*)realloc(box_path, strlen(box_path) + strlen("/box_entry") + 1);
     strcat(box_path, "/box_entry");
 
     printf("%s\n",frame_num_path);
