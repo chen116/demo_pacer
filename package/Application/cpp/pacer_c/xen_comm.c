@@ -34,7 +34,7 @@ int getDomid()
    in=popen("python3 -c 'from pyxs import Client;c=Client(xen_bus_path=\"/dev/xen/xenbus\");c.connect();print((c.read(\"domid\".encode())).decode());c.close()'", "r");
    fgets(domid, 4, in);
    domid = atoi(domid) - 1;
-   return 
+   return domid;
 }
 
 void xenstore_write(struct xs_handle *xs, xs_transaction_t th, const char *path, const void *data)
