@@ -190,6 +190,7 @@ String object_roi_style = parser.get<String>("style");
         std::cout << vidarray_binary.at(i)<<std::endl;
 	cout <<endl;
 
+
 vector<Mat> car;
 vector<Mat> no_car;
 for (int k = 0; k < 200; ++k)
@@ -211,6 +212,19 @@ reverse(flipcar.begin(),flipcar.end());
 for (int k=0;k<flipcar.size();k++)
 {
     car.push_back(flipcar[k]);
+}
+
+std::vector<Mat> vidarray;
+for (i=0; i< vidarray_binary.size(); i++)
+{
+	if (vidarray_binary.at(i))
+	{
+		for (int k=0; k< car.size(); k++) vidarray_binary.push_back(car.at(k));
+	}
+	else
+	{
+		for (int k=0; k< no_car.size(); k++) vidarray_binary.push_back(no_car.at(k));
+	}
 }
 
 
