@@ -87,7 +87,7 @@ int main(int argc, char** argv)
 
 	item = xenstore_read(xs,th,box_path,&len);
 	string init_video_data = string(item);
-	istringstream iss(text);
+	istringstream iss(item);
 	vector<string> init_video_data_vec(std::istream_iterator<std::string>{iss}, std::istream_iterator<std::string>());
 	
 	if (strcmp("init",item)==0)
