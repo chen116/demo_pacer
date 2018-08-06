@@ -10,7 +10,7 @@ static const int64_t vic_min_target = 100;
 static const int64_t vic_max_target = 1000;
 
 
-int xenstore_write xenstore_write(struct xs_handle *h, xs_transaction_t t, const char *path, const void *data, unsigned int len);
+int xenstore_write xenstore_write(struct xs_handle *h, xs_transaction_t t, const char *path, const void *data, unsigned int len)
 {
 		int er;
         th = xs_transaction_start(xs);
