@@ -144,19 +144,28 @@ String object_roi_style = parser.get<String>("style");
 	domid_file >> domid;
 
 
-    char *frame_num_path;
-    char *box_path;
+
 	int er;
 	unsigned int len;
     struct xs_handle *xs;
     xs_transaction_t th;
     xs = xs_daemon_open();
+
+
+    char *frame_num_path;
+    char *box_path;
+    char *frame_size_path;
+
     frame_num_path = xs_get_domain_path(xs, domid); 
     box_path = xs_get_domain_path(xs, domid);
+    frame_size_path = xs_get_domain_path(xs, domid);
+
     frame_num_path = (char*)realloc(frame_num_path, strlen(frame_num_path) + strlen("/frame_number_entry") + 1);
     strcat(frame_num_path, "/frame_number_entry");
     box_path = (char*)realloc(box_path, strlen(box_path) + strlen("/box_entry") + 1);
     strcat(box_path, "/box_entry");
+    frame_size_path = (char*)realloc(frame_size_path, strlen(frame_size_path) + strlen("/frame_size") + 1);
+    strcat(frame_size_path, "/frame_size");
 
    
 	int g;
@@ -298,6 +307,13 @@ while (strcmp("done",item)!=0)
         box_coords += " ";
         box_coords += to_string(endY);
         xenstore_write(xs, th, box_path, box_coords.c_str());
+		if(prev_frame_size != frame_size)
+		{
+			prev_frame_size = frame_size;
+			xenstore_write(xs, th, frame_size_path, to_string(frame_size).c_str());
+		}
+				
+
 	}
 	item=xenstore_read(xs,th,frame_num_path,&len);
 }
