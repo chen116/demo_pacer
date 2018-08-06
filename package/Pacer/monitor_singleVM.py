@@ -73,7 +73,6 @@ class MonitorThread(threading.Thread):
 				msg=c.read(path).decode()
 				self.threadLock.acquire()
 				if "heart_rate" in path.decode():
-					print(msg)
 					heart_rate=-1
 					try :
 						heart_rate = float(msg)
