@@ -8,7 +8,7 @@ extern "C" {
 
 
 
-struct pacer mypacer;
+pacer mypacer;
 
 
 
