@@ -81,7 +81,7 @@ int main(int argc, char** argv)
     printf("%s\n",path);
 	int g;
 	cout << hi(xs,th,path,&len,buf) <<endl;
-	cout << buf << endl;
+	printf("%s\n",buf );
 	return 0;
 
 }
