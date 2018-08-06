@@ -10,15 +10,7 @@ static const char* vic_log_file ="vic.log";
 static const int64_t vic_min_target = 100;
 static const int64_t vic_max_target = 1000;
 
-// #include <xenstore.h>
-#include <stdlib.h>
-#ifdef __cplusplus
-extern "C" {
-#endif
-#include <xenstore.h>
-#ifdef __cplusplus
-}
-#endif
+
 // int exec(const char* cmd) {
 //     array<char, 4> buffer;
 //     string result;
@@ -32,8 +24,6 @@ extern "C" {
 // }
 #include <ncurses.h>
 #include <stdio.h>
-extern "C" char * xenstore_read(struct xs_handle*  ,xs_transaction_t , const char*  , unsigned int * );
-extern "C" int xenstore_write(struct xs_handle *h, xs_transaction_t t, const char *path, const void *data);
 
 int getDomid()
 {
