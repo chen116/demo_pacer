@@ -9,7 +9,7 @@ extern "C" {
 #endif
 #include <heartbeats/heartbeat.h>
 
-typedef struct pacer_t {
+typedef struct pacer_t{
         int domid;
         struct xs_handle* xs;
         xs_transaction_t th;
