@@ -152,7 +152,7 @@ String object_roi_style = parser.get<String>("style");
 	// fstream domid_file("id.txt");
 	// int domid;
 	// domid_file >> domid;
-	int domuid=exec(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()')"); 
+	int domid=exec(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()')"); 
  
 
 
