@@ -91,30 +91,25 @@ int main(int argc, char** argv)
 	istringstream iss(item);
 	vector<string> init_video_data_vec(std::istream_iterator<std::string>{iss}, std::istream_iterator<std::string>());
 	
-
-	for (std::vector<string>::iterator it = init_video_data_vec.begin() ; it != init_video_data_vec.end(); ++it)
+	int hw_size,lw_size;
+	if (init_video_data_vec[0]=="init")
 	{
-		std::cout << ' ' << *it;
-	}	
-
-
+		hw_size=init_video_data_vec[1];
+		lw_size=init_video_data_vec[2];
+	}
+	vector<int> vidarray_binary;
 	std::string str = "1,2,3,4,5,6";
-    std::vector<int> vect;
+    std::vector<int> vidarray_binary;
 
-    std::stringstream ss(str);
-
+    std::stringstream ss(init_video_data_vec[3]);
     int i;
-
     while (ss >> i)
     {
-        vect.push_back(i);
-
-        if (ss.peek() == ',')
-            ss.ignore();
+        vidarray_binary.push_back(i);
+        if (ss.peek() == ',') ss.ignore();
     }
-
-    for (i=0; i< vect.size(); i++)
-        std::cout << vect.at(i)<<std::endl;
+    for (i=0; i< vidarray_binary.size(); i++)
+        std::cout << vidarray_binary.at(i)<<std::endl;
 	cout <<endl;
 
 
