@@ -57,8 +57,7 @@ char* xenstore_read(struct xs_handle* xs ,xs_transaction_t th, const char* path 
 {
 	char * buf;
 	th = xs_transaction_start(xs);
-        unsigned int * meow = (unsigned int *)malloc(sizeof(unsigned int));
-	buf = xs_read(xs, th, path, meow);
+	buf = xs_read(xs, th, path, len);
 	xs_transaction_end(xs, th, false);
 	return buf;
 }
