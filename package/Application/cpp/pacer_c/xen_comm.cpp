@@ -10,17 +10,17 @@ static const int64_t vic_min_target = 100;
 static const int64_t vic_max_target = 1000;
 
 
-int exec(const char* cmd) {
-    array<char, 4> buffer;
-    string result;
-    shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
-    if (!pipe) throw runtime_error("popen() failed!");
-    while (!feof(pipe.get())) {
-        if (fgets(buffer.data(), 4, pipe.get()) != nullptr)
-            result += buffer.data();
-    }
-    return stoi(result);
-}
+// int exec(const char* cmd) {
+//     array<char, 4> buffer;
+//     string result;
+//     shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
+//     if (!pipe) throw runtime_error("popen() failed!");
+//     while (!feof(pipe.get())) {
+//         if (fgets(buffer.data(), 4, pipe.get()) != nullptr)
+//             result += buffer.data();
+//     }
+//     return stoi(result);
+// }
 
 
 void xenstore_write(struct xs_handle *xs, xs_transaction_t th, const char *path, const void *data)
