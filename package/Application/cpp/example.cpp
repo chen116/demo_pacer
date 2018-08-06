@@ -152,6 +152,8 @@ int main( int argc, const char** argv )
     th = xs_transaction_start(xs);
     er = xs_write(xs, th, path, "done", strlen("done"));
     xs_transaction_end(xs, th, false);
+xs_daemon_close(xs);
+    
     return (0);
 
 }
