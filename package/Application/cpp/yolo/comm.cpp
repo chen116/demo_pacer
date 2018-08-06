@@ -49,7 +49,7 @@ static const int64_t vic_max_target = 1000;
 #include <vector>
 
 extern "C" int hi();
-
+// #ifdef __cplusplus
 // extern "C" char * cpp_xs_read(xs_handle* xs ,xs_transaction_t th, const char* path , unsigned int *len)
 // {
 // 	char * buf;
@@ -63,9 +63,23 @@ extern "C" int hi();
 
 int main(int argc, char** argv)
 {
+    char *path;
+	int er;
+	char * buf;
 
+
+	unsigned int len;
+    struct xs_handle *xs;
+    xs_transaction_t th;
+    xs = xs_daemon_open();
+
+    path = xs_get_domain_path(xs, 10); 
+    path = (char*)realloc(path, strlen(path) + strlen("/frame_number_entry") + 1);
+    strcat(path, "/frame_number_entry");
+
+    printf("%s\n",path);
 	int g;
-	cout << hi() <<endl;;
+	cout << hi(xs,th,path,&len) <<endl;;
 	return 0;
 
 }
