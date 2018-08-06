@@ -13,46 +13,26 @@ static const int64_t vic_max_target = 1000;
 // #include <xenstore.h>
 #include <stdlib.h>
 
-// int getDomid(const char* cmd) {
-//     array<char, 4> buffer;
-//     string result;
-//     shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
-//     if (!pipe) throw runtime_error("popen() failed!");
-//     while (!feof(pipe.get())) {
-//         if (fgets(buffer.data(), 4, pipe.get()) != nullptr)
-//             result += buffer.data();
-//     }
-//     return stoi(result);
-// }
 #include <ncurses.h>
 #include <stdio.h>
 
 int getDomid()
 {
 
-   int domid=0;
-   // FILE *in=NULL;
-   // char temp[4];
-   // system("python3 -c \'from pyxs import Client;c=Client(xen_bus_path=\"/dev/xen/xenbus\");c.connect();print((c.read(\"domid\".encode())).decode());c.close()\'");
+        int domid=0;
 
-   // in=popen("python3 -c \'from pyxs import Client;c=Client(xen_bus_path=\"/dev/xen/xenbus\");c.connect();print((c.read(\"domid\".encode())).decode());c.close()\'", "r");
-   // printf("hiii\n");
-   
-   // fgets(domid, 4, in);
-   // domid = atoi(domid) - 1;
-   // return domid;
 
         FILE * stream;
         const int max_buffer = 256;
         char buffer[max_buffer];
 
         stream =popen("python3 -c \'from pyxs import Client;c=Client(xen_bus_path=\"/dev/xen/xenbus\");c.connect();print((c.read(\"domid\".encode())).decode());c.close()\'", "r");
-       if (stream) {
+        if (stream) {
         while (!feof(stream))
                 if (fgets(buffer, max_buffer, stream) != NULL) sscanf(buffer, "%d", &domid);;
         pclose(stream);
         }
-        
+
         return domid;
 
 }
@@ -67,7 +47,7 @@ void xenstore_write(struct xs_handle *xs, xs_transaction_t th, const char *path,
         // th = xs_transaction_start(xs);
         // er = xs_write(xs, th, path, hr_str, strlen(hr_str));
         // xs_transaction_end(xs, th, false);
-		int er;
+	int er;
         th = xs_transaction_start(xs);
         er = xs_write(xs, th, path, data, strlen(data));
         xs_transaction_end(xs, th, false);
