@@ -67,7 +67,7 @@ static const int64_t vic_max_target = 1000;
 #include <vector>
 
 extern "C" char * xenstore_read(struct xs_handle*  ,xs_transaction_t , const char*  , unsigned int * );
-extern "C" int xenstore_write(struct xs_handle *h, xs_transaction_t t, const char *path, const void *data, unsigned int len);
+extern "C" int xenstore_write(struct xs_handle *h, xs_transaction_t t, const char *path, const void *data);
 
 int main(int argc, char** argv)
 {
@@ -226,6 +226,18 @@ for (i=0; i< vidarray_binary.size(); i++)
 		for (int k=0; k< no_car.size(); k++) vidarray.push_back(no_car.at(k));
 	}
 }
+
+xenstore_write(xs, th, box_path, "0 0 0 0")
+xenstore_write(xs, th, frame_num_path, "ready")
+
+// item = xenstore_read(xs,th,frame_num_path,&len);
+// int prev_frame_num = -1;
+
+// while (strcmp("done",item)!=0)
+// {
+// 	xenstore_read(xs,th,frame_num_path,&len);
+
+// }
 
 
 
