@@ -277,7 +277,7 @@ while (strcmp("done",item)!=0)
             if (confidence > confidenceThreshold)
             {
             	String className = objectClass < classNamesVec.size() ? classNamesVec[objectClass] : cv::format("unknown(%d)", objectClass);
-            	if (className=="car")
+            	if (className=="car" || className=="truck" || className=="bus" )
             	{
 	                float x_center = detectionMat.at<float>(i, 0) * frame.cols;
 	                float y_center = detectionMat.at<float>(i, 1) * frame.rows;
