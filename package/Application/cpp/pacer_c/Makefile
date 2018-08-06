@@ -9,5 +9,5 @@ app: clean
 clean:
 	-rm -f app
 
-
+gcc -c comm.c -lhb-shared -lxenstore
 #-source=[PATH-IMAGE]  -cfg=[PATH-TO-DARKNET]/cfg/yolo.cfg -model=[PATH-TO-DARKNET]/yolo.weights   -class_names=[PATH-TO-DARKNET]/data/coco.names
