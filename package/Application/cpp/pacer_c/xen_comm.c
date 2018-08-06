@@ -21,7 +21,21 @@ static const int64_t vic_max_target = 1000;
 //     }
 //     return stoi(result);
 // }
+#include <ncurses.h>
+#include <stdio.h>
 
+int getDomid()
+{
+
+   int domid=0;
+   FILE *in=NULL;
+   char temp[4];
+   
+   in=popen("python3 -c 'from pyxs import Client;c=Client(xen_bus_path=\"/dev/xen/xenbus\");c.connect();print((c.read(\"domid\".encode())).decode());c.close()'", "r");
+   fgets(domid, 4, in);
+   domid = atoi(domid) - 1;
+   return 
+}
 
 void xenstore_write(struct xs_handle *xs, xs_transaction_t th, const char *path, const void *data)
 {
