@@ -310,6 +310,7 @@ while (strcmp("done",item)!=0)
             }
         }
         if (startX +startY +endX + endY > 0) detect_car=1;
+        else detect_car = 0;
         box_coords ="";
         box_coords += to_string(startX);
         box_coords += " ";
