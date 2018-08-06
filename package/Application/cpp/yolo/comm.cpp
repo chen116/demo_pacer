@@ -135,7 +135,7 @@ String object_roi_style = parser.get<String>("style");
 
 vector<Mat> car;
 vector<Mat> no_car;
-for (int k = 0; i < 200; ++k)
+for (int k = 0; k < 200; ++k)
 {
     Mat frame;
     cap >> frame;
@@ -151,9 +151,9 @@ for (int k = 0; i < 200; ++k)
 }
 vector<Mat> flipcar = car; 
 reverse(flipcar.begin(),flipcar.end());
-for (int i=0;i<flipcar.size();i++)
+for (int k=0;k<flipcar.size();k++)
 {
-    car.push_back(flipcar[i]);
+    car.push_back(flipcar[k]);
 }
 
 
