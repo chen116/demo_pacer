@@ -37,7 +37,7 @@ extern "C" {
 #include <fstream>
 #include <iostream>
 #include <string>
-
+#include <iterator>
 
 #include <heartbeats/heartbeat.h>
 
