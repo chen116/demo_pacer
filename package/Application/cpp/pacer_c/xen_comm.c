@@ -1,3 +1,5 @@
+
+#include <xen_comm.h>
 #include <stdio.h>
 #include <xenstore.h>
 #include <heartbeats/heartbeat.h>
