@@ -36,10 +36,11 @@ extern "C" {
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include<string>
 
 
 #include <heartbeats/heartbeat.h>
-#include <string.h>
+
 heartbeat_t* heart;
 static const int64_t vic_win_size = 10;
 static const int64_t vic_buf_depth = 1000;
@@ -61,16 +62,19 @@ int main(int argc, char** argv)
 	int domid;
 	domid_file >> domid;
 
-
+	char *base_path;
     char *frame_num_path;
+    char *box_path;
 	int er;
 	unsigned int len;
     struct xs_handle *xs;
     xs_transaction_t th;
     xs = xs_daemon_open();
-    frame_num_path = xs_get_domain_path(xs, domid); 
-    frame_num_path = (char*)realloc(frame_num_path, strlen(frame_num_path) + strlen("/frame_number_entry") + 1);
+    base_path = xs_get_domain_path(xs, domid); 
+    frame_num_path = (char*)realloc(base_path, strlen(base_path) + strlen("/frame_number_entry") + 1);
+    box_path = (char*)realloc(base_path, strlen(base_path) + strlen("/box_entry") + 1);
     strcat(frame_num_path, "/frame_number_entry");
+    strcat(box_path, "/box_entry");
 
     printf("%s\n",frame_num_path);
 	int g;
@@ -81,9 +85,19 @@ int main(int argc, char** argv)
 		item = xenstore_read(xs,th,frame_num_path,&len);
 	} 
 
+	item = xenstore_read(xs,th,box_path,&len);
+	string init_video_data = string(item);
+	istringstream iss(text);
+	vector<string> init_video_data_vec(std::istream_iterator<std::string>{iss}, std::istream_iterator<std::string>());
 	
 	if (strcmp("init",item)==0)
 		printf("%s\n", item);
+
+	for (std::vector<string>::iterator it = init_video_data_vec.begin() ; it != init_video_data_vec.end(); ++it)
+	{
+		std::cout << ' ' << *it;
+	}	
+	cout <<endl;
 
 
 
