@@ -234,6 +234,10 @@ xenstore_write(xs, th, frame_num_path, "ready");
 int frame_num;
 item = xenstore_read(xs,th,frame_num_path,&len);
 int prev_frame_num = -1;
+int frame_size = vidarray_binary[0];
+int detect_car = vidarray_binary[0];
+int prev_frame_size = 0;
+
 
 while (strcmp("done",item)!=0)
 {
@@ -242,6 +246,15 @@ while (strcmp("done",item)!=0)
 	{
 		cout << frame_num << endl;
 		prev_frame_num = frame_num;
+
+
+
+
+
+
+
+
+
 	}
 	
 
