@@ -68,6 +68,17 @@ static const int64_t vic_max_target = 1000;
 
 extern "C" char * xenstore_read(struct xs_handle*  ,xs_transaction_t , const char*  , unsigned int * );
 extern "C" int xenstore_write(struct xs_handle *h, xs_transaction_t t, const char *path, const void *data);
+int exec(const char* cmd) {
+    std::array<char, 4> buffer;
+    std::string result;
+    std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
+    if (!pipe) throw std::runtime_error("popen() failed!");
+    while (!feof(pipe.get())) {
+        if (fgets(buffer.data(), 4, pipe.get()) != nullptr)
+            result += buffer.data();
+    }
+    return stoi(result);
+}
 
 int main(int argc, char** argv)
 {
@@ -137,12 +148,12 @@ String object_roi_style = parser.get<String>("style");
 
 
 
-	system("python3 getDomUid.py > id.txt"); 
-	// system(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()')"); 
-	fstream domid_file("id.txt");
-	int domid;
-	domid_file >> domid;
-
+	// system("python3 getDomUid.py > id.txt"); 
+	// fstream domid_file("id.txt");
+	// int domid;
+	// domid_file >> domid;
+	int domuid=exec(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()')"); 
+ 
 
 
 	int er;
