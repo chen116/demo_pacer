@@ -251,7 +251,7 @@ while (strcmp("done",item)!=0)
 		if (detect_car) frame_size = hw_size;
 		else frame_size = lw_size;
 		Mat frame;
-		resize(ori_frame, frame, cv::Size(150,150));
+		resize(ori_frame, frame, cv::Size( frame_size,round(144*frame_size/176)));
 
 
 
