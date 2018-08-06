@@ -3,7 +3,7 @@
 
 app: clean
 	-git pull
-	gcc xen_comm.cpp -c -lhb-shared -lxenstore -std=c++11
+	g++ xen_comm.cpp -c -lhb-shared -lxenstore -std=c++11
 	# g++ vid_proc.cpp -c `pkg-config --libs opencv` -std=c++11 -lhb-shared -lxenstore
 	# g++ xen_comm.o vid_proc.o -o app `pkg-config --libs opencv` -std=c++11 -lhb-shared -lxenstore
 clean:
