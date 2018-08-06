@@ -241,6 +241,7 @@ while (strcmp("done",item)!=0)
 	if (frame_num > prev_frame_num) 
 	{
 		cout << frame_num << endl;
+		prev_frame_num = frame_num;
 	}
 	
 
