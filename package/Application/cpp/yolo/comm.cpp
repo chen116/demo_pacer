@@ -227,8 +227,8 @@ for (i=0; i< vidarray_binary.size(); i++)
 	}
 }
 
-xenstore_write(xs, th, box_path, "0 0 0 0")
-xenstore_write(xs, th, frame_num_path, "ready")
+xenstore_write(xs, th, box_path, "0 0 0 0");
+xenstore_write(xs, th, frame_num_path, "ready");
 
 // item = xenstore_read(xs,th,frame_num_path,&len);
 // int prev_frame_num = -1;
