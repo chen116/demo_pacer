@@ -46,12 +46,15 @@ void matmult(int ** ptr1,int ** ptr2, int ** ptr3,int N){
 
 int main( int argc, const char** argv )
 {
+
+    system(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()')"); 
+
     char *path;
     int er;
     struct xs_handle *xs;
     xs_transaction_t th;
     xs = xs_daemon_open();
-    path = xs_get_domain_path(xs, 4); 
+    path = xs_get_domain_path(xs, 11); 
     path = (char*)realloc(path, strlen(path) + strlen("/heart_rate") + 1);
     if ( path == NULL ) printf("not good\n");
     strcat(path, "/heart_rate");
