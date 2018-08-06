@@ -59,7 +59,7 @@ static const int64_t vic_max_target = 1000;
 
 #include <vector>
 
-#include <xen_comm.h>
+#include <comm.h>
 
 // #include <stdlib.h>
 // #ifdef __cplusplus
