@@ -228,7 +228,7 @@ for (i=0; i< vidarray_binary.size(); i++)
 }
 
 string box_coords = "0 0 0 0";
-xenstore_write(xs, th, box_path, box_coords);
+xenstore_write(xs, th, box_path, box_coords.c_str());
 xenstore_write(xs, th, frame_num_path, "ready");
 
 // item = xenstore_read(xs,th,frame_num_path,&len);
