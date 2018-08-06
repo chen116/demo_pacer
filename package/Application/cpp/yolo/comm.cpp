@@ -255,6 +255,9 @@ while (strcmp("done",item)!=0)
 
 
 
+		CvSize dim = cvGetSize(frame);
+
+        cout <<" dimensions:: height:" <<  dim.height<<" width:"<< dim.width<< endl;
 
 
 
