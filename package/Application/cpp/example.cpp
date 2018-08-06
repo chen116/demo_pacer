@@ -23,6 +23,25 @@ static const char* vic_log_file ="vic.log";
 static const int64_t vic_min_target = 100;
 static const int64_t vic_max_target = 1000;
 
+#include <cstdio>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+#include <string>
+#include <array>
+
+int exec(const char* cmd) {
+    std::array<char, 4> buffer;
+    std::string result;
+    std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
+    if (!pipe) throw std::runtime_error("popen() failed!");
+    while (!feof(pipe.get())) {
+        if (fgets(buffer.data(), 4, pipe.get()) != nullptr)
+            result += buffer.data();
+    }
+    return atoi(result);
+}
+
 
 void matmult(int **,int **,int **,int);
 
@@ -47,7 +66,8 @@ void matmult(int ** ptr1,int ** ptr2, int ** ptr3,int N){
 int main( int argc, const char** argv )
 {
 
-    system(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()')"); 
+    int domuid;
+    domuid = exec(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()')"); 
 
     char *path;
     int er;
