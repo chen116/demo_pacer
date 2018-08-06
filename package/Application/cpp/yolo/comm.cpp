@@ -219,11 +219,11 @@ for (i=0; i< vidarray_binary.size(); i++)
 {
 	if (vidarray_binary.at(i))
 	{
-		for (int k=0; k< car.size(); k++) vidarray_binary.push_back(car.at(k));
+		for (int k=0; k< car.size(); k++) vidarray.push_back(car.at(k));
 	}
 	else
 	{
-		for (int k=0; k< no_car.size(); k++) vidarray_binary.push_back(no_car.at(k));
+		for (int k=0; k< no_car.size(); k++) vidarray.push_back(no_car.at(k));
 	}
 }
 
