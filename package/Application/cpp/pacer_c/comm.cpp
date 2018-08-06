@@ -19,7 +19,10 @@ static const int64_t vic_max_target = 1000;
 #include <string>
 #include <array>
 using namespace std;
-
+extern "C" bool xs_write(struct xs_handle *h, xs_transaction_t t,
+        const char *path, const void *data, unsigned int len);
+extern "C" void *xs_read(struct xs_handle *h, xs_transaction_t t,
+        const char *path, unsigned int *len);
 int getDomid(const char* cmd) {
     array<char, 4> buffer;
     string result;
