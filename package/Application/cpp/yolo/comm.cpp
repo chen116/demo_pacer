@@ -158,10 +158,10 @@ String object_roi_style = parser.get<String>("style");
     box_path = (char*)realloc(box_path, strlen(box_path) + strlen("/box_entry") + 1);
     strcat(box_path, "/box_entry");
 
-    printf("%s\n",frame_num_path);
+   
 	int g;
 	char * item;
-
+	printf("waiting for dom0...\n");
 	while (strcmp("init",item)!=0)
 	{
 		item = xenstore_read(xs,th,frame_num_path,&len);
@@ -230,6 +230,8 @@ for (i=0; i< vidarray_binary.size(); i++)
 string box_coords = "0 0 0 0";
 xenstore_write(xs, th, box_path, box_coords.c_str());
 xenstore_write(xs, th, frame_num_path, "ready");
+printf("ready...\n");
+
 
 int frame_num;
 int prev_frame_num = -1;
