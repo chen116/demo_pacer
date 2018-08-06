@@ -238,8 +238,12 @@ int prev_frame_num = -1;
 int frame_size = vidarray_binary[0];
 int detect_car = vidarray_binary[0];
 int prev_frame_size = 0;
-
+int startX,startY,endX,endY;
 item = xenstore_read(xs,th,frame_num_path,&len);
+int startX=0;
+int startY=0;
+int endX=0;
+int endY=0;
 while (strcmp("done",item)!=0)
 {
 	frame_num = atoi(item);
@@ -252,27 +256,51 @@ while (strcmp("done",item)!=0)
 		else frame_size = lw_size;
 		Mat frame;
 		resize(ori_frame, frame, cv::Size( frame_size,round(144*frame_size/176)));
-
-
-
-        cout <<" dimensions:: height:" <<  frame.rows<<" width:"<< frame.cols << endl;
-        cout <<" dimensions:: height:" <<  ori_frame.rows<<" width:"<< ori_frame.cols << endl;
-        cout <<" dimensions:: height:" <<  frame_size<<" width:"<< frame_size << endl;
-
-
-
-
-
-
-
+		if (frame.channels() == 4)
+            cvtColor(frame, frame, COLOR_BGRA2BGR);
+        Mat inputBlob = blobFromImage(frame, 1 / 255.F, Size(416, 416), Scalar(), true, false); //Convert Mat to batch of images
+        net.setInput(inputBlob, "data");                   //set the network input
+        Mat detectionMat = net.forward("detection_out");   //compute output
+        vector<double> layersTimings;
+        float confidenceThreshold = parser.get<float>("min_confidence");
+        startX=0;
+        startY=0;
+        endX=0;
+        endY=0;
+        for (i = 0; i < detectionMat.rows; i++)
+        {
+            const int probability_index = 5;
+            const int probability_size = detectionMat.cols - probability_index;
+            float *prob_array_ptr = &detectionMat.at<float>(i, probability_index);
+            size_t objectClass = max_element(prob_array_ptr, prob_array_ptr + probability_size) - prob_array_ptr;
+            float confidence = detectionMat.at<float>(i, (int)objectClass + probability_index);
+            if (confidence > confidenceThreshold)
+            {
+            	String className = objectClass < classNamesVec.size() ? classNamesVec[objectClass] : cv::format("unknown(%d)", objectClass);
+            	if (className=="car")
+            	{
+	                float x_center = detectionMat.at<float>(i, 0) * frame.cols;
+	                float y_center = detectionMat.at<float>(i, 1) * frame.rows;
+	                float width = detectionMat.at<float>(i, 2) * frame.cols;
+	                float height = detectionMat.at<float>(i, 3) * frame.rows;
+			        startX=cvRound(x_center - width / 2);
+			        startY=cvRound(y_center - height / 2);
+			        endX=cvRound(x_center + width / 2);
+			        endY=cvRound(y_center + height / 2);
+			    }
+            }
+        }
+        if (startX +startY +endX + endY > 0) detect_car=1;
+        box_coords ="";
+        box_coords += to_string(startX);
+        box_coords += " ";
+        box_coords += to_string(startY);
+        box_coords += " ";
+        box_coords += to_string(endX);
+        box_coords += " ";
+        box_coords += to_string(endY);
+        xenstore_write(xs, th, box_path, box_coords.c_str());
 	}
-	
-
-
-
-
-
-
 	item=xenstore_read(xs,th,frame_num_path,&len);
 }
 
