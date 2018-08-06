@@ -10,7 +10,6 @@
 // get coordinates:
 
 
-
 #include <opencv2/dnn.hpp>
 #include <opencv2/dnn/shape_utils.hpp>
 #include <opencv2/imgproc.hpp>
@@ -20,6 +19,23 @@
 using namespace std;
 using namespace cv;
 using namespace cv::dnn;
+static const char* about =
+"This sample uses You only look once (YOLO)-Detector (https://arxiv.org/abs/1612.08242) to detect objects on camera/video/image.\n"
+"Models can be downloaded here: https://pjreddie.com/darknet/yolo/\n"
+"Default network is 416x416.\n"
+"Class names can be downloaded here: https://github.com/pjreddie/darknet/tree/master/data\n";
+static const char* params =
+"{ help           | false | print usage         }"
+"{ cfg            |  yolov2-tiny.cfg   | model configuration }"
+"{ model          |    yolov2-tiny.weights   | model weights       }"
+"{ camera_device  | 0     | camera device number}"
+"{ source         |  rollcar.3gp    | video or image for detection}"
+"{ out            |       | path to output video file}"
+"{ fps            | 3     | frame per second }"
+"{ style          | box   | box or line style draw }"
+"{ min_confidence | 0.24  | min confidence      }"
+"{ class_names    |  coco.names   | File with class names, [PATH-TO-DARKNET]/data/coco.names }";
+
 
 
 
@@ -55,6 +71,71 @@ extern "C" int xenstore_write(struct xs_handle *h, xs_transaction_t t, const cha
 
 int main(int argc, char** argv)
 {
+
+//yolo
+CommandLineParser parser(argc, argv, params);
+if (parser.get<bool>("help"))
+{
+    cout << about << endl;
+    parser.printMessage();
+    return 0;
+}
+String modelConfiguration = parser.get<String>("cfg");
+String modelBinary = parser.get<String>("model");
+cout<<modelBinary<<" "<<modelConfiguration <<endl;
+dnn::Net net = readNetFromDarknet(modelConfiguration, modelBinary);
+if (net.empty())
+{
+    cerr << "Can't load network by using the following files: " << endl;
+    cerr << "cfg-file:     " << modelConfiguration << endl;
+    cerr << "weights-file: " << modelBinary << endl;
+    cerr << "Models can be downloaded here:" << endl;
+    cerr << "https://pjreddie.com/darknet/yolo/" << endl;
+    exit(-1);
+}
+VideoCapture cap;
+VideoWriter writer;
+int codec = CV_FOURCC('M', 'J', 'P', 'G');
+double fps = parser.get<float>("fps");
+if (parser.get<String>("source").empty())
+{
+    int cameraDevice = parser.get<int>("camera_device");
+    cap = VideoCapture(cameraDevice);
+    if(!cap.isOpened())
+    {
+        cout << "Couldn't find camera: " << cameraDevice << endl;
+        return -1;
+    }
+}
+else
+{
+    cap.open(parser.get<String>("source"));
+    if(!cap.isOpened())
+    {
+        cout << "Couldn't open image or video: " << parser.get<String>("video") << endl;
+        return -1;
+    }
+}
+if(!parser.get<String>("out").empty())
+{
+    writer.open(parser.get<String>("out"), codec, fps, Size((int)cap.get(CAP_PROP_FRAME_WIDTH),(int)cap.get(CAP_PROP_FRAME_HEIGHT)), 1);
+}
+vector<String> classNamesVec;
+ifstream classNamesFile(parser.get<String>("class_names").c_str());
+if (classNamesFile.is_open())
+{
+    string className = "";
+    while (std::getline(classNamesFile, className))
+        classNamesVec.push_back(className);
+}
+String object_roi_style = parser.get<String>("style");
+
+
+
+
+
+
+	
 
 	system("python3 getDomUid.py > id.txt"); 
 	// system(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()')"); 
