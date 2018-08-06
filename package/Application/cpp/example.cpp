@@ -68,7 +68,7 @@ int main( int argc, const char** argv )
 
     int domuid;
     domuid = exec(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()')"); 
-
+    printf("%d\n",domuid );
     char *path;
     int er;
     struct xs_handle *xs;
