@@ -11,8 +11,8 @@ extern "C" {
 
 struct pacer {
         int domid;
-        struct xs_handle* xs;
-        struct xs_transaction_t th;
+        // struct xs_handle* xs;
+        // struct xs_transaction_t th;
         char * base_path;
         heartbeat_t * heart;
 };
