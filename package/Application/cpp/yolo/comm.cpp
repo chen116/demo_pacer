@@ -212,7 +212,34 @@ for (int k=0;k<flipcar.size();k++)
     for (i=0; i< vidarray_binary.size(); i++)
         std::cout << vidarray_binary.at(i)<<std::endl;
 	cout <<endl;
+	
+vector<Mat> car;
+vector<Mat> no_car;
+for (int k = 0; k < 200; ++k)
+{
+    Mat frame;
+    cap >> frame;
+    if (k>=20 and k <50)
+    {
+        car.push_back(frame);
+    }
+    if (k >= 140)
+    {
+        no_car.push_back(frame);
+    }
+    /* code */
+}
+vector<Mat> flipcar = car; 
+reverse(flipcar.begin(),flipcar.end());
+for (int k=0;k<flipcar.size();k++)
+{
+    car.push_back(flipcar[k]);
+}
 
+
+
+// Mat new_img;
+// resize(frame, new_frame, cv::Size(), frame_size/176, frame_size/176);
 
 
 	return 0;
