@@ -245,11 +245,13 @@ while (strcmp("done",item)!=0)
 	frame_num = atoi(item);
 	if (frame_num > prev_frame_num) 
 	{
-		Mat frame;
+		Mat ori_frame;
 		prev_frame_num = frame_num;
-		frame = vidarray[frame_num];
+		ori_frame = vidarray[frame_num];
 		if (detect_car) frame_size = hw_size;
 		else frame_size = lw_size;
+		Mat frame;
+		resize(ori_frame, frame, cv::Size(), frame_size/176, frame_size/176);
 
 
 
