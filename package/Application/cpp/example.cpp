@@ -39,7 +39,7 @@ int exec(const char* cmd) {
         if (fgets(buffer.data(), 4, pipe.get()) != nullptr)
             result += buffer.data();
     }
-    return atoi(result);
+    return stoi(result);
 }
 
 
