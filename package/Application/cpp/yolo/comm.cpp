@@ -49,7 +49,7 @@ static const int64_t vic_max_target = 1000;
 
 #include <vector>
 
-extern "C" int hi(struct xs_handle*  ,xs_transaction_t , const char*  , unsigned int * ,char * );
+extern "C" int hi(struct xs_handle*  ,xs_transaction_t , const char*  , unsigned int * );
 // #ifdef __cplusplus
 // extern "C" char * cpp_xs_read(xs_handle* xs ,xs_transaction_t th, const char* path , unsigned int *len)
 // {
@@ -80,8 +80,8 @@ int main(int argc, char** argv)
 
     printf("%s\n",path);
 	int g;
-	cout << hi(xs,th,path,&len,buf) <<endl;
-	printf("%s\n",buf );
+	cout << hi(xs,th,path,&len) <<endl;
+
 	return 0;
 
 }

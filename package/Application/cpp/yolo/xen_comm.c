@@ -14,11 +14,11 @@ static const int64_t vic_max_target = 1000;
 
 
 
-int hi(struct xs_handle* xs ,xs_transaction_t th, const char* path , unsigned int *len ,char * buf)
+int hi(struct xs_handle* xs ,xs_transaction_t th, const char* path , unsigned int *len )
 {
  //    char *path;
 	// int er;
-	// char * buf;
+	char * buf;
 
 
 	// unsigned int len;
@@ -35,5 +35,5 @@ int hi(struct xs_handle* xs ,xs_transaction_t th, const char* path , unsigned in
 	xs_transaction_end(xs, th, false);
 	printf("%s\n",buf );
 
-	return 1;
+	return buf;
 }
