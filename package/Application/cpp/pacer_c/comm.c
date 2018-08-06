@@ -32,6 +32,8 @@ extern "C" {
 // }
 #include <ncurses.h>
 #include <stdio.h>
+extern "C" char * xenstore_read(struct xs_handle*  ,xs_transaction_t , const char*  , unsigned int * );
+extern "C" int xenstore_write(struct xs_handle *h, xs_transaction_t t, const char *path, const void *data);
 
 int getDomid()
 {
