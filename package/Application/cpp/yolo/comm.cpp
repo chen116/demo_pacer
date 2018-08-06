@@ -231,14 +231,22 @@ string box_coords = "0 0 0 0";
 xenstore_write(xs, th, box_path, box_coords.c_str());
 xenstore_write(xs, th, frame_num_path, "ready");
 
-// item = xenstore_read(xs,th,frame_num_path,&len);
-// int prev_frame_num = -1;
+int frame_num;
+item = xenstore_read(xs,th,frame_num_path,&len);
+int prev_frame_num = -1;
 
-// while (strcmp("done",item)!=0)
-// {
-// 	xenstore_read(xs,th,frame_num_path,&len);
-
-// }
+while (strcmp("done",item)!=0)
+{
+	try{
+		frame_num = atoi(xenstore_read(xs,th,frame_num_path,&len));
+		cout << frame_num << endl;
+	}
+	catch(int err)
+	{
+		cout << "done" << endl;
+	}
+	xenstore_read(xs,th,frame_num_path,&len);
+}
 
 
 
