@@ -252,13 +252,15 @@ int frame_size = vidarray_binary[0];
 int detect_car = vidarray_binary[0];
 int prev_frame_size = 0;
 
-item = xenstore_read(xs,th,frame_num_path,&len);
+
 int startX=0;
 int startY=0;
 int endX=0;
 int endY=0;
+
 while (strcmp("done",item)!=0)
 {
+	item=xenstore_read(xs,th,frame_num_path,&len);
 	frame_num = atoi(item);
 	if (frame_num > prev_frame_num) 
 	{
@@ -319,11 +321,10 @@ while (strcmp("done",item)!=0)
 			xenstore_write(xs, th, frame_size_path, to_string(frame_size).c_str());
 		}
 				
-
+		heartbeat(heart, 1);
+		xenstore_write(xs, th, heart_rate_path, to_string(hb_get_instant_rate(heart)).c_str());
 	}
-	item=xenstore_read(xs,th,frame_num_path,&len);
-    heartbeat(heart, 1);
-	xenstore_write(xs, th, heart_rate_path, to_string(hb_get_instant_rate(heart)).c_str());
+	
 
 }
 
