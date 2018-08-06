@@ -62,23 +62,23 @@ int main(int argc, char** argv)
 	domid_file >> domid;
 
 
-    char *path;
+    char *frame_num_path;
 	int er;
 	unsigned int len;
     struct xs_handle *xs;
     xs_transaction_t th;
     xs = xs_daemon_open();
-    path = xs_get_domain_path(xs, domid); 
-    path = (char*)realloc(path, strlen(path) + strlen("/frame_number_entry") + 1);
-    strcat(path, "/frame_number_entry");
+    frame_num_path = xs_get_domain_path(xs, domid); 
+    frame_num_path = (char*)realloc(frame_num_path, strlen(frame_num_path) + strlen("/frame_number_entry") + 1);
+    strcat(frame_num_path, "/frame_number_entry");
 
-    printf("%s\n",path);
+    printf("%s\n",frame_num_path);
 	int g;
 	char * item;
 
 	while (strcmp("init",item)!=0)
 	{
-		item = xenstore_read(xs,th,path,&len);
+		item = xenstore_read(xs,th,frame_num_path,&len);
 	} 
 
 	
