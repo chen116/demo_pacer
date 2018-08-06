@@ -69,7 +69,7 @@ int main(int argc, char** argv)
 	char * buf;
 
 
-	unsigned int *len;
+	unsigned int len;
     struct xs_handle *xs;
     xs_transaction_t th;
     xs = xs_daemon_open();
@@ -80,7 +80,7 @@ int main(int argc, char** argv)
 
     printf("%s\n",path);
 	int g;
-	cout << hi(xs,th,path,len,buf) <<endl;;
+	cout << hi(xs,th,path,&len,buf) <<endl;;
 	return 0;
 
 }
