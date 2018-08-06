@@ -10,8 +10,15 @@ static const char* vic_log_file ="vic.log";
 static const int64_t vic_min_target = 100;
 static const int64_t vic_max_target = 1000;
 
+// #include <xenstore.h>
+#include <stdlib.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include <xenstore.h>
-
+#ifdef __cplusplus
+}
+#endif
 // int exec(const char* cmd) {
 //     array<char, 4> buffer;
 //     string result;
