@@ -91,13 +91,30 @@ int main(int argc, char** argv)
 	istringstream iss(item);
 	vector<string> init_video_data_vec(std::istream_iterator<std::string>{iss}, std::istream_iterator<std::string>());
 	
-	if (strcmp("init",item)==0)
-		printf("%s\n", item);
 
 	for (std::vector<string>::iterator it = init_video_data_vec.begin() ; it != init_video_data_vec.end(); ++it)
 	{
 		std::cout << ' ' << *it;
 	}	
+
+
+	std::string str = "1,2,3,4,5,6";
+    std::vector<int> vect;
+
+    std::stringstream ss(str);
+
+    int i;
+
+    while (ss >> i)
+    {
+        vect.push_back(i);
+
+        if (ss.peek() == ',')
+            ss.ignore();
+    }
+
+    for (i=0; i< vect.size(); i++)
+        std::cout << vect.at(i)<<std::endl;
 	cout <<endl;
 
 
