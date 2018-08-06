@@ -12,7 +12,12 @@ static const int64_t vic_max_target = 1000;
 
 // #include <xenstore.h>
 #include <stdlib.h>
-
+#include <cstdio>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+#include <string>
+#include <array>
 int getDomid(const char* cmd) {
     array<char, 4> buffer;
     string result;
