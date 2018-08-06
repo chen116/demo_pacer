@@ -107,7 +107,7 @@ class ResourceAllocation:
 
 	# force sharing of limited CPU resource between 2VMs
 	def exec_stride_sharing(self,cur_bw,now_time):
-		allowed_processing_time_per_contention=3
+		allowed_processing_time_per_contention=2
 
 		other_info = self.shared_data[self.other_domuid]
 		if self.rtxen_or_credit=="rtxen":
