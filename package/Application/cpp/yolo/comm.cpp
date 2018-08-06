@@ -186,9 +186,7 @@ String object_roi_style = parser.get<String>("style");
         vidarray_binary.push_back(i);
         if (ss.peek() == ',') ss.ignore();
     }
-    for (i=0; i< vidarray_binary.size(); i++)
-        std::cout << vidarray_binary.at(i)<<std::endl;
-	cout <<endl;
+
 
 
 vector<Mat> car;
