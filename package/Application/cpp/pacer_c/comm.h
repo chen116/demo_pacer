@@ -8,7 +8,7 @@ extern "C" {
 }
 #endif
 #include <heartbeats/heartbeat.h>
-
+typedef struct pacer;
 struct pacer {
 	int domid;
 	xs_handle* xs;
