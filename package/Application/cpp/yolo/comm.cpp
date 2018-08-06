@@ -49,7 +49,7 @@ static const int64_t vic_max_target = 1000;
 
 #include <vector>
 
-extern "C" int hi(struct xs_handle*  ,xs_transaction_t , const char*  , unsigned int * );
+extern "C" int xenstore_read(struct xs_handle*  ,xs_transaction_t , const char*  , unsigned int * );
 // #ifdef __cplusplus
 // extern "C" char * cpp_xs_read(xs_handle* xs ,xs_transaction_t th, const char* path , unsigned int *len)
 // {
@@ -66,9 +66,6 @@ int main(int argc, char** argv)
 {
     char *path;
 	int er;
-	char * buf;
-
-
 	unsigned int len;
     struct xs_handle *xs;
     xs_transaction_t th;
@@ -80,7 +77,7 @@ int main(int argc, char** argv)
 
     printf("%s\n",path);
 	int g;
-	printf("%s\n", hi(xs,th,path,&len));
+	printf("%s\n", xenstore_read(xs,th,path,&len));
 
 
 	return 0;
