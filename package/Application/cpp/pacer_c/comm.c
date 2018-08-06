@@ -48,8 +48,8 @@ int getDomid()
 
         stream =popen("python3 -c \'from pyxs import Client;c=Client(xen_bus_path=\"/dev/xen/xenbus\");c.connect();print((c.read(\"domid\".encode())).decode());c.close()\'", "r");
        if (stream) {
-        // while (!feof(stream))
-        if (fgets(buffer, max_buffer, stream) != NULL) printf("%s\n",buffer);
+        while (!feof(stream))
+                if (fgets(buffer, max_buffer, stream) != NULL) printf("%s\n",buffer);
         pclose(stream);
         }
         sscanf(buffer, "%d", &domid);
