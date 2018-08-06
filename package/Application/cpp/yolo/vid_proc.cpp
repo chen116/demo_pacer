@@ -334,7 +334,10 @@ while (strcmp("done",item)!=0)
 printf("done\n");
 heartbeat_finish(heart);
 xs_daemon_close(xs);
-free(path);
+free(frame_num_path);
+free(box_path);
+free(frame_size_path);
+free(heart_rate_path);
 	return 0;
 
 }
