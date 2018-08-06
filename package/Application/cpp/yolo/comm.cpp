@@ -98,9 +98,6 @@ int main(int argc, char** argv)
 		lw_size=init_video_data_vec[2];
 	}
 	vector<int> vidarray_binary;
-	std::string str = "1,2,3,4,5,6";
-    std::vector<int> vidarray_binary;
-
     std::stringstream ss(init_video_data_vec[3]);
     int i;
     while (ss >> i)
