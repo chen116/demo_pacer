@@ -15,7 +15,15 @@ static const int64_t vic_max_target = 1000;
 
 #include <ncurses.h>
 #include <stdio.h>
+#include <heartbeats/heartbeat.h>
 
+struct pacer {
+        int domid;
+        xs_handle* xs;
+        xs_transaction_t th;
+        char * base_path;
+        heartbeat_t * heart;
+};
 int getDomid()
 {
 

@@ -7,15 +7,7 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-#include <heartbeats/heartbeat.h>
-typedef struct pacer;
-struct pacer {
-	int domid;
-	xs_handle* xs;
-	xs_transaction_t th;
-	char * base_path;
-	heartbeat_t * heart;
-};
+
 // extern "C" char * xenstore_read(struct xs_handle*  ,xs_transaction_t , const char*  , unsigned int * );
 // extern "C" int xenstore_write(struct xs_handle *, xs_transaction_t , const char *, const void *);
 
