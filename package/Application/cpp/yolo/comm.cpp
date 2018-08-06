@@ -20,6 +20,7 @@
 using namespace std;
 using namespace cv;
 using namespace cv::dnn;
+#include <xenstore.h>
 
 
 
