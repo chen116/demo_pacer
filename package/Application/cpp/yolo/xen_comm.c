@@ -14,7 +14,7 @@ static const int64_t vic_max_target = 1000;
 
 
 
-int hi(xs_handle* xs ,xs_transaction_t th, const char* path , unsigned int *len )
+int hi(struct xs_handle* xs ,xs_transaction_t th, const char* path , unsigned int *len )
 {
  //    char *path;
 	// int er;
