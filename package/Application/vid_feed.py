@@ -66,9 +66,9 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 		if c[name_path].decode() == "VM2":
 			domu_ids.append(x)
 			box_color[x]=[255,144,30] # blue box
-		# if c[name_path].decode() == "VM2":
-		# 	domu_ids.append(x)
-		# 	box_color[x]=[120,240,120] # green box			
+		if c[name_path].decode() == "VM2":
+			domu_ids.append(x)
+			box_color[x]=[120,240,120] # green box			
 	print("domU's id:",domu_ids)
 	boxes = {}
 	keys=['frame_number_entry','box_entry']
