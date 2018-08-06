@@ -1,12 +1,12 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
+// #ifdef __cplusplus
+// extern "C" {
+// #endif
+// #include "comm.h"
+// #ifdef __cplusplus
+// }
+// #endif
+
 #include "comm.h"
-#ifdef __cplusplus
-}
-#endif
-
-
 
 pacer mypacer;
 
