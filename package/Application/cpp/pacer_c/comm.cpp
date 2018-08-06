@@ -18,6 +18,8 @@ static const int64_t vic_max_target = 1000;
 #include <stdexcept>
 #include <string>
 #include <array>
+using namespace std;
+
 int getDomid(const char* cmd) {
     array<char, 4> buffer;
     string result;
