@@ -237,15 +237,11 @@ int prev_frame_num = -1;
 
 while (strcmp("done",item)!=0)
 {
-	try{
-		frame_num = atoi(xenstore_read(xs,th,frame_num_path,&len));
-		cout << frame_num << endl;
-	}
-	catch(int err)
-	{
-		cout << "done" << endl;
-	}
-	xenstore_read(xs,th,frame_num_path,&len);
+
+	frame_num = atoi(xenstore_read(xs,th,frame_num_path,&len));
+	cout << frame_num << endl;
+
+	item=xenstore_read(xs,th,frame_num_path,&len);
 }
 
 
