@@ -49,27 +49,18 @@ static const int64_t vic_max_target = 1000;
 
 #include <vector>
 
-extern "C" int xenstore_read(struct xs_handle*  ,xs_transaction_t , const char*  , unsigned int * );
-// #ifdef __cplusplus
-// extern "C" char * cpp_xs_read(xs_handle* xs ,xs_transaction_t th, const char* path , unsigned int *len)
-// {
-// 	char * buf;
-// 	th = xs_transaction_start(xs);
-// 	buf = xs_read(xs, th, path, len);
-//     xs_transaction_end(xs, th, false);
-
-//     return buf;
-// }
-
+extern "C" char * xenstore_read(struct xs_handle*  ,xs_transaction_t , const char*  , unsigned int * );
+extern "C" int xenstore_write(struct xs_handle *h, xs_transaction_t t, const char *path, const void *data, unsigned int len);
 
 int main(int argc, char** argv)
 {
 
-system("python3 getDomUid.py > id.txt"); 
-// system(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()')"); 
-fstream domid_file("id.txt");
-int domid;
-domid_file >> domid;
+	system("python3 getDomUid.py > id.txt"); 
+	// system(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()')"); 
+	fstream domid_file("id.txt");
+	int domid;
+	domid_file >> domid;
+
 
     char *path;
 	int er;
