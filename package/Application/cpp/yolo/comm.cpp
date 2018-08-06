@@ -232,20 +232,23 @@ xenstore_write(xs, th, box_path, box_coords.c_str());
 xenstore_write(xs, th, frame_num_path, "ready");
 
 int frame_num;
-item = xenstore_read(xs,th,frame_num_path,&len);
 int prev_frame_num = -1;
 int frame_size = vidarray_binary[0];
 int detect_car = vidarray_binary[0];
 int prev_frame_size = 0;
 
-
+item = xenstore_read(xs,th,frame_num_path,&len);
 while (strcmp("done",item)!=0)
 {
 	frame_num = atoi(item);
 	if (frame_num > prev_frame_num) 
 	{
-		cout << frame_num << endl;
+		Mat frame;
 		prev_frame_num = frame_num;
+		frame = vidarray[frame_num];
+		if (detect_car) frame_size = hw_size;
+		else frame_size = lw_size;
+
 
 
 
