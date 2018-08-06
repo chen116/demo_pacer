@@ -19,8 +19,7 @@ static const int64_t vic_max_target = 1000;
 #include <string>
 #include <array>
 using namespace std;
-extern "C" char * xenstore_read(struct xs_handle*  ,xs_transaction_t , const char*  , unsigned int * );
-extern "C" int xenstore_write(struct xs_handle *, xs_transaction_t , const char *, const void *);
+
 int getDomid(const char* cmd) {
     array<char, 4> buffer;
     string result;
