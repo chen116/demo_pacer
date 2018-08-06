@@ -238,7 +238,7 @@ int prev_frame_num = -1;
 int frame_size = vidarray_binary[0];
 int detect_car = vidarray_binary[0];
 int prev_frame_size = 0;
-int startX,startY,endX,endY;
+
 item = xenstore_read(xs,th,frame_num_path,&len);
 int startX=0;
 int startY=0;
