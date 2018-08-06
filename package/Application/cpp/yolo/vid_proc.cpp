@@ -338,6 +338,8 @@ while (strcmp("done",item)!=0)
 // resize(frame, new_frame, cv::Size(), frame_size/176, frame_size/176);
 printf("done\n");
 heartbeat_finish(heart);
+xenstore_write(xs, th, heart_rate_path, "done");
+
 xs_daemon_close(xs);
 free(frame_num_path);
 free(box_path);
