@@ -273,7 +273,7 @@ while (strcmp("done",item)!=0)
 		resize(ori_frame, frame, cv::Size( frame_size,round(144*frame_size/176)));
 		if (frame.channels() == 4)
             cvtColor(frame, frame, COLOR_BGRA2BGR);
-        Mat inputBlob = blobFromImage(frame, 1 / 255.F, Size(416, 416), Scalar(), true, false); //Convert Mat to batch of images
+        Mat inputBlob = blobFromImage(frame, 1 / 255.F, Size(300, 300), Scalar(), true, false); //Convert Mat to batch of images
         net.setInput(inputBlob, "data");                   //set the network input
         Mat detectionMat = net.forward("detection_out");   //compute output
         vector<double> layersTimings;
