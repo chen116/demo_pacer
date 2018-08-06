@@ -20,19 +20,19 @@
 using namespace std;
 using namespace cv;
 using namespace cv::dnn;
+
+
+
+
+
+#include <stdlib.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include <xenstore.h>
-
-
-
-
-// #include <stdlib.h>
-// #ifdef __cplusplus
-// extern "C" {
-// #endif
-// #include <xenstore.h>
-// #ifdef __cplusplus
-// }
-// #endif
+#ifdef __cplusplus
+}
+#endif
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
