@@ -64,14 +64,20 @@ extern "C" int xenstore_read(struct xs_handle*  ,xs_transaction_t , const char* 
 
 int main(int argc, char** argv)
 {
+
+system("python3 getDomUid.py > id.txt"); 
+// system(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()')"); 
+fstream domid_file("id.txt");
+int domid;
+domid_file >> domid;
+
     char *path;
 	int er;
 	unsigned int len;
     struct xs_handle *xs;
     xs_transaction_t th;
     xs = xs_daemon_open();
-
-    path = xs_get_domain_path(xs, 10); 
+    path = xs_get_domain_path(xs, domid); 
     path = (char*)realloc(path, strlen(path) + strlen("/frame_number_entry") + 1);
     strcat(path, "/frame_number_entry");
 
