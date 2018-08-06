@@ -30,17 +30,31 @@ static const int64_t vic_max_target = 1000;
 int getDomid()
 {
 
-   int domid=0;
-   FILE *in=NULL;
-   char temp[4];
-   system("python3 -c \'from pyxs import Client;c=Client(xen_bus_path=\"/dev/xen/xenbus\");c.connect();print((c.read(\"domid\".encode())).decode());c.close()\'");
+   // int domid=0;
+   // FILE *in=NULL;
+   // char temp[4];
+   // system("python3 -c \'from pyxs import Client;c=Client(xen_bus_path=\"/dev/xen/xenbus\");c.connect();print((c.read(\"domid\".encode())).decode());c.close()\'");
 
-   in=popen("python3 -c \'from pyxs import Client;c=Client(xen_bus_path=\"/dev/xen/xenbus\");c.connect();print((c.read(\"domid\".encode())).decode());c.close()\'", "r");
-   printf("hiii\n");
+   // in=popen("python3 -c \'from pyxs import Client;c=Client(xen_bus_path=\"/dev/xen/xenbus\");c.connect();print((c.read(\"domid\".encode())).decode());c.close()\'", "r");
+   // printf("hiii\n");
    
-   fgets(domid, 4, in);
-   domid = atoi(domid) - 1;
-   return domid;
+   // fgets(domid, 4, in);
+   // domid = atoi(domid) - 1;
+   // return domid;
+
+        FILE * stream;
+        const int max_buffer = 256;
+        char buffer[max_buffer];
+
+        stream =popen("python3 -c \'from pyxs import Client;c=Client(xen_bus_path=\"/dev/xen/xenbus\");c.connect();print((c.read(\"domid\".encode())).decode());c.close()\'", "r");
+       if (stream) {
+        while (!feof(stream))
+        if (fgets(buffer, max_buffer, stream) != NULL) printf("%s\n",buffer );;
+        pclose(stream);
+        }
+
+        return 0;
+
 }
 
 void xenstore_write(struct xs_handle *xs, xs_transaction_t th, const char *path, const void *data)
