@@ -6,8 +6,6 @@ extern "C" {
 }
 #endif
 
-#include "comm.h"
-
 pacer mypacer;
 
 
