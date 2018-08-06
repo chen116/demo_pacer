@@ -15,5 +15,5 @@ gcc -c comm.c -lhb-shared -lxenstore
 
 
 
-g++ comm.o main.o -o app -std=c++11 -lhb-shared -lxenstore
+gcc comm.o main.o -o app -lhb-shared -lxenstore
 #-source=[PATH-IMAGE]  -cfg=[PATH-TO-DARKNET]/cfg/yolo.cfg -model=[PATH-TO-DARKNET]/yolo.weights   -class_names=[PATH-TO-DARKNET]/data/coco.names
