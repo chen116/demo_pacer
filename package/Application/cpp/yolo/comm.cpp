@@ -308,7 +308,7 @@ while (strcmp("done",item)!=0)
 
 // Mat new_img;
 // resize(frame, new_frame, cv::Size(), frame_size/176, frame_size/176);
-
+printf("done\n");
 
 	return 0;
 
