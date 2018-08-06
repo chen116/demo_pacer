@@ -7,7 +7,7 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-
+#include <heartbeats/heartbeat.h>
 
 struct pacer {
 	int domid;
