@@ -94,8 +94,8 @@ int main(int argc, char** argv)
 	int hw_size,lw_size;
 	if (init_video_data_vec[0]=="init")
 	{
-		hw_size=init_video_data_vec[1];
-		lw_size=init_video_data_vec[2];
+		hw_size=stoi(init_video_data_vec[1]);
+		lw_size=stoi(init_video_data_vec[2]);
 	}
 	vector<int> vidarray_binary;
     std::stringstream ss(init_video_data_vec[3]);
