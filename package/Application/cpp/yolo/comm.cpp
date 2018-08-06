@@ -257,6 +257,7 @@ while (strcmp("done",item)!=0)
 
         cout <<" dimensions:: height:" <<  frame.rows<<" width:"<< frame.cols << endl;
         cout <<" dimensions:: height:" <<  ori_frame.rows<<" width:"<< ori_frame.cols << endl;
+        cout <<" dimensions:: height:" <<  frame_size<<" width:"<< frame_size << endl;
 
 
 
