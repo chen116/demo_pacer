@@ -33,6 +33,8 @@ int getDomid()
    int domid=0;
    FILE *in=NULL;
    char temp[4];
+   system("python3 -c \'from pyxs import Client;c=Client(xen_bus_path=\"/dev/xen/xenbus\");c.connect();print((c.read(\"domid\".encode())).decode());c.close()\'");
+
    in=popen("python3 -c \'from pyxs import Client;c=Client(xen_bus_path=\"/dev/xen/xenbus\");c.connect();print((c.read(\"domid\".encode())).decode());c.close()\'", "r");
    printf("hiii\n");
    
