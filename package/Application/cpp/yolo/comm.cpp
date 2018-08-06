@@ -75,7 +75,13 @@ int main(int argc, char** argv)
     printf("%s\n",path);
 	int g;
 	char * item;
-	item = xenstore_read(xs,th,path,&len);
+
+	while (strcmp("init",item)!=0)
+	{
+		item = xenstore_read(xs,th,path,&len);
+	} 
+
+	
 	if (strcmp("init",item)==0)
 		printf("%s\n", item);
 
