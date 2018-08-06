@@ -68,6 +68,13 @@ static const int64_t vic_max_target = 1000;
 
 extern "C" char * xenstore_read(struct xs_handle*  ,xs_transaction_t , const char*  , unsigned int * );
 extern "C" int xenstore_write(struct xs_handle *h, xs_transaction_t t, const char *path, const void *data);
+#include <cstdio>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+#include <string>
+#include <array>
+
 int exec(const char* cmd) {
     std::array<char, 4> buffer;
     std::string result;
