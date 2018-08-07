@@ -87,7 +87,7 @@ char * Pacer::readHeartRate()
 	unsigned int len;
 	return xenstore_read(xs,th,heart_rate_path,&len);
 }
-void Pacer::writeItem(char * item, char * content)
+void Pacer::writeItem(char * item, const char * content)
 {
 	unsigned int len;
 	for (map<char *,char *>::iterator it=paths.begin(); it!=paths.end(); ++it)

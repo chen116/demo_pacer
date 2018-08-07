@@ -34,7 +34,7 @@ public:
   void setItem(char *);
   char* readItem(char *);
   char* readHeartRate();
-  void writeItem(char *,char *);
+  void writeItem(char *, const char *);
   void writeHeartRate();
   void beat();
 
