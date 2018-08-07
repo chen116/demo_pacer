@@ -70,7 +70,6 @@ if (parser.get<bool>("help"))
 }
 String modelConfiguration = parser.get<String>("cfg");
 String modelBinary = parser.get<String>("model");
-cout<<modelBinary<<" "<<modelConfiguration <<endl;
 dnn::Net net = readNetFromDarknet(modelConfiguration, modelBinary);
 if (net.empty())
 {
@@ -125,16 +124,10 @@ String object_roi_style = parser.get<String>("style");
 
 
 
-	// system("python3 getDomUid.py > id.txt"); 
-	// fstream domid_file("id.txt");
-	// int domid;
-	// domid_file >> domid;
-
 
 
 
     Pacer mypacer(10);
-    printf("%d\n",mypacer.getDomid() );
     mypacer.setItem("box_entry");
     mypacer.setItem("frame_number_entry");
     mypacer.setItem("frame_size");
