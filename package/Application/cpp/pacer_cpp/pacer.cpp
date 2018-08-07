@@ -17,7 +17,7 @@ extern "C" {
 extern "C" {
 	char * xenstore_read(struct xs_handle*  ,xs_transaction_t , const char*  , unsigned int * );
 	void xenstore_write(struct xs_handle *, xs_transaction_t , const char *, const void *);
-	int getDomid();
+	int xenstore_getDomid();
 }
 
 
@@ -57,5 +57,5 @@ int Pacer::myDomid()
 
     printf("%s\n",xenstore_read(xs,th,frame_num_path,&len));
 
-  return getDomid();
+  return xenstore_getDomid();
 }
