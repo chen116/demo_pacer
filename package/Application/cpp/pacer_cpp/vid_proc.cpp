@@ -208,7 +208,7 @@ for (i=0; i< vidarray_binary.size(); i++)
 
 string box_coords = "0 0 0 0";
 mypacer.writeItem("box_entry",box_coords.c_str());
-mypacer.writeItem("frame_number_entry","ready");
+mypacer.writeItem("frame_number_entry",'ready');
 printf("ready...\n");
 
 
