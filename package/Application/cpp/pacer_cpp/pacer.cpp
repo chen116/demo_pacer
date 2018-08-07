@@ -78,7 +78,6 @@ void Pacer::writeHeartRate()
 {
 	char buffer[16];
 	int ret = snprintf(buffer, sizeof buffer, "%f", hb_get_instant_rate(heart));
-	printf("%s\n",buffer);
 	xenstore_write(xs, th, heart_rate_path, buffer);
 	return;
 }
