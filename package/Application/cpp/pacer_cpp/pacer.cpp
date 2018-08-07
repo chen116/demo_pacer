@@ -84,7 +84,7 @@ void Pacer::writeInstantHeartRate()
 void Pacer::writeWindowHeartRate()
 {
 	char buffer[16];
-	int ret = snprintf(buffer, sizeof buffer, "%f", hb_get_window_rate(heart));
+	int ret = snprintf(buffer, sizeof buffer, "%f", hb_get_windowed_rate(heart));
 	xenstore_write(xs, th, heart_rate_path, buffer);
 	return;
 }
