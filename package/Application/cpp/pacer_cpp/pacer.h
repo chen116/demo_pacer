@@ -8,14 +8,10 @@ extern "C" {
 }
 #endif
 #include <heartbeats/heartbeat.h>
-// #include <vector>
-// #include <iostream>
-// #include <map>
-// #include <string>
 
 
-// #include <map>
-// using namespace std;
+#include <map>
+using namespace std;
 
 
 class Pacer
