@@ -1,7 +1,7 @@
 
 
 
-demo_app: clean
+vid_proc: clean
 	-git pull
 	gcc -c comm.c -lxenstore
 	g++ -c pacer.cpp -lhb-shared 

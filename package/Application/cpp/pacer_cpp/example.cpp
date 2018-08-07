@@ -1,6 +1,7 @@
+// example Custom C++ Application
 #include "pacer.h"
-// #include <unistd.h>
-//example Custom C++ Application
+// library for sleep function used in this example
+#include <unistd.h>
 int main(int argc, char** argv)
 {
 	// create a pacer instant
