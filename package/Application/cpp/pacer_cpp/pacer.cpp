@@ -31,7 +31,7 @@ extern "C" {
 #include "pacer.h"
 static const int64_t heartbeat_win_size = 10;
 static const int64_t heartbeat_buf_depth = 1000;
-static const char* heartbeat_log_file ="heartbeat.log";
+static const char* heartbeat_log_file ="heartbeat.log"; //heartbeat information file
 static const int64_t heartbeat_min_target = 100; // heartbeat module, not used in pacer
 static const int64_t heartbeat_max_target = 1000; // heartbeat module, not used in pacer
 Pacer::Pacer()
