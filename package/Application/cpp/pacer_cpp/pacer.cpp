@@ -28,10 +28,6 @@ extern "C" {
 
 
 
-int exec() {
-	return 1;
-}
-
 #include "pacer.h"
 static const int64_t vic_win_size = 10;
 static const int64_t vic_buf_depth = 1000;
