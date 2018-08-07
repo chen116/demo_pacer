@@ -60,7 +60,10 @@ char* Pacer::readItem(char * item)
 
 void Pacer::writeHeartRate()
 {
-	xenstore_write(xs, th, heart_rate_path, to_string(hb_get_instant_rate(heart)).c_str());
+	char buffer[16];
+	int ret = snprintf(buffer, sizeof buffer, "%f", hb_get_instant_rate(heart));
+	printf("%s\n",buffer);
+	xenstore_write(xs, th, heart_rate_path, buffer);
 	return;
 }
 char * Pacer::readHeartRate()
@@ -75,7 +78,7 @@ void Pacer::writeItem(char * item, char * content)
 	{
     	if (strcmp(it->first,item)==0)
     	{
-    		xenstore_write(xs, th, it->second, to_string(hb_get_instant_rate(heart)).c_str());
+    		xenstore_write(xs, th, it->second, content);
     		return;
     	}
 	}
