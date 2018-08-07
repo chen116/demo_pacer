@@ -1,7 +1,3 @@
-
-
-
-
 #include <stdio.h>
 #ifdef __cplusplus
 extern "C" {
@@ -10,6 +6,8 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
+
+
 
 
 // C function declarations
@@ -22,4 +20,17 @@ extern "C" {
 
 int exec() {
 	return 1;
+}
+
+#include "pacer.h"
+
+Pacer::Pacer(int x,int y)
+{
+  gx = x;
+  gy = y;
+}
+
+int Pacer::getSum()
+{
+  return gx + gy;
 }
