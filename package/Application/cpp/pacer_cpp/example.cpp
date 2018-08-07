@@ -1,10 +1,6 @@
 #include "pacer.h"
-// #include <stdio.h>
 #include <unistd.h>
-
-
 //example Custom C++ Application
-
 int main(int argc, char** argv)
 {
 
