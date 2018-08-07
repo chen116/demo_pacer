@@ -55,7 +55,8 @@ int Pacer::setItem(char * item)
 {
 	char *path;
 	path = xs_get_domain_path(xs, domid);
-	path = (char*)realloc(path, strlen(path) + strlen(item) + 1);
+	path = (char*)realloc(path, strlen(path) + strlen(item) + 2);
+	strcat(path, "/");
 	strcat(path, item);
 	paths[item]=path;
 }
