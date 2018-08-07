@@ -21,7 +21,7 @@ int main(int argc, char** argv)
 
 	Pacer mypacer;
 	printf("%d\n",mypacer.getDomid() );
-	// mypacer.getItems();
+	mypacer.getItems();
 
 	// int domid=getDomid();//exec(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()')"); 
  //    printf("domid %d\n",domid);
