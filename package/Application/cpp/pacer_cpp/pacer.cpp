@@ -60,7 +60,7 @@ char* Pacer::readItem(char * item)
 
 void Pacer::writeHeartRate()
 {
-	xenstore_write(xs, th, heart_rate_path, to_string(heart->hb_get_instant_rate(heart)).c_str());
+	xenstore_write(xs, th, heart_rate_path, to_string(hb_get_instant_rate(heart)).c_str());
 	return;
 }
 char * Pacer::readHeartRate()
