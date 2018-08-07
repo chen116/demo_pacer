@@ -42,53 +42,16 @@ static const char* params =
 
 
 
-#include <cstdlib>
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <iterator>
 
-#include <heartbeats/heartbeat.h>
 
-heartbeat_t* heart;
-static const int64_t vic_win_size = 10;
-static const int64_t vic_buf_depth = 1000;
-static const char* vic_log_file ="vic.log";
-static const int64_t vic_min_target = 100;
-static const int64_t vic_max_target = 1000;
 
-#include <vector>
+#include "pacer.h"
+#include <stdio.h>
 
-#include <comm.h>
 
-// #include <stdlib.h>
-// #ifdef __cplusplus
-// extern "C" {
-// #endif
-// #include <xenstore.h>
-// #ifdef __cplusplus
-// }
-// #endif
-// extern "C" char * xenstore_read(struct xs_handle*  ,xs_transaction_t , const char*  , unsigned int * );
-// extern "C" int xenstore_write(struct xs_handle *h, xs_transaction_t t, const char *path, const void *data);
-#include <cstdio>
-#include <iostream>
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <array>
 
-// int exec(const char* cmd) {
-//     array<char, 4> buffer;
-//     string result;
-//     shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
-//     if (!pipe) throw runtime_error("popen() failed!");
-//     while (!feof(pipe.get())) {
-//         if (fgets(buffer.data(), 4, pipe.get()) != nullptr)
-//             result += buffer.data();
-//     }
-//     return stoi(result);
-// }
+
+
 
 int main(int argc, char** argv)
 {
@@ -162,48 +125,26 @@ String object_roi_style = parser.get<String>("style");
 	// fstream domid_file("id.txt");
 	// int domid;
 	// domid_file >> domid;
-	int domid=getDomid();//exec(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()')"); 
- 
-
-    printf("domid %d\n",domid);
-	int er;
-	unsigned int len;
-    struct xs_handle *xs;
-    xs_transaction_t th;
-    xs = xs_daemon_open();
 
 
-    char *frame_num_path;
-	frame_num_path = xs_get_domain_path(xs, domid); 
-	frame_num_path = (char*)realloc(frame_num_path, strlen(frame_num_path) + strlen("/frame_number_entry") + 1);
-    strcat(frame_num_path, "/frame_number_entry");
 
 
-    char *box_path;
-	box_path = xs_get_domain_path(xs, domid);
-    box_path = (char*)realloc(box_path, strlen(box_path) + strlen("/box_entry") + 1);
-    strcat(box_path, "/box_entry");
+    Pacer mypacer;
+    printf("%d\n",mypacer.getDomid() );
+    mypacer.setItem("box_entry");
+    mypacer.setItem("frame_number_entry");
+    mypacer.setItem("frame_size");
 
-    char *frame_size_path;
-    frame_size_path = xs_get_domain_path(xs, domid);
-    frame_size_path = (char*)realloc(frame_size_path, strlen(frame_size_path) + strlen("/frame_size") + 1);
-    strcat(frame_size_path, "/frame_size");
-
-    heart = heartbeat_init(vic_win_size, vic_buf_depth, vic_log_file, vic_min_target, vic_max_target);
-    char *heart_rate_path;
-    heart_rate_path = xs_get_domain_path(xs, domid);
-    heart_rate_path = (char*)realloc(heart_rate_path, strlen(heart_rate_path) + strlen("/heart_rate") + 1);
-    strcat(heart_rate_path, "/heart_rate");
    
 	int g;
 	char * item;
 	printf("waiting for dom0...\n");
 	while (strcmp("init",item)!=0)
 	{
-		item = xenstore_read(xs,th,frame_num_path,&len);
+		item = mypacer.readItem("frame_number_entry");
 	} 
 
-	item = xenstore_read(xs,th,box_path,&len);
+	item = mypacer.readItem("box_entry");
 	string init_video_data = string(item);
 	istringstream iss(item);
 	vector<string> init_video_data_vec(std::istream_iterator<std::string>{iss}, std::istream_iterator<std::string>());
@@ -262,8 +203,8 @@ for (i=0; i< vidarray_binary.size(); i++)
 }
 
 string box_coords = "0 0 0 0";
-xenstore_write(xs, th, box_path, box_coords.c_str());
-xenstore_write(xs, th, frame_num_path, "ready");
+mypacer.writeItem("box_entry",box_coords.c_str());
+mypacer.writeItem("frame_number_entry","ready");
 printf("ready...\n");
 
 
@@ -281,7 +222,7 @@ int endY=0;
 
 while (strcmp("done",item)!=0)
 {
-	item=xenstore_read(xs,th,frame_num_path,&len);
+	item=mypacer.readItem("frame_number_entry");
 	frame_num = atoi(item);
 	if (frame_num > prev_frame_num) 
 	{
@@ -340,15 +281,16 @@ while (strcmp("done",item)!=0)
         box_coords += to_string(endX);
         box_coords += " ";
         box_coords += to_string(endY);
-        xenstore_write(xs, th, box_path, box_coords.c_str());
+        mypacer.writeItem("box_entry",box_coords.c_str());
+ 
 		if(prev_frame_size != frame_size)
 		{
 			prev_frame_size = frame_size;
-			xenstore_write(xs, th, frame_size_path, to_string(frame_size).c_str());
+            mypacer.writeItem("frame_size",to_string(frame_size).c_str());
 		}
 				
-		heartbeat(heart, 1);
-		xenstore_write(xs, th, heart_rate_path, to_string(hb_get_instant_rate(heart)).c_str());
+		mypacer.beat();
+		mypacer.writeHeartRate();
 	}
 	
 
@@ -359,14 +301,8 @@ while (strcmp("done",item)!=0)
 // Mat new_img;
 // resize(frame, new_frame, cv::Size(), frame_size/176, frame_size/176);
 printf("done\n");
-heartbeat_finish(heart);
-xenstore_write(xs, th, heart_rate_path, "done");
 
-xs_daemon_close(xs);
-free(frame_num_path);
-free(box_path);
-free(frame_size_path);
-free(heart_rate_path);
+
 	return 0;
 
 }

@@ -12,7 +12,8 @@ git pull
 g++ -c  main.cpp 
 gcc -c comm.c -lhb-shared -lxenstore
 g++ -c pacer.cpp -lhb-shared -lxenstore
-g++ comm.o pacer.o main.o -o app -lhb-shared -lxenstore
+g++ comm.o pacer.o main.o -o app -lhb-shared -lxenstore `pkg-config --libs opencv` -std=c++11 
+./app
 #-source=[PATH-IMAGE]  -cfg=[PATH-TO-DARKNET]/cfg/yolo.cfg -model=[PATH-TO-DARKNET]/yolo.weights   -class_names=[PATH-TO-DARKNET]/data/coco.names
 
 
