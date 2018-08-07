@@ -51,7 +51,10 @@ Pacer::Pacer()
 char* Pacer::read(char * item)
 {
 	unsigned int len;
+	printf("mee\n");
 	printf("%s\n", paths[item]);
+	printf("mees\n");
+
 	return xenstore_read(xs,th,paths[item],&len);
 }
 
