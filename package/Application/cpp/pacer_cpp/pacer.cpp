@@ -42,27 +42,46 @@ Pacer::Pacer()
  	domid = xenstore_getDomid();
  	xs = xs_daemon_open();
  	heart = heartbeat_init(vic_win_size, vic_buf_depth, vic_log_file, vic_min_target, vic_max_target);
-	char *heart_rate_path;
 	heart_rate_path = xs_get_domain_path(xs, domid);
 	heart_rate_path = (char*)realloc(heart_rate_path, strlen(heart_rate_path) + strlen("/heart_rate") + 1);
 	strcat(heart_rate_path, "/heart_rate");
-	paths["heart_rate"]=heart_rate_path;
 }
-char* Pacer::read(char * item)
+char* Pacer::readItem(char * item)
 {
 	unsigned int len;
-	printf("mee  %s\n",item);
 	for (map<char *,char *>::iterator it=paths.begin(); it!=paths.end(); ++it)
 	{
-    	if (strcmp(it->first,item)==0) return xenstore_read(xs,th,it->second,&len);;
+    	if (strcmp(it->first,item)==0) return xenstore_read(xs,th,it->second,&len);
 	}
-
-
-
 	return "not found";
 }
 
-int Pacer::setItem(char * item)
+
+void Pacer::writeHeartRate()
+{
+	xenstore_write(xs, th, heart_rate_path, to_string(heart.hb_get_instant_rate(heart)).c_str());
+	return;
+}
+char * Pacer::readHeartRate()
+{
+	unsigned int len;
+	return xenstore_read(xs,th,heart_rate_path,&len);
+}
+void Pacer::writeItem(char * item, char * content)
+{
+	unsigned int len;
+	for (map<char *,char *>::iterator it=paths.begin(); it!=paths.end(); ++it)
+	{
+    	if (strcmp(it->first,item)==0)
+    	{
+    		xenstore_write(xs, th, it->second, to_string(hb_get_instant_rate(heart)).c_str());
+    		return;
+    	}
+	}
+	return;
+}
+
+void Pacer::setItem(char * item)
 {
 	char *path;
 	path = xs_get_domain_path(xs, domid);
@@ -71,13 +90,13 @@ int Pacer::setItem(char * item)
 	strcat(path, item);
 	paths[item]=path;
 }
-int Pacer::getItems()
+void Pacer::getItems()
 {
 	 for (map<char *,char *>::iterator it=paths.begin(); it!=paths.end(); ++it)
     cout << it->first << " => " << it->second << '\n';
 }
 
-int Pacer::getDomid()
+void Pacer::getDomid()
 {
 	int er;
 

@@ -22,14 +22,18 @@ private:
     struct xs_handle* xs;
     xs_transaction_t th;
     heartbeat_t * heart;
+    char *heart_rate_path; 
     map<char *,char * > paths;
 
 
 public:
   Pacer();
-  int getDomid();
-  int getItems();
-  int setItem(char *);
-  char* read(char *);
+  void getDomid();
+  void getItems();
+  void setItem(char *);
+  char* readItem(char *);
+  char* readHeartRate();
+  void writeItem(char *,char *);
+  void writeHeartRate();
 
 };
