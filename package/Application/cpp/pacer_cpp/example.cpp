@@ -14,7 +14,7 @@ int main(int argc, char** argv)
 
 	for (int i = 0; i < 100; ++i)
 	{
-		usleep(10000);
+		usleep(100000);
 		mypacer.beat();
 		mypacer.writeInstantHeartRate();
 		printf("Insant Heartrate: %s\n",mypacer.readHeartRate());
