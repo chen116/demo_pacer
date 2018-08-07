@@ -1,6 +1,6 @@
 
 #include "comm.h"
-#include <string.h>
+// #include <string.h>
 int xenstore_getDomid()
 {
 
