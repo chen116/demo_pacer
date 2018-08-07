@@ -23,14 +23,13 @@ extern "C" {
 	int xenstore_getDomid();
 }
 
-
-
 #include "pacer.h"
-
 static const int64_t heartbeat_buf_depth = 1000;
 static const char* heartbeat_log_file ="heartbeat.log"; //heartbeat information file
 static const int64_t heartbeat_min_target = 100; // heartbeat module, not used in pacer
 static const int64_t heartbeat_max_target = 1000; // heartbeat module, not used in pacer
+
+// constructor: get xenstore handle with domUid, initiates default heart rate path in xenstore
 Pacer::Pacer()
 {
  	domid = xenstore_getDomid();
@@ -39,13 +38,14 @@ Pacer::Pacer()
 	heart_rate_path = (char*)realloc(heart_rate_path, strlen(heart_rate_path) + strlen("/heart_rate") + 1);
 	strcat(heart_rate_path, "/heart_rate");
 }
+
+// initiate heartbeat with user defined heartrate window size
 void Pacer::setWindowSize(const int64_t heartbeat_win_size)
 {
 	heart = heartbeat_init(heartbeat_win_size, heartbeat_buf_depth, heartbeat_log_file, heartbeat_min_target, heartbeat_max_target);
 }
+// destructor
 Pacer::~Pacer() {  
-   // Deallocate the memory that was previously reserved  
-   //  for this string.  
 	delete heart_rate_path;
 
 	heartbeat_finish(heart);
@@ -58,6 +58,7 @@ Pacer::~Pacer() {
 	}
 
 }  
+// read a paricular item from xenstore
 char* Pacer::readItem(char * item)
 {
 	unsigned int len;
@@ -67,12 +68,14 @@ char* Pacer::readItem(char * item)
 	}
 	return (char*)"not found";
 }
+
+// record a heartbeat
 void Pacer::beat()
 {
 	heartbeat(heart,1);
 	return;
 }
-
+// write a instant heartbeat to xenstore
 void Pacer::writeInstantHeartRate()
 {
 	char buffer[16];
@@ -80,6 +83,7 @@ void Pacer::writeInstantHeartRate()
 	xenstore_write(xs, th, heart_rate_path, buffer);
 	return;
 }
+// write a window heartbeat to xenstore
 void Pacer::writeWindowHeartRate()
 {
 	char buffer[16];
@@ -87,6 +91,7 @@ void Pacer::writeWindowHeartRate()
 	xenstore_write(xs, th, heart_rate_path, buffer);
 	return;
 }
+// write a global heartbeat to xenstore
 void Pacer::writeGlobalHeartRate()
 {
 	char buffer[16];
@@ -94,11 +99,13 @@ void Pacer::writeGlobalHeartRate()
 	xenstore_write(xs, th, heart_rate_path, buffer);
 	return;
 }
+// read hear_rate entry from xenstore
 char * Pacer::readHeartRate()
 {
 	unsigned int len;
 	return xenstore_read(xs,th,heart_rate_path,&len);
 }
+// write a particular item to xenstore
 void Pacer::writeItem(char * item, const char * content)
 {
 	unsigned int len;
@@ -112,7 +119,7 @@ void Pacer::writeItem(char * item, const char * content)
 	}
 	return;
 }
-
+// create a item entry in xenstore
 void Pacer::setItem(char * item)
 {
 	char *path;
@@ -122,6 +129,7 @@ void Pacer::setItem(char * item)
 	strcat(path, item);
 	paths[item]=path;
 }
+// print out all item's entry and path to xenstore 
 void Pacer::getItems()
 {
 	 for (map<char *,char *>::iterator it=paths.begin(); it!=paths.end(); ++it)

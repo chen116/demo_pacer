@@ -1,13 +1,5 @@
 //rief Sample of using OpenCV dnn module in real time with device capture, video and image.
-// VIDEO DEMO: https://www.youtube.com/watch?v=NHtRlndE2cg
 //https://docs.opencv.org/3.4.1/da/d9d/tutorial_dnn_yolo.html
-
-
-
-// able to cut vid frame
-//resize()
-//automatic know its VM's id, sort of, better to do inline
-// get coordinates:
 
 
 #include <opencv2/dnn.hpp>
