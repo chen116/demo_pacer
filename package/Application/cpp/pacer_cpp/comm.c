@@ -1,6 +1,6 @@
 
 #include "comm.h"
-// #include <string.h>
+#include <string.h>
 // #include <stdlib.h>
 // #include <ncurses.h>
 // #include <stdio.h>
