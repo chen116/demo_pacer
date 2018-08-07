@@ -29,6 +29,6 @@ public:
   Pacer();
   int getDomid();
   int getItems();
-  int setItem();
+  int setItem(char *);
 
 };
