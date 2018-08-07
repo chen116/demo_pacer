@@ -54,13 +54,12 @@ char* Pacer::read(char * item)
 	printf("mee  %s\n",item);
 	for (map<char *,char *>::iterator it=paths.begin(); it!=paths.end(); ++it)
 	{
-    	if (strcmp(it->first,item)==0) cout << it->second <<endl;
+    	if (strcmp(it->first,item)==0) return xenstore_read(xs,th,it->second,&len);;
 	}
 
-	printf("%s\n", paths.find(item)->second );
-	printf("mees\n");
 
-	return xenstore_read(xs,th,paths[item],&len);
+
+	return "not found";
 }
 
 int Pacer::setItem(char * item)
