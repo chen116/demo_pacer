@@ -11,6 +11,8 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <vector>
+
 
 
 // C function declarations
@@ -37,7 +39,7 @@ Pacer::Pacer()
 
 
 
-int Pacer::myDomid()
+int Pacer::getDomid()
 {
 	int er;
 
