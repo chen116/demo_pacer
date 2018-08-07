@@ -21,4 +21,6 @@ typedef struct pacer_t{
 
 char * xenstore_read(struct xs_handle*  ,xs_transaction_t , const char*  , unsigned int * );
 void xenstore_write(struct xs_handle *, xs_transaction_t , const char *, const void *);
+void set_base_path();
 int getDomid();
+
