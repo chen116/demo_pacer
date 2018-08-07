@@ -1,7 +1,7 @@
 
 
 
-app: clean
+demo_app: clean
 	-git pull
 	g++ -c  vid_proc.cpp  `pkg-config --libs opencv` -std=c++11  
 	gcc -c comm.c -lxenstore
