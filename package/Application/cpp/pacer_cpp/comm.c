@@ -15,12 +15,10 @@ static const int64_t vic_max_target = 1000;
 #include <ncurses.h>
 #include <stdio.h>
 
-int getDomid()
+int xenstore_getDomid()
 {
-     
+
         int domid=0;
-
-
         FILE * stream;
         const int max_buffer = 256;
         char buffer[max_buffer];

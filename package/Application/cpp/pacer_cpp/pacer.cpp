@@ -28,6 +28,8 @@ int exec() {
 
 Pacer::Pacer(int x,int y)
 {
+
+
   gx = x;
   gy = y;
 }
@@ -39,6 +41,19 @@ int Pacer::getSum()
 
 int Pacer::myDomid()
 {
+	int er;
+
+	unsigned int len;
+    struct xs_handle *xs;
+    xs_transaction_t th;
+    xs = xs_daemon_open();
+
+    char *frame_num_path;
+	frame_num_path = xs_get_domain_path(xs, 16); 
+	frame_num_path = (char*)realloc(frame_num_path, strlen(frame_num_path) + strlen("/frame_number_entry") + 1);
+    strcat(frame_num_path, "/frame_number_entry");
+
+    printf("%s\n",xenstore_read(xs,th,frame_num_path,&len));
 
   return getDomid();
 }
