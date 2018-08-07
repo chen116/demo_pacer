@@ -27,7 +27,7 @@ int main(int argc, char** argv)
 	mypacer.beat();
 
 
-	printf("%s\n",mypacer.readItem("box_entry"));
+
 	mypacer.beat();
 	mypacer.writeInstantHeartRate();
 	printf("%s\n",mypacer.readHeartRate());
