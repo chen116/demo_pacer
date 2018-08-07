@@ -66,7 +66,7 @@ char* Pacer::readItem(char * item)
 	{
     	if (strcmp(it->first,item)==0) return xenstore_read(xs,th,it->second,&len);
 	}
-	return "not found";
+	return 'not found';
 }
 void Pacer::beat()
 {
