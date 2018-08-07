@@ -19,7 +19,7 @@ private:
     char * base_path;
     heartbeat_t * heart;
     std::map<char *,char * > paths;
-	string init_video_data = string(item);
+
 
 public:
   Pacer();
