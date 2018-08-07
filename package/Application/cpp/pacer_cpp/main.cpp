@@ -1,6 +1,6 @@
 #include "pacer.h"
 
-
+#include <stdio.h>
 // mypacer.heart = heartbeat_init(vic_win_size, vic_buf_depth, vic_log_file, vic_min_target, vic_max_target);
 // mypacer.domid = getDomid();  
 // mypacer.xs = xs_daemon_open();
