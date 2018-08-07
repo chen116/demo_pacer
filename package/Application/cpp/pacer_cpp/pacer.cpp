@@ -46,6 +46,10 @@ void Pacer::setWindowSize(const int64_t heartbeat_win_size)
 }
 // destructor
 Pacer::~Pacer() {  
+
+
+	// signaling dom0 monitor the application is finished
+	xenstore_write(xs, th, heart_rate_path, 'done');
 	delete heart_rate_path;
 
 	heartbeat_finish(heart);
