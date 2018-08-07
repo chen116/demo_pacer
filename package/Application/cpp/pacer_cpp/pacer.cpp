@@ -3,6 +3,7 @@
 extern "C" {
 #endif
 #include <xenstore.h>
+#include <comm.h>
 #ifdef __cplusplus
 }
 #endif
