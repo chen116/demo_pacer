@@ -135,6 +135,7 @@ String object_roi_style = parser.get<String>("style");
    
 	int g;
 	char * item;
+    printf("My Dom ID: %d\n",mypacer.getDomid() );
 	printf("waiting for dom0...\n");
 	while (strcmp("init",item)!=0)
 	{
@@ -295,67 +296,9 @@ while (strcmp("done",item)!=0)
 
 
 
-// Mat new_img;
-// resize(frame, new_frame, cv::Size(), frame_size/176, frame_size/176);
 printf("done\n");
 
 
 	return 0;
 
 }
-
-// int main(int argc, char** argv)
-// {
-
-// //get domu id.
-// 	system("python3 getDomUid.py > id.txt"); 
-// // system(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()')"); 
-// 	fstream domid_file("id.txt");
-// 	int domid;
-// 	domid_file >> domid;
-
-//     char *path;
-// 	int er;
-// 	char * buf;
-// 	// unsigned int *len =  (unsigned int*) malloc(sizeof(unsigned int));
-// 	// int len = 42;
-
-// 	unsigned int len;
-
-
-//     struct xs_handle *xs;
-//     xs_transaction_t th;
-//     xs = xs_daemon_open();
-
-//     path = xs_get_domain_path(xs, domid); 
-//     path = (char*)realloc(path, strlen(path) + strlen("/frame_number_entry") + 1);
-//     strcat(path, "/frame_number_entry");
-//     printf("%s\n",path);
-//     while (strcmp(buf,"init"))//buf[0]!='i')
-//     {
-//     	buf = cpp_xs_read(xs, th, path, &len);
-//   //   	th = xs_transaction_start(xs);
-// 		// buf = xs_read(xs, th, path, len);
-//   //   	xs_transaction_end(xs, th, false);
-
-//     }
-//     cout << buf;
-
-//     heart = heartbeat_init(vic_win_size, vic_buf_depth, vic_log_file, vic_min_target, vic_max_target);
-        
-
-//     heartbeat(heart, 1);
-//     printf("heartbeat: instant rate: %f\n",hb_get_instant_rate(heart) );
-//     char hr_str[10];
-//     gcvt(hb_get_instant_rate(heart) , 8, hr_str);
-
-
-// heartbeat_finish(heart);
-// xs_daemon_close(xs);
-// free(path);
-// // free(len);
-
-// return 0;
-
-
-// }
