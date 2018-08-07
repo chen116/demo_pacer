@@ -28,6 +28,8 @@ int main(int argc, char** argv)
 
 
 	printf("%s\n",mypacer.readItem("box_entry"));
+	mypacer.beat();
+	mypacer.writeHeartRate();
 	printf("%s\n",mypacer.readHeartRate());
 	mypacer.beat();
 	mypacer.writeHeartRate();

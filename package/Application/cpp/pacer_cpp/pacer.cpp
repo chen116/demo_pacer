@@ -43,6 +43,22 @@ Pacer::Pacer()
 	heart_rate_path = (char*)realloc(heart_rate_path, strlen(heart_rate_path) + strlen("/heart_rate") + 1);
 	strcat(heart_rate_path, "/heart_rate");
 }
+
+Pacer::~Pacer() {  
+   // Deallocate the memory that was previously reserved  
+   //  for this string.  
+	delete heart_rate_path;
+
+	heartbeat_finish(heart);
+	xenstore_write(xs, th, heart_rate_path, "done");
+	xs_daemon_close(xs);
+	for (map<char *,char *>::iterator it=paths.begin(); it!=paths.end(); ++it)
+	{
+		delete it->second;
+		paths.erase(itr);
+	}
+
+}  
 char* Pacer::readItem(char * item)
 {
 	unsigned int len;
