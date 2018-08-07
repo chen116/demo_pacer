@@ -29,12 +29,12 @@ extern "C" {
 
 
 #include "pacer.h"
-static const int64_t heartbeat_win_size = 10;
+
 static const int64_t heartbeat_buf_depth = 1000;
 static const char* heartbeat_log_file ="heartbeat.log"; //heartbeat information file
 static const int64_t heartbeat_min_target = 100; // heartbeat module, not used in pacer
 static const int64_t heartbeat_max_target = 1000; // heartbeat module, not used in pacer
-Pacer::Pacer()
+Pacer::Pacer(const int64_t heartbeat_win_size)
 {
  	domid = xenstore_getDomid();
  	xs = xs_daemon_open();
@@ -74,10 +74,24 @@ void Pacer::beat()
 	return;
 }
 
-void Pacer::writeHeartRate()
+void Pacer::writeInstantHeartRate()
 {
 	char buffer[16];
 	int ret = snprintf(buffer, sizeof buffer, "%f", hb_get_instant_rate(heart));
+	xenstore_write(xs, th, heart_rate_path, buffer);
+	return;
+}
+void Pacer::writeWindowHeartRate()
+{
+	char buffer[16];
+	int ret = snprintf(buffer, sizeof buffer, "%f", hb_get_window_rate(heart));
+	xenstore_write(xs, th, heart_rate_path, buffer);
+	return;
+}
+void Pacer::writeGlobalHeartRate()
+{
+	char buffer[16];
+	int ret = snprintf(buffer, sizeof buffer, "%f", hb_get_global_rate(heart));
 	xenstore_write(xs, th, heart_rate_path, buffer);
 	return;
 }

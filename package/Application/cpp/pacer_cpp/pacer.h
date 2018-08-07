@@ -27,7 +27,7 @@ private:
 
 
 public:
-  Pacer();
+  Pacer(const int64_t);
   ~Pacer();
   int getDomid();
   void getItems();
@@ -35,7 +35,9 @@ public:
   char* readItem(char *);
   char* readHeartRate();
   void writeItem(char *, const char *);
-  void writeHeartRate();
+  void writeInstantHeartRate();
+  void writeWindowHeartRate();
+  void writeGlobalHeartRate();
   void beat();
 
 };
