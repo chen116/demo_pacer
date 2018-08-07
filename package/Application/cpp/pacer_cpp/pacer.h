@@ -27,7 +27,7 @@ private:
 
 
 public:
-  Pacer(const int64_t);
+  Pacer();
   ~Pacer();
   int getDomid();
   void getItems();
@@ -39,5 +39,6 @@ public:
   void writeWindowHeartRate();
   void writeGlobalHeartRate();
   void beat();
+  void setWindowSize(const int64_t);
 
 };

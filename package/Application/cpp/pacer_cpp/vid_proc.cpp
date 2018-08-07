@@ -127,7 +127,8 @@ String object_roi_style = parser.get<String>("style");
 
 
 
-    Pacer mypacer(10);
+    Pacer mypacer();
+    mypacer.setWindowSize(10);
     mypacer.setItem("box_entry");
     mypacer.setItem("frame_number_entry");
     mypacer.setItem("frame_size");

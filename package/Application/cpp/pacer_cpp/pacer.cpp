@@ -34,16 +34,18 @@ static const int64_t heartbeat_buf_depth = 1000;
 static const char* heartbeat_log_file ="heartbeat.log"; //heartbeat information file
 static const int64_t heartbeat_min_target = 100; // heartbeat module, not used in pacer
 static const int64_t heartbeat_max_target = 1000; // heartbeat module, not used in pacer
-Pacer::Pacer(const int64_t heartbeat_win_size)
+Pacer::Pacer()
 {
  	domid = xenstore_getDomid();
  	xs = xs_daemon_open();
- 	heart = heartbeat_init(heartbeat_win_size, heartbeat_buf_depth, heartbeat_log_file, heartbeat_min_target, heartbeat_max_target);
 	heart_rate_path = xs_get_domain_path(xs, domid);
 	heart_rate_path = (char*)realloc(heart_rate_path, strlen(heart_rate_path) + strlen("/heart_rate") + 1);
 	strcat(heart_rate_path, "/heart_rate");
 }
-
+void Pacer::setWindowSize(const int64_t heartbeat_win_size)
+{
+	heart = heartbeat_init(heartbeat_win_size, heartbeat_buf_depth, heartbeat_log_file, heartbeat_min_target, heartbeat_max_target);
+}
 Pacer::~Pacer() {  
    // Deallocate the memory that was previously reserved  
    //  for this string.  

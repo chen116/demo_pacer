@@ -19,9 +19,9 @@ int main(int argc, char** argv)
 	// send()
 	// finish()
 
-	Pacer mypacer;
+	Pacer mypacer();
+	mypacer.setWindowSize(2);
 	printf("%d\n",mypacer.getDomid() );
-	mypacer.setItem("box_entry");
 	mypacer.getItems();
 
 	mypacer.beat();
@@ -29,12 +29,14 @@ int main(int argc, char** argv)
 
 	printf("%s\n",mypacer.readItem("box_entry"));
 	mypacer.beat();
-	mypacer.writeHeartRate();
+	mypacer.writeInstantHeartRate();
 	printf("%s\n",mypacer.readHeartRate());
 	mypacer.beat();
-	mypacer.writeHeartRate();
+	mypacer.writeGlobalHeartRate();
 	printf("%s\n",mypacer.readHeartRate());
-
+	mypacer.beat();
+	mypacer.writeWindowHeartRate();
+	printf("%s\n",mypacer.readHeartRate());
 	// int domid=getDomid();//exec(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()')"); 
  //    printf("domid %d\n",domid);
  //    mypacer.domid = domid;
