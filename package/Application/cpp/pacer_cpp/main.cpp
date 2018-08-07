@@ -19,7 +19,7 @@ int main(int argc, char** argv)
 	// send()
 	// finish()
 
-	Pacer mypacer();
+	Pacer mypacer;
 	printf("%d\n",mypacer.myDomid() );
 
 
