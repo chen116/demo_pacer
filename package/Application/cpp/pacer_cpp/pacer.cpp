@@ -37,7 +37,9 @@ int Pacer::getSum()
   return gx + gy;
 }
 
-int Pacer::getDomid()
+int Pacer::myDomid()
 {
-  return getDomid();
+	int id;
+	id = getDomid()
+  return id;
 }
