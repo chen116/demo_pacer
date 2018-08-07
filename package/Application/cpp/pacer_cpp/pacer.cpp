@@ -42,14 +42,17 @@ Pacer::Pacer()
  	domid = xenstore_getDomid();
  	xs = xs_daemon_open();
  	heart = heartbeat_init(vic_win_size, vic_buf_depth, vic_log_file, vic_min_target, vic_max_target);
-
 	char *heart_rate_path;
 	heart_rate_path = xs_get_domain_path(xs, domid);
 	heart_rate_path = (char*)realloc(heart_rate_path, strlen(heart_rate_path) + strlen("/heart_rate") + 1);
 	strcat(heart_rate_path, "/heart_rate");
 	paths["heart_rate"]=heart_rate_path;
 }
-
+char* Pacer::read(char * item)
+{
+	unsigned int len;
+	return xenstore_read(xs,th,paths[item],&len);
+}
 
 int Pacer::setItem(char * item)
 {

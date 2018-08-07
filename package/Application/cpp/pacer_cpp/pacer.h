@@ -30,5 +30,6 @@ public:
   int getDomid();
   int getItems();
   int setItem(char *);
+  char* read(char *);
 
 };
