@@ -26,15 +26,15 @@ static const char* about =
 "Class names can be downloaded here: https://github.com/pjreddie/darknet/tree/master/data\n";
 static const char* params =
 "{ help           | false | print usage         }"
-"{ cfg            |  yolov2-tiny.cfg   | model configuration }"
-"{ model          |    yolov2-tiny.weights   | model weights       }"
+"{ cfg            |  ../yolo/yolov2-tiny.cfg   | model configuration }"
+"{ model          |    ../yolo/yolov2-tiny.weights   | model weights       }"
 "{ camera_device  | 0     | camera device number}"
 "{ source         |  rollcar.3gp    | video or image for detection}"
 "{ out            |       | path to output video file}"
 "{ fps            | 3     | frame per second }"
 "{ style          | box   | box or line style draw }"
 "{ min_confidence | 0.24  | min confidence      }"
-"{ class_names    |  coco.names   | File with class names, [PATH-TO-DARKNET]/data/coco.names }";
+"{ class_names    |  ../yolo/coco.names   | File with class names, [PATH-TO-DARKNET]/data/coco.names }";
 
 
 
