@@ -52,11 +52,11 @@ char* Pacer::read(char * item)
 {
 	unsigned int len;
 	printf("mee\n");
-	for (map<char *,char *>::iterator it=paths.begin(); it!=paths.end(); ++it)
-	{
-    	if (it.first == item) cout << it->second <<endl;
-	}
-	printf("%s\n", paths[item]);
+	// for (map<char *,char *>::iterator it=paths.begin(); it!=paths.end(); ++it)
+	// {
+ //    	if (it.first == item) cout << it->second <<endl;
+	// }
+	printf("%s\n", paths.find(item)->second );
 	printf("mees\n");
 
 	return xenstore_read(xs,th,paths[item],&len);
