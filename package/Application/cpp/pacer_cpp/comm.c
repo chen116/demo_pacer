@@ -1,6 +1,8 @@
 
 #include "comm.h"
 #include <string.h>
+
+// get domU id
 int xenstore_getDomid()
 {
 
