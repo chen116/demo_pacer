@@ -55,7 +55,7 @@ Pacer::~Pacer() {
 	for (map<char *,char *>::iterator it=paths.begin(); it!=paths.end(); ++it)
 	{
 		delete it->second;
-		paths.erase(itr);
+		paths.erase(it);
 	}
 
 }  
