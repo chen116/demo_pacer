@@ -41,7 +41,11 @@ static const char* params =
 
 
 
-
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <iterator>
 
 
 
