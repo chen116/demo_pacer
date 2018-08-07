@@ -2,9 +2,10 @@
 #include "comm.h"
 #include <string.h>
 #include <stdlib.h>
-#include <ncurses.h>
-#include <stdio.h>
+// #include <ncurses.h>
+// #include <stdio.h>
 
+// get domu id
 int xenstore_getDomid()
 {
 
@@ -19,11 +20,11 @@ int xenstore_getDomid()
                 if (fgets(buffer, max_buffer, stream) != NULL) sscanf(buffer, "%d", &domid);;
         pclose(stream);
         }
-
         return domid;
 
 }
 
+// helper for writing data to xenstore
 void xenstore_write(struct xs_handle *xs, xs_transaction_t th, const char *path, const void *data)
 {
 	int er;
@@ -32,6 +33,7 @@ void xenstore_write(struct xs_handle *xs, xs_transaction_t th, const char *path,
         xs_transaction_end(xs, th, false);
         return;
 }
+// helper for reading data from xenstore
 char* xenstore_read(struct xs_handle* xs ,xs_transaction_t th, const char* path , unsigned int *len )
 {
 	char * buf;
