@@ -19,7 +19,6 @@ private:
 
 public:
   Pacer();
-  int getSum();
   int myDomid();
 
 };
