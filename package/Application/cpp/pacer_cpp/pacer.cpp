@@ -97,7 +97,7 @@ void Pacer::getItems()
     cout << it->first << " => " << it->second << '\n';
 }
 
-void Pacer::getDomid()
+int Pacer::getDomid()
 {
 	int er;
 

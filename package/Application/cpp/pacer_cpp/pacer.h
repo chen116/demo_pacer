@@ -28,7 +28,7 @@ private:
 
 public:
   Pacer();
-  void getDomid();
+  int getDomid();
   void getItems();
   void setItem(char *);
   char* readItem(char *);
