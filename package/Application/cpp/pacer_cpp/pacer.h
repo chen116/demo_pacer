@@ -23,12 +23,12 @@ private:
     xs_transaction_t th;
     char * base_path;
     heartbeat_t * heart;
-    std::map<char *,char * > paths;
+    map<char *,char * > paths;
 
 
 public:
   Pacer();
   int getDomid();
-  
+  int getItems();
 
 };
