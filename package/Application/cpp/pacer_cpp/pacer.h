@@ -28,7 +28,7 @@ private:
 
 public:
   Pacer();
-  getDomid();
+  int getDomid();
   
 
 };
