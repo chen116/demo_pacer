@@ -15,7 +15,7 @@ int main(int argc, char** argv)
 		printf("Insant Heartrate: %s\n",mypacer.readHeartRate());
 	}
 
-
+    printf("done\n");
     return 0;
 
 
