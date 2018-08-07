@@ -132,7 +132,7 @@ String object_roi_style = parser.get<String>("style");
 
 
 
-printf("hey hey hey\n");
+
     Pacer mypacer(10);
     printf("%d\n",mypacer.getDomid() );
     mypacer.setItem("box_entry");
