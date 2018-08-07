@@ -1,10 +1,9 @@
 #include "pacer.h"
-
 #include <stdio.h>
 #include <unistd.h>
 
 
-
+//example Custom C++ Application
 
 int main(int argc, char** argv)
 {
@@ -12,7 +11,7 @@ int main(int argc, char** argv)
 	Pacer mypacer;
 	mypacer.setWindowSize(5);
 
-	for (int i = 0; i < 100; ++i)
+	for (int i = 0; i < 10; ++i)
 	{
 		usleep(100000);
 		mypacer.beat();
