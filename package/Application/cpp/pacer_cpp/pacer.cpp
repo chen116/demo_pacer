@@ -52,7 +52,11 @@ char* Pacer::readItem(char * item)
 	}
 	return "not found";
 }
-
+void Pacer::beat()
+{
+	heartbeat(heart,1);
+	return;
+}
 
 void Pacer::writeHeartRate()
 {

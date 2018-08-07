@@ -35,5 +35,6 @@ public:
   char* readHeartRate();
   void writeItem(char *,char *);
   void writeHeartRate();
+  void beat();
 
 };
