@@ -40,6 +40,6 @@ int Pacer::getSum()
 int Pacer::myDomid()
 {
 	int id;
-	id = getDomid()
+	id = getDomid();
   return id;
 }
