@@ -13,7 +13,7 @@ with open("data.txt", "w") as myfile:
 import argparse
 ap = argparse.ArgumentParser()
 ap.add_argument("-f", "--fps", type=float, default=10, help="target fps")
-ap.add_argument("-a", "--algo", type=int, default=3, help="algorithm for VM1")
+ap.add_argument("-a", "--algo", type=int, default=0, help="algorithm for VM1")
 ap.add_argument("-s", "--static-alloc", type=int, default=20, help="static utilization percentage(%)")
 args = vars(ap.parse_args())
 
