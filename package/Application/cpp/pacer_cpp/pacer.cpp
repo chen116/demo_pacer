@@ -11,7 +11,7 @@ extern "C" {
 
 #include <stdlib.h>
 #include <heartbeats/heartbeat.h>
-// #include <iostream>
+#include <iostream>
 #include <map>
 #include <string>
 using namespace std;
