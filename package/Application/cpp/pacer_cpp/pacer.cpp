@@ -52,6 +52,10 @@ char* Pacer::read(char * item)
 {
 	unsigned int len;
 	printf("mee\n");
+	for (map<char *,char *>::iterator it=paths.begin(); it!=paths.end(); ++it)
+	{
+    	if (it->first == "heart_rate") cout << it->second <<endl;
+	}
 	printf("%s\n", paths[item]);
 	printf("mees\n");
 
