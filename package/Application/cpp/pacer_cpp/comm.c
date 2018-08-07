@@ -1,10 +1,6 @@
 
 #include "comm.h"
-#include <stdio.h>
 #include <string.h>
-
-
-// #include <xenstore.h>
 #include <stdlib.h>
 #include <ncurses.h>
 #include <stdio.h>
@@ -30,14 +26,6 @@ int xenstore_getDomid()
 
 void xenstore_write(struct xs_handle *xs, xs_transaction_t th, const char *path, const void *data)
 {
-
-	    // heartbeat(heart, 1);
-        // printf("heartbeat: instant rate: %f\n",hb_get_instant_rate(heart) );
-        // char hr_str[10];
-        // gcvt(hb_get_instant_rate(heart) , 8, hr_str);
-        // th = xs_transaction_start(xs);
-        // er = xs_write(xs, th, path, hr_str, strlen(hr_str));
-        // xs_transaction_end(xs, th, false);
 	int er;
         th = xs_transaction_start(xs);
         er = xs_write(xs, th, path, data, strlen(data));
