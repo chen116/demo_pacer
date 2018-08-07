@@ -43,18 +43,18 @@ Pacer::Pacer()
  	xs = xs_daemon_open();
  	base_path = xs_get_domain_path(xs, domid); 
  	heart = heartbeat_init(vic_win_size, vic_buf_depth, vic_log_file, vic_min_target, vic_max_target);
-	char *heart_rate_path;
-	heart_rate_path = xs_get_domain_path(xs, domid);
+	char *heart_rate_path=malloc(strlen(base_path)+1);
+	strcpy(heart_rate_path, base_path);
 	heart_rate_path = (char*)realloc(heart_rate_path, strlen(heart_rate_path) + strlen("/heart_rate") + 1);
 	strcat(heart_rate_path, "/heart_rate");
 	paths["heart_rate"]=heart_rate_path;
 }
 
 
-// int Pacer::setItem()
-// {
+int Pacer::setItem(char * item)
+{
 
-// }
+}
 int Pacer::getItems()
 {
 	 for (map<char *,char *>::iterator it=paths.begin(); it!=paths.end(); ++it)
