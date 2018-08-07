@@ -28,18 +28,14 @@ int exec() {
 
 #include "pacer.h"
 
-Pacer::Pacer(int x,int y)
+Pacer::Pacer()
 {
 
+ domid = xenstore_getDomid();
 
-  gx = x;
-  gy = y;
 }
 
-int Pacer::getSum()
-{
-  return gx + gy;
-}
+
 
 int Pacer::myDomid()
 {
@@ -57,5 +53,5 @@ int Pacer::myDomid()
 
     printf("%s\n",xenstore_read(xs,th,frame_num_path,&len));
 
-  return xenstore_getDomid();
+  return domid;
 }
