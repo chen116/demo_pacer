@@ -17,22 +17,22 @@ static const int64_t vic_max_target = 1000;
 
 int getDomid()
 {
+        return 10;
+        // int domid=0;
 
-        int domid=0;
 
+        // FILE * stream;
+        // const int max_buffer = 256;
+        // char buffer[max_buffer];
 
-        FILE * stream;
-        const int max_buffer = 256;
-        char buffer[max_buffer];
+        // stream =popen("python3 -c \'from pyxs import Client;c=Client(xen_bus_path=\"/dev/xen/xenbus\");c.connect();print((c.read(\"domid\".encode())).decode());c.close()\'", "r");
+        // if (stream) {
+        // while (!feof(stream))
+        //         if (fgets(buffer, max_buffer, stream) != NULL) sscanf(buffer, "%d", &domid);;
+        // pclose(stream);
+        // }
 
-        stream =popen("python3 -c \'from pyxs import Client;c=Client(xen_bus_path=\"/dev/xen/xenbus\");c.connect();print((c.read(\"domid\".encode())).decode());c.close()\'", "r");
-        if (stream) {
-        while (!feof(stream))
-                if (fgets(buffer, max_buffer, stream) != NULL) sscanf(buffer, "%d", &domid);;
-        pclose(stream);
-        }
-
-        return domid;
+        // return domid;
 
 }
 
