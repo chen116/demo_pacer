@@ -49,12 +49,11 @@ Pacer::~Pacer() {
 
 
 	// signaling dom0 monitor the application is finished
-	char buffer[]="done";
-	xenstore_write(xs, th, heart_rate_path, buffer);
-	delete heart_rate_path;
-
-	heartbeat_finish(heart);
+	// char buffer[]="done";
+	// xenstore_write(xs, th, heart_rate_path, buffer);
 	xenstore_write(xs, th, heart_rate_path, "done");
+	delete heart_rate_path;
+	heartbeat_finish(heart);
 	xs_daemon_close(xs);
 	for (map<char *,char *>::iterator it=paths.begin(); it!=paths.end(); ++it)
 	{
