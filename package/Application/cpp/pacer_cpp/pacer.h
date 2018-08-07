@@ -8,8 +8,6 @@ extern "C" {
 }
 #endif
 #include <heartbeats/heartbeat.h>
-
-
 #include <map>
 using namespace std;
 

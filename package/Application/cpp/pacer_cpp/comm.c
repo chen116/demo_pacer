@@ -1,11 +1,6 @@
 
 #include "comm.h"
 #include <string.h>
-// #include <stdlib.h>
-// #include <ncurses.h>
-// #include <stdio.h>
-
-// get domu id
 int xenstore_getDomid()
 {
 
