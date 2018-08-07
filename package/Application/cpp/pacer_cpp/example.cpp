@@ -19,7 +19,7 @@ int main(int argc, char** argv)
 	// send()
 	// finish()
 
-	Pacer mypacer();
+	Pacer mypacer;
 	mypacer.setWindowSize(2);
 	printf("%d\n",mypacer.getDomid() );
 	mypacer.getItems();
