@@ -52,10 +52,10 @@ char* Pacer::read(char * item)
 {
 	unsigned int len;
 	printf("mee  %s\n",item);
-	// for (map<char *,char *>::iterator it=paths.begin(); it!=paths.end(); ++it)
-	// {
- //    	if (it.first == item) cout << it->second <<endl;
-	// }
+	for (map<char *,char *>::iterator it=paths.begin(); it!=paths.end(); ++it)
+	{
+    	if (it->first==item) cout << it->second <<endl;
+	}
 
 	printf("%s\n", paths.find(item)->second );
 	printf("mees\n");
