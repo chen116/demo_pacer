@@ -49,9 +49,9 @@ Pacer::~Pacer() {
 
 
 	// signaling dom0 monitor the application is finished
-	// char buffer[]="done";
-	// xenstore_write(xs, th, heart_rate_path, buffer);
 	xenstore_write(xs, th, heart_rate_path, "done");
+
+	// clean up heartbeat and xenstore instance
 	delete heart_rate_path;
 	heartbeat_finish(heart);
 	xs_daemon_close(xs);
@@ -136,7 +136,7 @@ void Pacer::setItem(char * item)
 // print out all item's entry and path to xenstore 
 void Pacer::getItems()
 {
-	 for (map<char *,char *>::iterator it=paths.begin(); it!=paths.end(); ++it)
+	for (map<char *,char *>::iterator it=paths.begin(); it!=paths.end(); ++it)
     cout << it->first << " => " << it->second << '\n';
 }
 
