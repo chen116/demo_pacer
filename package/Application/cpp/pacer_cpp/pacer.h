@@ -14,8 +14,8 @@ extern "C" {
 // #include <string>
 
 
-#include <map>
-using namespace std;
+// #include <map>
+// using namespace std;
 
 
 class Pacer
