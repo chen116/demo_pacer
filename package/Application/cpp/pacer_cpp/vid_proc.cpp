@@ -26,8 +26,8 @@ static const char* about =
 "Class names can be downloaded here: https://github.com/pjreddie/darknet/tree/master/data\n";
 static const char* params =
 "{ help           | false | print usage         }"
-"{ cfg            |  ../yolo/yolov2-tiny.cfg   | model configuration }"
-"{ model          |    ../yolo/yolov2-tiny.weights   | model weights       }"
+"{ cfg            |  yolov2-tiny.cfg   | model configuration }"
+"{ model          |    yolov2-tiny.weights   | model weights       }"
 "{ camera_device  | 0     | camera device number}"
 "{ source         |  rollcar.3gp    | video or image for detection}"
 "{ out            |       | path to output video file}"
