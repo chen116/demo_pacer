@@ -8,10 +8,10 @@ extern "C" {
 }
 #endif
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <vector>
+// #include <stdio.h>
+// #include <stdlib.h>
+// #include <string.h>
+// #include <vector>
 
 #include <heartbeats/heartbeat.h>
 #include <iostream>
