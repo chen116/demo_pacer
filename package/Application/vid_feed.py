@@ -63,9 +63,9 @@ with Client(xen_bus_path="/dev/xen/xenbus") as c:
 	all_domuid_ids.pop(0)
 	for x in all_domuid_ids:
 		name_path = ("/local/domain/"+x+"/name").encode()
-		if c[name_path].decode() == "VM1":
-			domu_ids.append(x)
-			box_color[x]=[255,144,30] # blue box
+		# if c[name_path].decode() == "VM1":
+		# 	domu_ids.append(x)
+		# 	box_color[x]=[255,144,30] # blue box
 		if c[name_path].decode() == "VM2":
 			domu_ids.append(x)
 			box_color[x]=[120,240,120] # green box			
