@@ -8,12 +8,14 @@ extern "C" {
 }
 #endif
 
-
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+// #include <vector>
+
 #include <heartbeats/heartbeat.h>
 #include <iostream>
 #include <map>
-#include <string>
 using namespace std;
 
 // C function declarations
