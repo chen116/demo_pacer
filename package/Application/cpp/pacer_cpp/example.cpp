@@ -1,5 +1,5 @@
 #include "pacer.h"
-#include <unistd.h>
+// #include <unistd.h>
 //example Custom C++ Application
 int main(int argc, char** argv)
 {
@@ -20,9 +20,6 @@ int main(int argc, char** argv)
 		// read the instant heart rate that was just written to xenstore
 		printf("Insant Heartrate: %s\n",mypacer.readHeartRate());
 	}
-
     printf("done\n");
     return 0;
-
-
 }
