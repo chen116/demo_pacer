@@ -23,7 +23,7 @@ int main(int argc, char** argv)
 	printf("%d\n",mypacer.getDomid() );
 	mypacer.setItem("box_entry");
 	mypacer.getItems();
-	printf("%s\n",mypacer.read("heart_rate");
+	printf("%s\n",mypacer.read("heart_rate"));
 
 	// int domid=getDomid();//exec(R"(python3 -c 'from pyxs import Client;c=Client(xen_bus_path="/dev/xen/xenbus");c.connect();print((c.read("domid".encode())).decode());c.close()')"); 
  //    printf("domid %d\n",domid);
