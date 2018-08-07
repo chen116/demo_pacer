@@ -294,7 +294,7 @@ while (strcmp("done",item)!=0)
 		}
 				
 		mypacer.beat();
-		mypacer.writeHeartRate();
+		mypacer.writeInstantHeartRate();
 	}
 	
 
