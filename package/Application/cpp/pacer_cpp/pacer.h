@@ -21,7 +21,6 @@ private:
     int domid;
     struct xs_handle* xs;
     xs_transaction_t th;
-    char * base_path;
     heartbeat_t * heart;
     map<char *,char * > paths;
 
