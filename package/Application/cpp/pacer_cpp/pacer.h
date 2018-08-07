@@ -7,5 +7,6 @@ private:
 public:
   Pacer(int x,int y);
   int getSum();
+  int getDomid();
 
 };
