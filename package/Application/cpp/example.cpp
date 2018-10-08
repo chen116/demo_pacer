@@ -110,9 +110,9 @@ int main( int argc, const char** argv )
     for (i = 0; i < 50; ++i)
     {
 
+        matmult(ptr1,ptr2,ptr3,N);
+        matmult(ptr1,ptr2,ptr3,N);
 
-        matmult(ptr1,ptr2,ptr3,N);
-        matmult(ptr1,ptr2,ptr3,N);
 
         heartbeat(heart, 1);
         char hr_str[10];
@@ -129,8 +129,8 @@ int main( int argc, const char** argv )
     for (i = 0; i < 50; ++i)
     {
 
-
         matmult(ptr1,ptr2,ptr3,N);
+
 
         heartbeat(heart, 1);
         char hr_str[10];

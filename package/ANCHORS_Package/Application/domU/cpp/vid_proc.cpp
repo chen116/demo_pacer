@@ -115,9 +115,9 @@ int main(int argc, char** argv)
 
     Pacer mypacer;
     mypacer.setWindowSize(10);
-    mypacer.setItem("box_entry");
-    mypacer.setItem("frame_number_entry");
-    mypacer.setItem("frame_size");
+    mypacer.setEntry("box_entry");
+    mypacer.setEntry("frame_number_entry");
+    mypacer.setEntry("frame_size");
 
    
 	int g;
@@ -126,10 +126,10 @@ int main(int argc, char** argv)
 	printf("waiting for dom0...\n");
 	while (strcmp("init",item)!=0)
 	{
-		item = mypacer.readItem("frame_number_entry");
+		item = mypacer.readEntry("frame_number_entry");
 	} 
 
-	item = mypacer.readItem("box_entry");
+	item = mypacer.readEntry("box_entry");
 	string init_video_data = string(item);
 	istringstream iss(item);
 	vector<string> init_video_data_vec(std::istream_iterator<std::string>{iss}, std::istream_iterator<std::string>());
@@ -187,8 +187,8 @@ int main(int argc, char** argv)
     }
 
     string box_coords = "0 0 0 0";
-    mypacer.writeItem("box_entry",box_coords.c_str());
-    mypacer.writeItem("frame_number_entry","ready");
+    mypacer.writeEntry("box_entry",box_coords.c_str());
+    mypacer.writeEntry("frame_number_entry","ready");
     printf("ready...\n");
 
 
@@ -206,7 +206,7 @@ int main(int argc, char** argv)
 
     while (strcmp("done",item)!=0)
     {
-    	item=mypacer.readItem("frame_number_entry");
+    	item=mypacer.readEntry("frame_number_entry");
     	frame_num = atoi(item);
     	if (frame_num > prev_frame_num) 
     	{
@@ -265,12 +265,12 @@ int main(int argc, char** argv)
             box_coords += to_string(endX);
             box_coords += " ";
             box_coords += to_string(endY);
-            mypacer.writeItem("box_entry",box_coords.c_str());
+            mypacer.writeEntry("box_entry",box_coords.c_str());
      
     		if(prev_frame_size != frame_size)
     		{
     			prev_frame_size = frame_size;
-                mypacer.writeItem("frame_size",to_string(frame_size).c_str());
+                mypacer.writeEntry("frame_size",to_string(frame_size).c_str());
     		}
     				
     		mypacer.beat();

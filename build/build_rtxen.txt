@@ -35,10 +35,13 @@ apt -y install lxde lxde-common
 # turbo vnc 
 cd /root/ && apt -y install x11-xkb-utils && wget https://sourceforge.net/projects/turbovnc/files/2.1.2/turbovnc_2.1.2_amd64.deb && dpkg -i turbovnc*.deb && /opt/TurboVNC/bin/vncserver
 /opt/TurboVNC/bin/vncserver -kill :1
-sed -i '/#!\/bin\/sh/a \/usr\/bin\/lxterminal --geometry=90x30 --show-menubar --show-borders --show-scrollbar --font=10' /root/.vnc/xstartup.turbovnc
+sed -i '/#!\/bin\/sh/a xrdb $HOME\/.Xresources' /root/.vnc/xstartup.turbovnc
+sed -i '/#!\/bin\/sh/a \/usr\/bin\/lxterminal' /root/.vnc/xstartup.turbovnc
 /opt/TurboVNC/bin/vncserver
 /opt/TurboVNC/bin/vncserver
 
+
+/usr/share/themes/xfce4
 # pacer
 
 cd /root/  && apt update && apt -y install git &&  apt -y install gcc && apt -y install python3-dev && wget http://semanchuk.com/philip/sysv_ipc/sysv_ipc-1.0.0.tar.gz && tar -xzf sysv_ipc-1.0.0.tar.gz && cd sysv_ipc-1.0.0 && python3 setup.py install && cd /root/  && apt -y install python3-pip && pip3 install numpy && apt-get -y install python3-setuptools && git clone https://github.com/selectel/pyxs && cd pyxs && python3 setup.py install && cd /root/ && apt -y install xenstore-utils && cd /root &&  git clone https://github.com/chen116/demo2018.git && cd demo2018/pacer 

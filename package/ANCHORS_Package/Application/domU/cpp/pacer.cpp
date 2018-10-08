@@ -63,7 +63,7 @@ Pacer::~Pacer() {
 
 }  
 // read a paricular item from xenstore
-char* Pacer::readItem(char * item)
+char* Pacer::readEntry(char * item)
 {
 	unsigned int len;
 	for (map<char *,char *>::iterator it=paths.begin(); it!=paths.end(); ++it)
@@ -110,7 +110,7 @@ char * Pacer::readHeartRate()
 	return xenstore_read(xs,th,heart_rate_path,&len);
 }
 // write a particular item to xenstore
-void Pacer::writeItem(char * item, const char * content)
+void Pacer::writeEntry(char * item, const char * content)
 {
 	unsigned int len;
 	for (map<char *,char *>::iterator it=paths.begin(); it!=paths.end(); ++it)
@@ -124,7 +124,7 @@ void Pacer::writeItem(char * item, const char * content)
 	return;
 }
 // create a item entry in xenstore
-void Pacer::setItem(char * item)
+void Pacer::setEntry(char * item)
 {
 	char *path;
 	path = xs_get_domain_path(xs, domid);
@@ -134,7 +134,7 @@ void Pacer::setItem(char * item)
 	paths[item]=path;
 }
 // print out all item's entry and path to xenstore 
-void Pacer::getItems()
+void Pacer::getEntrys()
 {
 	for (map<char *,char *>::iterator it=paths.begin(); it!=paths.end(); ++it)
     cout << it->first << " => " << it->second << '\n';

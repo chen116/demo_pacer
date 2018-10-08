@@ -27,11 +27,11 @@ class Pacer
     Pacer();
     ~Pacer();
     int getDomid();
-    void getItems();
-    void setItem(char *);
-    char* readItem(char *);
+    void getEntrys();
+    void setEntry(char *);
+    char* readEntry(char *);
     char* readHeartRate();
-    void writeItem(char *, const char *);
+    void writeEntry(char *, const char *);
     void writeInstantHeartRate();
     void writeWindowHeartRate();
     void writeGlobalHeartRate();
