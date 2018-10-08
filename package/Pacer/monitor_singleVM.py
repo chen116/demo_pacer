@@ -58,7 +58,7 @@ class MonitorThread(threading.Thread):
 		self.timeslice_us = timeslice_us
 		self.rtxen_or_credit = rtxen_or_credit 
 		self.allocMod = res_alloc.ResourceAllocation(args["static_alloc"],timeslice_us,min_heart_rate,max_heart_rate,self.algo,self.domuid,self.other_domuid,self.shared_data,rtxen_or_credit)
-
+		self.st = 0
 	def run(self):
 		with Client(unix_socket_path="/var/run/xenstored/socket_ro") as c:
 			# watch the xenstore entries and perform different functions accodingly 
@@ -75,8 +75,11 @@ class MonitorThread(threading.Thread):
 				if "heart_rate" in path.decode():
 					heart_rate=-1
 					try :
+						self.st=time.time()
 						heart_rate = float(msg)
+
 						self.res_allocat(heart_rate)	
+						print(time.time()-st)
 					except:
 						heart_rate=-1			
 				self.threadLock.release()
